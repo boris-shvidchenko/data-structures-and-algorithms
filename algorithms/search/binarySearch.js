@@ -23,4 +23,5 @@ function binarySearch(array, targetValue) {
     }
 }
 
+// Test log 
 console.log(binarySearch(testArray,2))
