@@ -23,5 +23,5 @@ function bogoSort(array) {
     return array;
 }
 
-// Test log
+// Test run
 console.log(bogoSort(testArray));
