@@ -1,1 +1,1 @@
-This repo will store reference code on a variety of algorithms and data structures.
+This repo will store reference code on a variety of algorithms, data structures, and challenge questions.
