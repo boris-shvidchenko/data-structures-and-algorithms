@@ -19,3 +19,24 @@ function canConstruct(target, wordBank, memo={}) {
 
 // Test
 console.log(canConstruct('enterapotentpot', ['a','p','ent','enter','ot','o','t']));
+
+// == Count Construct ==
+// Given a target and a word bank, return an integer representing the total number of ways the target can be constructed using the words from the word bank. Elements can be reused.
+
+function countConstruct(target, wordBank, memo={}) {
+    if (target in memo) return memo[target];
+    if (target === '') return true;
+    let totalCount = 0;
+    for (let word of wordBank) {
+        if (target.indexOf(word) === 0) {
+            const suffix = target.slice(word.length);
+            const numWaysForRest = countConstruct(suffix, wordBank, memo);
+            totalCount += numWaysForRest;
+        }
+    }
+    memo[target] = totalCount; // Note: When updating the memo always update before a return
+    return totalCount;
+}
+
+// Test
+console.log(countConstruct('eeeeeeeeeeeeeeeeeeeeeeeeeef', ['f','e','ee','eee','eeeee','ef','ff']));
