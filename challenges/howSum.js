@@ -1,8 +1,6 @@
 // == How Sum ==
 // Given a target value and an array, return an array of possible combinations of numbers that add up to the target. If multiple combinations are possible, return any of one of the combination arrays. If none return null.
 
-// NOTE: The howSum functions below need to be revisited, as they run into errors
-
 // This works but can be optimized to improve runtime
 function howSum1(target, numbers) {
     // Base cases
