@@ -11,16 +11,8 @@ function selectionSort(list) {
     let min = list[0];
     // Base case
     if (list.length === 0) return newArray;
-    for (let i = 0; i < list.length - 1; i++) {
-        if (list[i] < list[i+1]) {
-            if (list[i] < min) {
-                min = list[i];
-            }
-        } else {
-            if (list[i+1] < min) {
-                min = list[i+1];
-            }
-        }
+    for (let i = 0; i < list.length; i++) {
+        if (list[i] < min) min = list[i];
     }
     newArray.push(min);
     const minIndex = list.indexOf(min);
