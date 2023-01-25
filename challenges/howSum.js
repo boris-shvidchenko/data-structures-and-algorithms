@@ -8,7 +8,7 @@ function howSum1(target, numbers) {
     // Base cases
     if (target === 0) return [];
     if (target < 0) return null;
-    for (let num in numbers) {
+    for (let num of numbers) {
         const remainder = target - num;
         const remainderResult = howSum1(remainder, numbers);
         if (remainderResult !== null) return [...remainderResult, num];
@@ -22,7 +22,7 @@ function howSum2(target, numbers, memo={}) {
     // Base cases
     if (target === 0) return [];
     if (target < 0) return null;
-    for (let num in numbers) {
+    for (let num of numbers) {
         const remainder = target - num;
         const remainderResult = howSum2(remainder, numbers, memo);
         if (remainderResult !== null) {
@@ -34,4 +34,5 @@ function howSum2(target, numbers, memo={}) {
     return null;
 }
 
-console.log(howSum2(300, [7,14]));
+// Test
+console.log(howSum2(511, [7,14]));
