@@ -17,7 +17,7 @@ class LinkedList {
     append(val){
         // If the head is null then add an initial node
         if (this.head === null) {
-            this.head = new Node(val)
+            this.head = new Node(val);
             this.length++;
             return;
         }
