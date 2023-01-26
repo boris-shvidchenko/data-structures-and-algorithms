@@ -50,4 +50,5 @@ function canSum3(target, numbers) {
     return table[target];
 }
 
+// Test
 console.log(canSum3(7, [5,3,4]));

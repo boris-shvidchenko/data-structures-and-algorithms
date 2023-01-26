@@ -34,3 +34,21 @@ function howSum2(target, numbers, memo={}) {
 
 // Test
 console.log(howSum2(511, [7,14]));
+
+// Tabulation approach
+
+function howSum3(target, numbers) {
+    const table = Array(target + 1).fill(null);
+    table[0] = [];
+    for (let i = 0; i < target; i++) {
+        if (table[i] !== null) {
+            for (let num of numbers) {
+                table[i + num] = [...table[i], num];
+            }
+        }
+    }
+    return table[target];
+}
+
+// Test
+console.log(howSum3(7, [5,3,4,1,2,7]));
