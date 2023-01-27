@@ -143,7 +143,7 @@ function treeMinRecursive(root){
     return Math.min(root.val, leftMin, rightMin);
 }
 // Test
-console.log(treeMinRecursive(g));
+// console.log(treeMinRecursive(g));
 
 // Iterative
 function treeMinIterative(root){
@@ -159,3 +159,19 @@ function treeMinIterative(root){
 }
 // Test
 // console.log(treeMinIterative(g));
+
+// Max root to leaf path sum
+// Prompt: Return the max sum of all possible paths in a tree.
+
+function maxPathSum(root) {
+    if (root === null) return -Infinity;
+    if (root.left === null && root.right === null) return root.val;
+    const maxChildPathSum = Math.max(
+        maxPathSum(root.left),
+        maxPathSum(root.right)
+    );
+    return root.val + maxChildPathSum;
+}
+
+// Test
+console.log(maxPathSum(g));
