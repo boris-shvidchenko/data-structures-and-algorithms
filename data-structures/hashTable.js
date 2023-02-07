@@ -81,6 +81,32 @@ class HashTable {
         this.length = length;
     }
 
+    // hash function
+    hash(key) {
+        let total = 0;
+        key.forEach((char) => total += key.charCodeAt(char));
+        return total % this.size;
+    }
+
+    // Set
+    set(key, value) {
+        const index = this.hash(key);
+        const bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[key, value]];
+        } else {
+            const sameKeyItem = bucket.find(item => item[0] === key);
+            if (sameKeyItem) {
+                sameKeyItem[1] = value;
+            } else {
+                bucket.push([key, value]);
+            }
+        }
+    }
+    // get
+    // remove
+    // display hash table 
+
 }
 
 const table = new HashTable(50);
@@ -92,4 +118,6 @@ console.log(table.get('name'));
 table.remove('color');
 table.set('mane', 'Clark');
 table.display();
+
+
 
