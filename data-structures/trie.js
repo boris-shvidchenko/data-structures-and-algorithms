@@ -1,4 +1,4 @@
-// Tries (prefix tree) are very specific data structures that are based on binary trees. They are useful when it comes to searching for data. 
+// Tries (prefix tree) are very specific data structures that are based on trees. They are useful when it comes to searching for data. 
 // Common operations include node insertion, checking if a node exists, and removal of nodes.
 
 class Node {
@@ -51,4 +51,14 @@ class Trie {
         }
         return true;
     }
+
+    // Print trie
+    print() {
+        console.log(this.root);
+    }
 }
+
+let trie = new Trie();
+trie.insert('Hello');
+trie.insert('Goodbye');
+trie.print();
