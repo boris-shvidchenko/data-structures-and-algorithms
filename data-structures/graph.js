@@ -81,24 +81,75 @@ function isConnected2(node1, node2) {
 
 
 // === Adjacency list ===
+// class Node {
+//     constructor(value) {
+//         this.value = value;
+//         this.edgesList = [];
+//     }
+//     // Connect node to another node
+//     connect(node) {
+//         this.edgesList.push(node);
+//         node.edgesList.push(this); // Undirected graph, make sure to push self to edge list of other node
+//     }
+//     // Adjacent nodes.
+//     getAdjacentNodes() {
+//         return this.edgesList.map(node => node.value);
+//     }
+//     // Is connected (T/F)?
+//     isConnected(node) {
+//         if (this.edgesList.includes(node)) return true;
+//         return false;
+//     }
+// }
+
+// class Graph {
+//     constructor(nodes) {
+//         this.nodes = [...nodes];
+//     }
+//     // Add new node to graph after initialization 
+//     addToGraph(node) {
+//         this.nodes.push(node);
+//     }
+
+// }
+
+// Create nodes
+// const nodeA = new Node('A');
+// const nodeB = new Node('B');
+// const nodeC = new Node('C');
+// const nodeD = new Node('D');
+// const nodeE = new Node('E');
+// Create graph
+// const graph = new Graph([nodeA, nodeB, nodeC, nodeD, nodeE]);
+// Add connections
+// nodeA.connect(nodeB);
+// nodeA.connect(nodeD);
+// nodeB.connect(nodeC);
+// nodeC.connect(nodeD);
+// nodeC.connect(nodeE);
+// nodeD.connect(nodeE);
+
+// console.log(nodeA.getAdjacentNodes()); // Expected: [B, D]
+// console.log(nodeC.getAdjacentNodes()); // Expected: [B, D, E]
+// console.log(nodeA.isConnected(nodeB)); // Expected: true
+// console.log(nodeA.isConnected(nodeC)); // Expected: false
+
+// === Graph breadth first traversal and shortest path ===
+
 class Node {
     constructor(value) {
         this.value = value;
         this.edgesList = [];
     }
-    // Connect node to another node
-    connect(node) {
+    connect(node){
         this.edgesList.push(node);
-        node.edgesList.push(this); // Undirected graph, make sure to push self to edge list of other node
+        node.edgesList.push(this);
     }
-    // Adjacent nodes.
-    getAdjacentNodes() {
-        return this.edgesList.map(node => node.value);
+    getAdjacentNodes(){
+        return this.edgesList;
     }
-    // Is connected (T/F)?
-    isConnected(node) {
-        if (this.edgesList.includes(node)) return true;
-        return false;
+    isConnected(node){
+        return this.edgesList.includes(node) ? true : false;
     }
 }
 
@@ -106,30 +157,53 @@ class Graph {
     constructor(nodes) {
         this.nodes = [...nodes];
     }
-    // Add new node to graph after initialization 
     addToGraph(node) {
         this.nodes.push(node);
     }
-
+    breadthFirstTraversal(start, end){
+        const queue = [start];
+        const vistedNodes = new Set();
+        vistedNodes.add(start);
+        while(queue.length > 0) {
+            const node = queue.shift();
+            if (node.value === end.value) {
+                console.log('Found it!');
+                return;
+            }
+            for (let adjacency of node.edgesList) {
+                if (!vistedNodes.has(adjacency)) {
+                    queue.push(adjacency);
+                    vistedNodes.add(adjacency);
+                }
+            }
+            console.log(node.value)
+        }
+    }
 }
 
-// Create nodes
-const nodeA = new Node('A');
-const nodeB = new Node('B');
-const nodeC = new Node('C');
-const nodeD = new Node('D');
-const nodeE = new Node('E');
-// Create graph
-const graph = new Graph([nodeA, nodeB, nodeC, nodeD, nodeE]);
-// Add connections
-nodeA.connect(nodeB);
-nodeA.connect(nodeD);
-nodeB.connect(nodeC);
-nodeC.connect(nodeD);
-nodeC.connect(nodeE);
-nodeD.connect(nodeE);
+const DFW = new Node('DFW');
+const JFK = new Node('JFK');
+const LAX = new Node('LAX');
+const HNL = new Node('HNL');
+const SAN = new Node('SAN');
+const EWR = new Node('EWR');
+const BOS = new Node('BOS');
+const MIA = new Node('MIA');
+const MCO = new Node('MCO');
+const PBI = new Node('PBI');
 
-console.log(nodeA.getAdjacentNodes()); // Expected: [B, D]
-console.log(nodeC.getAdjacentNodes()); // Expected: [B, D, E]
-console.log(nodeA.isConnected(nodeB)); // Expected: true
-console.log(nodeA.isConnected(nodeC)); // Expected: false
+const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI]);
+
+DFW.connect(JFK);
+DFW.connect(LAX);
+JFK.connect(BOS);
+JFK.connect(MIA);
+LAX.connect(HNL);
+LAX.connect(EWR);
+LAX.connect(SAN);
+MIA.connect(MCO);
+MIA.connect(PBI);
+MCO.connect(PBI);
+
+graph.breadthFirstTraversal(DFW, PBI);
+
