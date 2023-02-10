@@ -22,7 +22,7 @@ function findAdjacentNodes(node){
     });
     return adjacentNodes;
 }
-console.log(findAdjacentNodes('C')); // Expected: ['B','D','E']
+// console.log(findAdjacentNodes('C')); // Expected: ['B','D','E']
 
 
 // Are nodes connected? (T/F)
@@ -34,9 +34,9 @@ function isConnected(node1, node2) {
     }
     return false;
 }
-console.log(isConnected('A','B')); // Expected: true
-console.log(isConnected('A','E')); // Expected: false
-console.log(isConnected('C','D')); // Expected: true
+// console.log(isConnected('A','B')); // Expected: true
+// console.log(isConnected('A','E')); // Expected: false
+// console.log(isConnected('C','D')); // Expected: true
 
 
 // === Adjacency matrix ===
@@ -50,5 +50,31 @@ const adjacencyMatrix = [
     [0, 0, 1, 1, 0],
 ];
 
-
 // --- Operations ---
+
+// Find adjacent nodes
+function findAdjacentNodes2(node) {
+    if (!vertices2.includes(node)) return 'Node not in vertices list';
+    let adjacencyArray = [];
+    let rowIndex = vertices2.indexOf(node);
+    let row = adjacencyMatrix[rowIndex];
+    for (let i = 0; i <= row.length - 1; i++) {
+        row[i] === 1 ? adjacencyArray.push(vertices2[i]) : null;
+    }
+    return adjacencyArray;
+}
+// console.log(findAdjacentNodes2('A')); // Expected: ['B', 'D']
+// console.log(findAdjacentNodes2('H')); // Expected: Node not in vertices list
+// console.log(findAdjacentNodes2('C')); // Expected: ['B', 'D', 'E']
+
+// Are nodes connected? (T/F)
+function isConnected2(node1, node2) {
+    const rowIndex = vertices2.indexOf(node1);
+    const colIndex = vertices2.indexOf(node2);
+    const row = adjacencyMatrix[rowIndex];
+    if (row[colIndex] === 1) return true;
+    return false;
+}
+console.log(isConnected2('A','B')); // Expected: true
+console.log(isConnected2('A','E')); // Expected: false
+console.log(isConnected2('C','D')); // Expected: true
