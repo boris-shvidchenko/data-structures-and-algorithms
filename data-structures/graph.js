@@ -134,7 +134,7 @@ function isConnected2(node1, node2) {
 // console.log(nodeA.isConnected(nodeB)); // Expected: true
 // console.log(nodeA.isConnected(nodeC)); // Expected: false
 
-// === Graph breadth first traversal and shortest path ===
+// === Graph breadth first traversal, depth first traversal and shortest path ===
 
 class Node {
     constructor(value) {
@@ -160,7 +160,8 @@ class Graph {
     addToGraph(node) {
         this.nodes.push(node);
     }
-    breadthFirstTraversal(start, end){
+    // Breadth First visits each adjacent node
+    breadthFirstTraversal(start, end) {
         const queue = [start];
         const vistedNodes = new Set(); // Tracking nodes that have been visited
         vistedNodes.add(start);
@@ -179,7 +180,21 @@ class Graph {
             console.log(node.value)
         }
     }
-    shortestPath(start, end){
+    // Depth First visits all nodes in order, if target node is not found it backtracks and tries another route
+    depthFirstTraversal(start, end, visited = new Set()) {
+        if (start.value === end.value) {
+            console.log('Found it!');
+            return;
+        }
+        console.log('Visiting node: ', start.value);
+        visited.add(start);
+        for (let adjacency of start.edgesList) {
+            if (!visited.has(adjacency)) {
+                this.depthFirstTraversal(adjacency, end, visited);
+            }
+        }
+    }
+    shortestPath(start, end) {
         const queue = [start];
         const visitedNodes = {};
         visitedNodes[start.value] = null;
@@ -218,8 +233,9 @@ const BOS = new Node('BOS');
 const MIA = new Node('MIA');
 const MCO = new Node('MCO');
 const PBI = new Node('PBI');
+const HKG = new Node('HKG');
 
-const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI]);
+const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
 
 DFW.connect(JFK);
 DFW.connect(LAX);
@@ -228,11 +244,13 @@ JFK.connect(MIA);
 LAX.connect(HNL);
 LAX.connect(EWR);
 LAX.connect(SAN);
+SAN.connect(HKG);
 MIA.connect(MCO);
 MIA.connect(PBI);
 MCO.connect(PBI);
 
 // graph.breadthFirstTraversal(DFW, PBI);
+// graph.depthFirstTraversal(DFW, HKG);
 
 // Practice Question
 // Given 2 airports find the smallest distance between the 2. (ex: DFW and PBI > DFW-JFK-MIA-PBI)
