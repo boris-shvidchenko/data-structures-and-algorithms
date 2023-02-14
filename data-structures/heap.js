@@ -67,7 +67,6 @@ class Heap {
         this.heapifyDown();
         return maxValue;
     }
-
 }
 
 const heap = new Heap();
