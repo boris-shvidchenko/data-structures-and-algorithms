@@ -13,7 +13,7 @@ class Trie {
         this.root = new Node();
     }
 
-    // Insert
+    // Insert a word
     insert(word) {
         let current = this.root;
         for (let i = 0; i < word.length; i++) {
@@ -26,7 +26,7 @@ class Trie {
         current.isWord = true;
     }
 
-    // Check if contains
+    // Check if trie contains
     contains(word) {
         let current = this.root;
         for (let i = 0; i < word.length; i++) {
