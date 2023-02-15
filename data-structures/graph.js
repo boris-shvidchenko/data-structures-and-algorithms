@@ -302,6 +302,17 @@ class Graph {
             console.log(node.value)
         }
     }  
+    // Breadth First visits each adjacent node
+    depthFirstTraversal(start, end, visited = new Set()) {
+        if (start.value === end.value) return 'Found it!';
+        visited.add(start);
+        console.log('Visiting Node: ', start.value);
+        for (let adj of start.edgesList) {
+            if (!visited.has(adj)) {
+                this.depthFirstTraversal(adj, end, visited);
+            }
+        }
+    } 
 }
 
 const DFW = new Node('DFW');
@@ -330,5 +341,5 @@ MIA.connect(MCO);
 MIA.connect(PBI);
 MCO.connect(PBI);
 
-graph.breadthFirstTraversal(DFW, PBI);
-// graph.depthFirstTraversal(DFW, HKG);
+// graph.breadthFirstTraversal(DFW, PBI);
+graph.depthFirstTraversal(DFW, HKG);
