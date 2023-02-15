@@ -313,6 +313,34 @@ class Graph {
             }
         }
     } 
+
+    // Shortest path
+    shortestPath(start, end) {
+        const queue = [start];
+        const visited = {};
+        visited[start.value] = null;
+        while (queue.length > 0) {
+            const node = queue.shift();
+            if (node.value === end.value) {
+                return this.reconstructPath(visited, end);
+            }
+            for (let adj of node.edgesList) {
+                if (!visited.hasOwnProperty(adj.value)) {
+                    visited[adj.value] = node;
+                    queue.push(adj);
+                }
+            }
+        }
+    }
+    reconstructPath(visited, end) {
+        let current = end;
+        const shortestPath = [];
+        while (current !== null) {
+            shortestPath.push(current);
+            current = visited[current.value];
+        }
+        return shortestPath.reverse();
+    }
 }
 
 const DFW = new Node('DFW');
@@ -342,4 +370,5 @@ MIA.connect(PBI);
 MCO.connect(PBI);
 
 // graph.breadthFirstTraversal(DFW, PBI);
-graph.depthFirstTraversal(DFW, HKG);
+// graph.depthFirstTraversal(DFW, HKG);
+console.log(graph.shortestPath(DFW, PBI));
