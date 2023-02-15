@@ -257,11 +257,78 @@
 // // console.log(graph.shortestPath(DFW, PBI));
 
 
-const vertices2 = ['A', 'B', 'C', 'D', 'E'];
-const adjacencyMatrix = [
-    [0, 1, 0, 1, 0],
-    [1, 0, 1, 0, 0],
-    [0, 1, 0, 1, 1],
-    [1, 0, 1, 0, 1],
-    [0, 0, 1, 1, 0],
-];
+class Node {
+    constructor(value) {
+        this.value = value;
+        this.edgesList = [];
+    }
+    connect(node){
+        this.edgesList.push(node);
+        node.edgesList.push(this);
+    }
+    getAdjacentNodes(){
+        return this.edgesList;
+    }
+    isConnected(node){
+        return this.edgesList.includes(node) ? true : false;
+    }
+}
+
+
+class Graph {
+    constructor(nodes) {
+        this.nodes = [...nodes];
+    }
+    addToGraph(node) {
+        this.nodes.push(node);
+    }
+    // Breadth First visits each adjacent node
+    breadthFirstTraversal(start, end) {
+        const queue = [start];
+        const visited = new Set();
+        visited.add(start);
+        while (queue.length > 0) {
+            const node = queue.shift();
+            if (node.value === end.value) {
+                console.log('Found it!');
+                return;
+            }
+            for (let adj of node.edgesList) {
+                if (!visited.has(adj)) {
+                    queue.push(adj);
+                    visited.add(adj);
+                }
+            }
+            console.log(node.value)
+        }
+    }  
+}
+
+const DFW = new Node('DFW');
+const JFK = new Node('JFK');
+const LAX = new Node('LAX');
+const HNL = new Node('HNL');
+const SAN = new Node('SAN');
+const EWR = new Node('EWR');
+const BOS = new Node('BOS');
+const MIA = new Node('MIA');
+const MCO = new Node('MCO');
+const PBI = new Node('PBI');
+const HKG = new Node('HKG');
+
+const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
+
+DFW.connect(JFK);
+DFW.connect(LAX);
+JFK.connect(BOS);
+JFK.connect(MIA);
+LAX.connect(HNL);
+LAX.connect(EWR);
+LAX.connect(SAN);
+SAN.connect(HKG);
+MIA.connect(MCO);
+MIA.connect(PBI);
+MCO.connect(PBI);
+
+graph.breadthFirstTraversal(DFW, PBI);
+// graph.depthFirstTraversal(DFW, HKG);
