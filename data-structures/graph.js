@@ -249,54 +249,9 @@ MIA.connect(MCO);
 MIA.connect(PBI);
 MCO.connect(PBI);
 
-graph.breadthFirstTraversal(DFW, PBI);
+// graph.breadthFirstTraversal(DFW, PBI);
 // graph.depthFirstTraversal(DFW, HKG);
 
 // Practice Question
 // Given 2 airports find the smallest distance between the 2. (ex: DFW and PBI > DFW-JFK-MIA-PBI)
 // console.log(graph.shortestPath(DFW, PBI));
-
-
-class Graph {
-    constructor(nodes) {
-        this.nodes = [...nodes]
-    }
-
-    getShortestPath(start, end){
-        const queue = [start];
-        const visitedNodes = {};
-        visitedNodes[start.val] = null;
-        while (queue.length > 0) {
-            const node = queue.shift();
-            if (node.val === end.val) {
-                //found
-                return this.reconstructPath(visitedNodes, end);
-            }
-            for (let edge of node.edgeList) {
-                if (!visitedNodes.hasOwnProperty(edge.val)) {
-                    visitedNodes[edge.val] = node;
-                    queue.push(edge)
-                }
-            }
-        }
-    }
-    reconstructPath(visitedNodes, end){
-        let currentNode = end;
-        const shortestPath = [];
-        while (currentNode !== null) {
-            shortestPath.push(currentNode);
-            currentNode = visitedNodes[currentNode.val]
-        }
-        return shortestPath.reverse();
-    }
-    
-}
-
-// reconstructPath(visitedNodes, end) {
-
-//     while (currentNode !== null) {
-//         shortestPath.push(currentNode);
-//         currentNode = visitedNodes[currentNode.value];
-//     }
-//     return shortestPath.reverse();
-// }
