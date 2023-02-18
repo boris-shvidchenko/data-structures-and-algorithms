@@ -83,37 +83,79 @@
 // table.set('mane', 'Clark');
 // table.display();
 
-// merge sort
 
-// linked list
 
 // take a look at graph types (reveiw mentally) , traversals
 
+// add, remove all, print, swap
 
-const arr = [10,8,7,6,4,9,15,2,3];
-
-function mergeSort(list) {
-    if (list.length <= 1) return list;
-    const mid = Math.floor(list.length / 2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return compare(mergeSort(left), mergeSort(right));
+class Node {
+    constructor(value) {
+        this.value = value;
+        this.next = null;
+    }
 }
 
-function compare(left, right) {
-    let result = [];
-    let leftIndex = 0;
-    let rightIndex = 0;
-    while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            result.push(left[leftIndex]);
-            leftIndex++;
+class LinkedList {
+    constructor() {
+        this.head = null;
+        this.length = 0;
+    }
+    add(node) {
+        const newNode = new Node(node);
+        if (this.head === null) {
+            this.head = newNode;
         } else {
-            result.push(right[rightIndex]);
-            rightIndex++;
+            let current = this.head;
+            while (current.next !== null) {
+                current = current.next;
+            }
+            current.next = newNode;
+            this.length++;
         }
     }
-    return result.concat(left.slice(leftIndex), right.slice(rightIndex));
+    swap(node1, node2) {
+        const newNode = new Node(node2);
+        let current = this.head;
+        let previous;
+        if (this.head.value === node1) {
+            this.head = newNode;
+            newNode.next = current.next;
+            return;
+        }
+        while (current.value !== node1) {
+            previous = current;
+            current = current.next;
+        }
+        previous.next = newNode;
+        newNode.next = current.next;
+    }
+    removeAll() {
+        console.log('removed')
+        this.head = null;
+        this.length = 0;
+    }
+    print() {
+        let result = '';
+        let current = this.head;
+        while (current !== null) {
+            result += current.value + '>';
+            current = current.next;
+        }
+        console.log(result);
+    }
 }
 
-console.log(mergeSort(arr));
+
+const list = new LinkedList();
+list.add('a');
+list.add('b');
+list.add('c');
+// a -> b -> c -> etc.
+list.print();
+list.swap('a', 'z');
+list.print();
+// list.remove('b'); // a -> c -> etc.
+// list.appendAt(1,'z');
+list.removeAll();
+list.print();
