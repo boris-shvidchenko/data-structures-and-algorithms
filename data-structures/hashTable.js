@@ -73,56 +73,47 @@
 //     }
 // }
 
-// [ [ [k,v] [k,v] [k,v] ] ]
-// [k,v]
+// const table = new HashTable(50);
+// table.set('name', 'Ryan');
+// table.set('age', 25);
+// table.set('color', 'red');
+// table.display();
+// console.log(table.get('name'));
+// table.remove('color');
+// table.set('mane', 'Clark');
+// table.display();
 
-class HashTable {
-    constructor(size) {
-        this.table = new Array(size)
-        this.size = size;
-    }
-    hash(key) {
-        let total = 0;
-        for (let i = 0; i < key.length; i++) {
-            total += key.charCodeAt(i);
-        }
-        return total % this.size;
-    }
-    set(key, value) {
-        const index = this.hash(key);
-        const bucket = this.table[index];
-        if (!bucket) {
-            this.table[index] = [[key, value]];
-        } else {
-            const sameKey = bucket.find(item => item[0] === key);
-            if (sameKey) {
-                sameKey[1] = value;
-            } else {
-                bucket.push([key, value]);
-            }
-        }
-    }
-    remove(key){
-        const index = this.hash(key);
-        const bucket = this.table[index];
-        if (bucket) {
-            const sameKey = bucket.find(item => item[0] === key);
-            if (sameKey) {
-                bucket.splice(this.table[key], 1);
-            }
-        }
-    }
-    display(){
-        this.table.forEach(bucket => console.log(bucket));
-    }
+// merge sort
+
+// linked list
+
+// take a look at graph types (reveiw mentally) , traversals
+
+
+const arr = [10,8,7,6,4,9,15,2,3];
+
+function mergeSort(list) {
+    if (list.length <= 1) return list;
+    const mid = Math.floor(list.length / 2);
+    const left = list.slice(0, mid);
+    const right = list.slice(mid);
+    return compare(mergeSort(left), mergeSort(right));
 }
 
-const table = new HashTable(50);
-table.set('name', 'Ryan');
-table.set('age', 25);
-table.set('color', 'red');
-table.display();
-// console.log(table.get('name'));
-table.remove('color');
-table.set('mane', 'Clark');
-table.display();
+function compare(left, right) {
+    let result = [];
+    let leftIndex = 0;
+    let rightIndex = 0;
+    while (leftIndex < left.length && rightIndex < right.length) {
+        if (left[leftIndex] < right[rightIndex]) {
+            result.push(left[leftIndex]);
+            leftIndex++;
+        } else {
+            result.push(right[rightIndex]);
+            rightIndex++;
+        }
+    }
+    return result.concat(left.slice(leftIndex), right.slice(rightIndex));
+}
+
+console.log(mergeSort(arr));
