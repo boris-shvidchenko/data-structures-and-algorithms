@@ -73,36 +73,64 @@
 //     }
 // }
 
+class HashTable {
 
+    constructor(size) {
+        this.table = new Array(size);
+        this.size = size;
+    }
 
+    hash(key) {
+        let total = 0;
+        for (let i = 0; i < key.length; i++) {
+            total += key.charCodeAt(i);
+        }
+        return total % this.size;
+    }
 
-// const table = new HashTable(50);
-// table.set('name', 'Ryan');
-// table.set('age', 25);
-// table.set('color', 'red');
-// table.display();
-// // console.log(table.get('name'));  >>>>>
-// // table.remove('color');   >>>>>
-// table.set('mane', 'Clark');
-// table.display();
-
-// quick sort (pivot)
-
-const arr = [10,8,7,9,6,1,5,3,4,2];
-
-function quickSort(list) {
-    if (list.length <= 1) return list;
-    const pivot = list[0];
-    let left = [];
-    let right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < pivot) {
-            left.push(list[i]);
+    set(key,value) {
+        const index = this.hash(key);
+        const bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[key,value]];
         } else {
-            right.push(list[i]);
+            const sameKeyItem = bucket.find(item => item[0] === key);
+            if (sameKeyItem) {
+                sameKeyItem[1] = value; 
+            } else {
+                bucket.push([key, value]);
+            }
         }
     }
-    return [...quickSort(left), pivot, ...quickSort(right)];
+
+    remove(key) {
+        const index = this.hash(key);
+        const bucket = this.table[index];
+        if (bucket) {
+            const sameKeyItem = bucket.find(item => item[0] === key);
+            if (sameKeyItem) {
+                bucket.splice(this.table[key], 1)
+            }
+        }
+    }
+
+    display() {
+        this.table.forEach(bucket => console.log(bucket));
+    }
+
 }
 
-console.log(quickSort(arr));
+// [ [ bucket ],      [ [k, v], [k, v], [k, v] ],         [ bucket ] ]
+
+
+const table = new HashTable(50);
+table.set('name', 'Ryan');
+table.set('age', 25);
+table.set('color', 'red');
+table.display();
+// console.log(table.get('name'));  >>>>>
+table.remove('color');  
+table.set('mane', 'Clark');
+table.display();
+
+
