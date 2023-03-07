@@ -16,7 +16,16 @@
 //     return memo[n];
 // }
 
+function fib2(n, memo={}) {
+    if (n <= 2) return 1;
+    if (n in memo) return memo[n];
+    memo[n] = fib2(n - 1, memo) + fib2(n - 2, memo);
+    return memo[n]; 
+}
 
+//1,2,3,4,5,6,7 ,8 , 9, 10
+//1,1,2,3,5,8,13,21,34, 55
 
 // Test 
-console.log(fib2(50));
+console.log(fib2(10));
+console.log(fib2(70));
