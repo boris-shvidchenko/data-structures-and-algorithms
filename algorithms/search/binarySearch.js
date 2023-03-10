@@ -44,7 +44,6 @@ const binarySearch = (list, target) => {
             return binarySearch(list.slice(midPoint), target);
         }
     }
-
 };
 
 
