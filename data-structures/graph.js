@@ -134,6 +134,39 @@ function isConnected2(node1, node2) {
 // console.log(nodeA.isConnected(nodeB)); // Expected: true
 // console.log(nodeA.isConnected(nodeC)); // Expected: false
 
+
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.edgeList = [];
+    }
+    connect(node) {
+        this.edgeList.push(node);
+        node.edgeList.push(this)
+    }
+    getAdjacentNodes() {
+        this.edgeList.forEach(node => console.log(node.val))
+    }
+    isConnected(node) {
+        if (this.edgeList.includes(node)) return true;
+        return false;
+    }
+}
+
+class Graph {
+    constructor(nodes) {
+        this.nodes = [...nodes];
+    }
+    connectNode(node) {
+        this.nodes.push(node);
+    }
+}
+
+
+
+
+
+
 // === Graph breadth first traversal, depth first traversal and shortest path ===
 
 class Node {
