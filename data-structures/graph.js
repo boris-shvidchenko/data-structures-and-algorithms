@@ -134,7 +134,6 @@ function isConnected2(node1, node2) {
 // console.log(nodeA.isConnected(nodeB)); // Expected: true
 // console.log(nodeA.isConnected(nodeC)); // Expected: false
 
-
 // === Graph breadth first traversal, depth first traversal and shortest path ===
 
 class Node {
@@ -154,8 +153,6 @@ class Node {
     }
 }
 
-
-
 class Graph {
     constructor(nodes) {
         this.nodes = [...nodes];
@@ -163,60 +160,40 @@ class Graph {
     addToGraph(node) {
         this.nodes.push(node);
     }
+    // Breadth First visits each adjacent node
     breadthFirstTraversal(start, end) {
         const queue = [start];
-        const visitedNodes = new Set();
-        visitedNodes.add(start);
-        while (queue.length > 0) {
+        const vistedNodes = new Set(); // Tracking nodes that have been visited
+        vistedNodes.add(start);
+        while(queue.length > 0) {
             const node = queue.shift();
             if (node.value === end.value) {
                 console.log('Found it!');
                 return;
-            } 
+            }
             for (let adjacency of node.edgesList) {
-                if (!visitedNodes.has(adjacency)) {
+                if (!vistedNodes.has(adjacency)) {
                     queue.push(adjacency);
-                    visitedNodes.add(adjacency);
+                    vistedNodes.add(adjacency);
                 }
             }
-            console.log(node.value);
+            console.log(node.value)
         }
     }
-
-    // // Breadth First visits each adjacent node
-    // breadthFirstTraversal(start, end) {
-    //     const queue = [start];
-    //     const vistedNodes = new Set(); // Tracking nodes that have been visited
-    //     vistedNodes.add(start);
-    //     while(queue.length > 0) {
-    //         const node = queue.shift();
-    //         if (node.value === end.value) {
-    //             console.log('Found it!');
-    //             return;
-    //         }
-    //         for (let adjacency of node.edgesList) {
-    //             if (!vistedNodes.has(adjacency)) {
-    //                 queue.push(adjacency);
-    //                 vistedNodes.add(adjacency);
-    //             }
-    //         }
-    //         console.log(node.value)
-    //     }
-    // }
-    // // Depth First visits all nodes in order, if target node is not found it backtracks and tries another route
-    // depthFirstTraversal(start, end, visited = new Set()) {
-    //     if (start.value === end.value) {
-    //         console.log('Found it!');
-    //         return;
-    //     }
-    //     console.log('Visiting node: ', start.value);
-    //     visited.add(start);
-    //     for (let adjacency of start.edgesList) {
-    //         if (!visited.has(adjacency)) {
-    //             this.depthFirstTraversal(adjacency, end, visited);
-    //         }
-    //     }
-    // }
+    // Depth First visits all nodes in order, if target node is not found it backtracks and tries another route
+    depthFirstTraversal(start, end, visited = new Set()) {
+        if (start.value === end.value) {
+            console.log('Found it!');
+            return;
+        }
+        console.log('Visiting node: ', start.value);
+        visited.add(start);
+        for (let adjacency of start.edgesList) {
+            if (!visited.has(adjacency)) {
+                this.depthFirstTraversal(adjacency, end, visited);
+            }
+        }
+    }
     shortestPath(start, end) {
         const queue = [start];
         const visitedNodes = {};
@@ -272,7 +249,7 @@ MIA.connect(MCO);
 MIA.connect(PBI);
 MCO.connect(PBI);
 
-graph.breadthFirstTraversal(DFW, PBI);
+// graph.breadthFirstTraversal(DFW, PBI);
 // graph.depthFirstTraversal(DFW, HKG);
 
 // Practice Question
