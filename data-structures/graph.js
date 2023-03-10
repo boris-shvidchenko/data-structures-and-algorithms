@@ -135,38 +135,6 @@ function isConnected2(node1, node2) {
 // console.log(nodeA.isConnected(nodeC)); // Expected: false
 
 
-class Node {
-    constructor(val) {
-        this.val = val;
-        this.edgeList = [];
-    }
-    connect(node) {
-        this.edgeList.push(node);
-        node.edgeList.push(this)
-    }
-    getAdjacentNodes() {
-        this.edgeList.forEach(node => console.log(node.val))
-    }
-    isConnected(node) {
-        if (this.edgeList.includes(node)) return true;
-        return false;
-    }
-}
-
-class Graph {
-    constructor(nodes) {
-        this.nodes = [...nodes];
-    }
-    connectNode(node) {
-        this.nodes.push(node);
-    }
-}
-
-
-
-
-
-
 // === Graph breadth first traversal, depth first traversal and shortest path ===
 
 class Node {
@@ -186,6 +154,8 @@ class Node {
     }
 }
 
+
+
 class Graph {
     constructor(nodes) {
         this.nodes = [...nodes];
@@ -193,40 +163,60 @@ class Graph {
     addToGraph(node) {
         this.nodes.push(node);
     }
-    // Breadth First visits each adjacent node
     breadthFirstTraversal(start, end) {
         const queue = [start];
-        const vistedNodes = new Set(); // Tracking nodes that have been visited
-        vistedNodes.add(start);
-        while(queue.length > 0) {
+        const visitedNodes = new Set();
+        visitedNodes.add(start);
+        while (queue.length > 0) {
             const node = queue.shift();
             if (node.value === end.value) {
                 console.log('Found it!');
                 return;
-            }
+            } 
             for (let adjacency of node.edgesList) {
-                if (!vistedNodes.has(adjacency)) {
+                if (!visitedNodes.has(adjacency)) {
                     queue.push(adjacency);
-                    vistedNodes.add(adjacency);
+                    visitedNodes.add(adjacency);
                 }
             }
-            console.log(node.value)
+            console.log(node.value);
         }
     }
-    // Depth First visits all nodes in order, if target node is not found it backtracks and tries another route
-    depthFirstTraversal(start, end, visited = new Set()) {
-        if (start.value === end.value) {
-            console.log('Found it!');
-            return;
-        }
-        console.log('Visiting node: ', start.value);
-        visited.add(start);
-        for (let adjacency of start.edgesList) {
-            if (!visited.has(adjacency)) {
-                this.depthFirstTraversal(adjacency, end, visited);
-            }
-        }
-    }
+
+    // // Breadth First visits each adjacent node
+    // breadthFirstTraversal(start, end) {
+    //     const queue = [start];
+    //     const vistedNodes = new Set(); // Tracking nodes that have been visited
+    //     vistedNodes.add(start);
+    //     while(queue.length > 0) {
+    //         const node = queue.shift();
+    //         if (node.value === end.value) {
+    //             console.log('Found it!');
+    //             return;
+    //         }
+    //         for (let adjacency of node.edgesList) {
+    //             if (!vistedNodes.has(adjacency)) {
+    //                 queue.push(adjacency);
+    //                 vistedNodes.add(adjacency);
+    //             }
+    //         }
+    //         console.log(node.value)
+    //     }
+    // }
+    // // Depth First visits all nodes in order, if target node is not found it backtracks and tries another route
+    // depthFirstTraversal(start, end, visited = new Set()) {
+    //     if (start.value === end.value) {
+    //         console.log('Found it!');
+    //         return;
+    //     }
+    //     console.log('Visiting node: ', start.value);
+    //     visited.add(start);
+    //     for (let adjacency of start.edgesList) {
+    //         if (!visited.has(adjacency)) {
+    //             this.depthFirstTraversal(adjacency, end, visited);
+    //         }
+    //     }
+    // }
     shortestPath(start, end) {
         const queue = [start];
         const visitedNodes = {};
@@ -282,7 +272,7 @@ MIA.connect(MCO);
 MIA.connect(PBI);
 MCO.connect(PBI);
 
-// graph.breadthFirstTraversal(DFW, PBI);
+graph.breadthFirstTraversal(DFW, PBI);
 // graph.depthFirstTraversal(DFW, HKG);
 
 // Practice Question
