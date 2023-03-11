@@ -136,20 +136,108 @@ function isConnected2(node1, node2) {
 
 // === Graph breadth first traversal, depth first traversal and shortest path ===
 
+// class Node {
+//     constructor(value) {
+//         this.value = value;
+//         this.edgesList = [];
+//     }
+//     connect(node){
+//         this.edgesList.push(node);
+//         node.edgesList.push(this);
+//     }
+//     getAdjacentNodes(){
+//         return this.edgesList;
+//     }
+//     isConnected(node){
+//         return this.edgesList.includes(node) ? true : false;
+//     }
+// }
+
+// class Graph {
+//     constructor(nodes) {
+//         this.nodes = [...nodes];
+//     }
+//     addToGraph(node) {
+//         this.nodes.push(node);
+//     }
+//     // Breadth First visits each adjacent node
+//     breadthFirstTraversal(start, end) {
+//         const queue = [start];
+//         const vistedNodes = new Set(); // Tracking nodes that have been visited
+//         vistedNodes.add(start);
+//         while(queue.length > 0) {
+//             const node = queue.shift();
+//             if (node.value === end.value) {
+//                 console.log('Found it!');
+//                 return;
+//             }
+//             for (let adjacency of node.edgesList) {
+//                 if (!vistedNodes.has(adjacency)) {
+//                     queue.push(adjacency);
+//                     vistedNodes.add(adjacency);
+//                 }
+//             }
+//             console.log(node.value)
+//         }
+//     }
+//     // Depth First visits all nodes in order, if target node is not found it backtracks and tries another route
+//     depthFirstTraversal(start, end, visited = new Set()) {
+//         if (start.value === end.value) {
+//             console.log('Found it!');
+//             return;
+//         }
+//         console.log('Visiting node: ', start.value);
+//         visited.add(start);
+//         for (let adjacency of start.edgesList) {
+//             if (!visited.has(adjacency)) {
+//                 this.depthFirstTraversal(adjacency, end, visited);
+//             }
+//         }
+//     }
+//     shortestPath(start, end) {
+//         const queue = [start];
+//         const visitedNodes = {};
+//         visitedNodes[start.value] = null;
+//         while (queue.length > 0) {
+//             const node = queue.shift();
+//             if (node.value === end.value) {
+//                 console.log('Found it!');
+//                 return this.reconstructPath(visitedNodes, end);
+//             }
+//             for (let adjacency of node.edgesList) {
+//                 if (!visitedNodes.hasOwnProperty(adjacency.value)) {
+//                     visitedNodes[adjacency.value] = node;
+//                     queue.push(adjacency);
+//                 }
+//             }
+//         }
+//     }
+//     reconstructPath(visitedNodes, end) {
+//         let currentNode = end;
+//         const shortestPath = [];
+//         while (currentNode !== null) {
+//             shortestPath.push(currentNode);
+//             currentNode = visitedNodes[currentNode.value];
+//         }
+//         return shortestPath.reverse();
+//     }
+// }
+
 class Node {
-    constructor(value) {
-        this.value = value;
+    constructor(val) {
+        this.val = val;
         this.edgesList = [];
     }
-    connect(node){
+    getAdjacencies() {
+        return this.edgesList;
+    }
+    connect(node) {
         this.edgesList.push(node);
         node.edgesList.push(this);
     }
-    getAdjacentNodes(){
-        return this.edgesList;
-    }
-    isConnected(node){
-        return this.edgesList.includes(node) ? true : false;
+    isConnected(node) {
+        if (this.edgesList.includes(node)) return true;
+        return false;
     }
 }
 
@@ -157,71 +245,73 @@ class Graph {
     constructor(nodes) {
         this.nodes = [...nodes];
     }
-    addToGraph(node) {
+    connectNode(node) {
         this.nodes.push(node);
     }
-    // Breadth First visits each adjacent node
-    breadthFirstTraversal(start, end) {
+    breadthFirstTraversal(start, end, visited = new Set()) {
         const queue = [start];
-        const vistedNodes = new Set(); // Tracking nodes that have been visited
-        vistedNodes.add(start);
-        while(queue.length > 0) {
+        visited.add(start);
+        while (queue.length > 0) {
             const node = queue.shift();
-            if (node.value === end.value) {
+            if (node.val === end.val) {
                 console.log('Found it!');
                 return;
+            } else {
+                for (let adjacency of node.edgesList) {
+                    if (!visited.has(adjacency)) {
+                        visited.add(adjacency);
+                        queue.push(adjacency);
+                    }
+                }    
+                console.log(node.val);
             }
-            for (let adjacency of node.edgesList) {
-                if (!vistedNodes.has(adjacency)) {
-                    queue.push(adjacency);
-                    vistedNodes.add(adjacency);
-                }
-            }
-            console.log(node.value)
         }
     }
-    // Depth First visits all nodes in order, if target node is not found it backtracks and tries another route
     depthFirstTraversal(start, end, visited = new Set()) {
-        if (start.value === end.value) {
+        if (start.val === end.val) {
             console.log('Found it!');
             return;
-        }
-        console.log('Visiting node: ', start.value);
-        visited.add(start);
-        for (let adjacency of start.edgesList) {
-            if (!visited.has(adjacency)) {
-                this.depthFirstTraversal(adjacency, end, visited);
+        } else {
+            console.log('Visiting node: ', start.val);
+            visited.add(start);
+            for (let adjacency of start.edgesList) {
+                if (!visited.has(adjacency)) {
+                    this.depthFirstTraversal(adjacency, end, visited);
+                }
             }
         }
     }
     shortestPath(start, end) {
         const queue = [start];
-        const visitedNodes = {};
-        visitedNodes[start.value] = null;
+        const visited = {};
+        visited[start.val] = null;
         while (queue.length > 0) {
             const node = queue.shift();
-            if (node.value === end.value) {
+            if (node.val === end.val) {
                 console.log('Found it!');
-                return this.reconstructPath(visitedNodes, end);
-            }
-            for (let adjacency of node.edgesList) {
-                if (!visitedNodes.hasOwnProperty(adjacency.value)) {
-                    visitedNodes[adjacency.value] = node;
-                    queue.push(adjacency);
+                return this.reconstructPath(visited, end);
+            } else {
+                for (let adjacency of node.edgesList) {
+                    if (!visited.hasOwnProperty(adjacency.val)) {
+                        visited[adjacency.val] = node;
+                        queue.push(adjacency);
+                    }
                 }
             }
         }
     }
-    reconstructPath(visitedNodes, end) {
+    reconstructPath(visited, end) {
         let currentNode = end;
         const shortestPath = [];
         while (currentNode !== null) {
             shortestPath.push(currentNode);
-            currentNode = visitedNodes[currentNode.value];
+            currentNode = visited[currentNode.val];
         }
         return shortestPath.reverse();
     }
 }
+
+
 
 const DFW = new Node('DFW');
 const JFK = new Node('JFK');
@@ -254,4 +344,4 @@ MCO.connect(PBI);
 
 // Practice Question
 // Given 2 airports find the smallest distance between the 2. (ex: DFW and PBI > DFW-JFK-MIA-PBI)
-// console.log(graph.shortestPath(DFW, PBI));
+console.log(graph.shortestPath(DFW, PBI));
