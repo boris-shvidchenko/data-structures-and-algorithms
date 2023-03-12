@@ -11,18 +11,20 @@
 //     return table[n];
 // }
 
-// Test
-
-function fibTabulation(n) {
-    let table = new Array(n + 1).fill(0);
+function fib(v) {
+    if (v <= 2) return 1;
+    const table = new Array(v + 1).fill(0);
     table[1] = 1;
-
-    for (let i = 0; i < n; i++) {
+    for (let i = 0; i <= v; i++) {
         table[i + 1] += table[i];
         table[i + 2] += table[i];
     }
-    
-    return table[n];
+    return table[v];
 }
 
-console.log(fibTabulation(60));
+// [0,1,1,2,3,0,0]
+
+// Test
+console.log(fib(6));
+console.log(fib(60));
+console.log(fib(200));
