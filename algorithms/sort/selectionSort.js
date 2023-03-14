@@ -5,30 +5,22 @@
 const testArray = [9,10,4,2,8,1,3,5,7,6];
 
 // Stores the sorted array
-// let newArray = [];
+let newArray = [];
 
-// function selectionSort(list) {
-//     let min = list[0];
-//     // Base case
-//     if (list.length === 0) return newArray;
-//     for (let i = 0; i < list.length; i++) {
-//         if (list[i] < min) min = list[i];
-//     }
-//     newArray.push(min);
-//     const minIndex = list.indexOf(min);
-//     list.splice(minIndex,1);
-//     // Test log
-//     console.log('Input List: ' + list);
-//     console.log('Output List: ' + newArray);
-//     return selectionSort(list);
-// }
-
-const selectionSort = (list, results=[]) => {
-    if (list.length === 0) return results;
-    let min = Math.min(...list);
-    results.push(min);
-    list.splice(list.indexOf(min), 1);
-    return selectionSort(list, results);
-};
+function selectionSort(list) {
+    let min = list[0];
+    // Base case
+    if (list.length === 0) return newArray;
+    for (let i = 0; i < list.length; i++) {
+        if (list[i] < min) min = list[i];
+    }
+    newArray.push(min);
+    const minIndex = list.indexOf(min);
+    list.splice(minIndex,1);
+    // Test log
+    console.log('Input List: ' + list);
+    console.log('Output List: ' + newArray);
+    return selectionSort(list);
+}
 
 console.log(selectionSort(testArray));
