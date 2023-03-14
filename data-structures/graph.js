@@ -237,21 +237,35 @@ class Node {
 class Graph {
     constructor(nodes) {
         this.node = [...nodes];
-    }
-    depthFirstTraversal(start, visited = new Set(), results = []) {
-        if (start === null) return results;
-        visited.add(start);
-        results.push(start.val);
-        for (let adj of start.edgesList) {
-            if (!visited.has(adj)) {
-                this.depthFirstTraversal(adj, visited, results);
+    } 
+    shortestPath(start, end) {
+        const visited = {};
+        const queue = [start];
+        visited[start.val] = null;
+        while (queue.length > 0) {
+            const currentNode = queue.shift();
+            if (currentNode.val === end.val) {
+                console.log('Found it!');
+                return this.reconstructPath(visited, end);
+            } else {
+                for (let adj of currentNode.edgesList) {
+                    if (!visited.hasOwnProperty(adj.val)) {
+                        visited[adj.val] = currentNode;
+                        queue.push(adj)
+                    }
+                }
             }
         }
-        console.log(results);
     }
-       
-    // shortestPath(star, end) {}
-    // reconstructPath(visited, end) {}
+    reconstructPath(visited, end) {
+        let currentNode = end;
+        const results = [];
+        while (currentNode !== null) {
+            results.push(currentNode);
+            currentNode = visited[currentNode.val];
+        }
+        return results.reverse();
+    }
 }
 
 const DFW = new Node('DFW');
@@ -280,8 +294,7 @@ MIA.connect(MCO);
 MIA.connect(PBI);
 MCO.connect(PBI);
 
-graph.depthFirstTraversal(DFW);
 
 // Practice Question
 // Given 2 airports find the smallest distance between the 2. (ex: DFW and PBI > DFW-JFK-MIA-PBI)
-// console.log(graph.shortestPath(DFW, PBI));
+console.log(graph.shortestPath(DFW, PBI));
