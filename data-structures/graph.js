@@ -238,27 +238,18 @@ class Graph {
     constructor(nodes) {
         this.node = [...nodes];
     }
-    // depthFirstTraversal(start, end, visited = new Set()) {
-
-    // }
-    breadthFirstTraversal(start) {
-        const visited = new Set();
-        const queue = [start];
-        const results = [];
+    depthFirstTraversal(start, visited = new Set(), results = []) {
+        if (start === null) return results;
         visited.add(start);
-        while(queue.length > 0) {
-            const currentNode = queue.shift();
-            results.push(currentNode.val);
-            for (let adj of currentNode.edgesList) {
-                if (!visited.has(adj)) {
-                    visited.add(adj);
-                    queue.push(adj);
-                }
+        results.push(start.val);
+        for (let adj of start.edgesList) {
+            if (!visited.has(adj)) {
+                this.depthFirstTraversal(adj, visited, results);
             }
         }
         console.log(results);
     }
-    
+       
     // shortestPath(star, end) {}
     // reconstructPath(visited, end) {}
 }
@@ -289,8 +280,7 @@ MIA.connect(MCO);
 MIA.connect(PBI);
 MCO.connect(PBI);
 
-graph.breadthFirstTraversal(DFW);
-// graph.depthFirstTraversal(DFW, HKG);
+graph.depthFirstTraversal(DFW);
 
 // Practice Question
 // Given 2 airports find the smallest distance between the 2. (ex: DFW and PBI > DFW-JFK-MIA-PBI)
