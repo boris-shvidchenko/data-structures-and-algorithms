@@ -238,23 +238,50 @@ class Graph {
     constructor(nodes) {
         this.nodes = [...nodes];
     }
-    depthFirstTraversal(start, end, visited = new Set()) {
-        if (start.value === end.value) {
-            console.log('Found it!');
-            return;
-        }
-        console.log('Visiting node: ', start.value);
+    breadthFirstTraversal(start, end) {
+        const queue = [start];
+        const visited = new Set();
         visited.add(start);
-        for (let adjacency of start.edgesList) {
-            if (!visited.has(adjacency)) {
-                this.depthFirstTraversal(adjacency, end, visited);
+        while (queue.length > 0) {
+            const currentNode = queue.shift();
+            if (currentNode.value === end.value) {
+                console.log('Found it!');
+                return;
+            } 
+            for (let adjacency of currentNode.edgesList) {
+                if (!visited.has(adjacency)) {
+                    queue.push(adjacency);
+                    visited.add(adjacency);
+                }
             }
+            console.log(currentNode.value);
         }
     }
-    // breadthFirstTraversal(start, end) {}
+}
+
+    //     breadthFirstTraversal(start, end) {
+//         const queue = [start];
+//         const vistedNodes = new Set(); // Tracking nodes that have been visited
+//         vistedNodes.add(start);
+//         while(queue.length > 0) {
+//             const node = queue.shift();
+//             if (node.value === end.value) {
+//                 console.log('Found it!');
+//                 return;
+//             }
+//             for (let adjacency of node.edgesList) {
+//                 if (!vistedNodes.has(adjacency)) {
+//                     queue.push(adjacency);
+//                     vistedNodes.add(adjacency);
+//                 }
+//             }
+//             console.log(node.value)
+//         }
+//     }
+
     // shortestPath(start, end) {}
     // reconstructPath(results, end) {}
-}
+
 
 const DFW = new Node('DFW');
 const JFK = new Node('JFK');
@@ -282,8 +309,8 @@ MIA.connect(MCO);
 MIA.connect(PBI);
 MCO.connect(PBI);
 
-// graph.breadthFirstTraversal(DFW, PBI);
-graph.depthFirstTraversal(DFW, HKG);
+graph.breadthFirstTraversal(DFW, PBI);
+// graph.depthFirstTraversal(DFW, HKG);
 
 // Practice Question
 // Given 2 airports find the smallest distance between the 2. (ex: DFW and PBI > DFW-JFK-MIA-PBI)
