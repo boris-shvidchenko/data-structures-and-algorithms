@@ -97,19 +97,108 @@
 //     }
 // }
 
+class Node {
+    constructor(value) {
+        this.value = value;
+        this.next = null;
+    }
+}
+
+class LinkedList {
+    constructor() {
+        this.head = null;
+        this.length = 0;
+    }
+    append(node) {
+        const newNode = new Node(node);
+        if (this.head === null) {
+            this.head = newNode;
+        } else {
+            let currentNode = this.head;
+            while (currentNode.next !== null) {
+                currentNode = currentNode.next;
+            } 
+            currentNode.next = newNode;
+        }
+        this.length++;
+    }
+    print() {
+        let str = '';
+        let currentNode = this.head;
+        while (currentNode !== null) {
+            str += currentNode.value + '>';
+            currentNode = currentNode.next;
+        }
+        console.log(str);
+    }
+    delAll() {
+        this.head = null;
+        this.length = 0;
+    }
+    remove(node) {
+        let current = this.head;
+        let previous;
+        if (current.value === node) {
+            this.head = current.next;
+            return;
+        }
+        while (current.value !== node) {
+            previous = current;
+            current = current.next;
+        }
+        previous.next = current.next;
+        this.length--;
+    }
+    appendAt(index, node) {
+        const newNode = new Node(node);
+        let current = this.head;
+        let previous;
+        let currentIndex = 0;
+        if (index === 0) {
+            this.head = newNode;
+            newNode.next = current;
+            return;
+        }
+        while (currentIndex !== index) {
+            previous = current;
+            current = current.next;
+            currentIndex++;
+        }
+        previous.next = newNode;
+        newNode.next = current;
+        this.length++;
+    }
+    contains (node) {
+        let current = this.head;
+        while (current !== null) {
+            if (current.value === node) {
+                console.log('true');
+                return;
+            } 
+            current = current.next;
+        }
+        console.log('false');
+    }
+}
+
 // Test
 const list = new LinkedList();
 list.append('a');
+list.print();
 list.append('b');
+list.print();
 list.append('c');
+list.print();
 // a -> b -> c -> etc.
 list.contains('a'); // true
 list.contains('z'); // false
+list.remove('a'); // a -> c -> etc.
 list.print();
-list.remove('b'); // a -> c -> etc.
-list.appendAt(1,'z');
+list.appendAt(0,'z');
 list.print();
 list.contains('z'); // true
+list.delAll();
+list.print();
 
 
 
