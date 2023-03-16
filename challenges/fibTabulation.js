@@ -11,18 +11,17 @@
 //     return table[n];
 // }
 
-function fib(n) {
-    if (n <= 2) return 1;
-    const table = new Array(n + 1).fill(0);
+const fib = (v) => {
+    if (v <= 2) return 1;
+    const table = Array(v+1).fill(0);
     table[1] = 1;
-    for (let i = 0; i<n; i++) {
+    for (let i=0; i<v; i++) {
         table[i+1] += table[i];
         table[i+2] += table[i];
     }
-    return table[n];
+    return table[v];
 }
-
 
 // Test
 console.log(fib(6));
-console.log(fib(300));
+console.log(fib(100));
