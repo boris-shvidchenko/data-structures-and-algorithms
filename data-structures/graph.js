@@ -238,41 +238,33 @@ class Graph {
     constructor(nodes) {
         this.nodes = [...nodes]
     }
-    breadthFirstTraversal(start, end) {
-        let visited = new Set();
+    shortestPath(start, end) {
+        const visited = {};
         const queue = [start];
-        visited.add(start);
+        visited[start.value] = null;
         while (queue.length > 0) {
             const current = queue.shift();
             if (current.value === end.value) {
                 console.log('Found it!');
-                return;
+                return this.reconstructPath(visited, end);
             }
             for (let adj of current.edges) {
-                if (!visited.has(adj)) {
-                    visited.add(adj);
+                if (!visited.hasOwnProperty(adj.value)) {
                     queue.push(adj);
+                    visited[adj.value] = current;
                 }
             }
-            console.log('visited node: ', current.value)
-
         }
     }
-    // depthFirstTraversal(start, end, visited = new Set()) {
-    //     // if (start.value === end.value) {
-    //     //     console.log('Found it!');
-    //     //     return;
-    //     // }
-    //     console.log('Visiting node: ', start.value);
-    //     visited.add(start);
-    //     for (let adj of start.edges) {
-    //         if (!visited.has(adj)) {
-    //             this.depthFirstTraversal(adj, end, visited);
-    //         }
-    //     }
-    // }
-    // shortestPath(start, end) {}
-    // reconstructPath(visited, end) {}
+    reconstructPath(visited, end) {
+        let current = end;
+        let path = [];
+        while (current !== null) {
+            path.push(current.value);
+            current = visited[current.value];
+        }
+        return path.reverse();
+    }
 }
 
 const DFW = new Node('DFW');
@@ -301,9 +293,9 @@ MIA.connect(MCO);
 MIA.connect(PBI);
 MCO.connect(PBI);
 
-graph.breadthFirstTraversal(DFW, PBI);
+// graph.breadthFirstTraversal(DFW, PBI);
 // graph.depthFirstTraversal(DFW, HKG);
 
 // Practice Question
 // Given 2 airports find the smallest distance between the 2. (ex: DFW and PBI > DFW-JFK-MIA-PBI)
-// console.log(graph.shortestPath(DFW, PBI));
+console.log(graph.shortestPath(DFW, PBI));
