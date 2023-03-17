@@ -25,19 +25,19 @@ c.right = f;
 //  / \   \ 
 // d   e   f
 
-
-function dft(root, target) {
-    if (root === null) return false;
-    if (root.val === target) return true;
-    return dft(root.left, target) || dft(root.right, target);
+function bft(root, target) {
+    if (root === null) return [];
+    const queue = [root];
+    while (queue.length > 0) {
+        const current = queue.shift();
+        if (current.val === target) return true;
+        if (current.left !== null) queue.push(current.left);
+        if (current.right !== null) queue.push(current.right);
+    }
+    return false;
 }
-console.log(dft(a, 'c'));
-console.log(dft(a, 'z'));
-
-// function bft(root) {
-    
-// }
-// console.log(bft(a));
+console.log(bft(a, 'a'));
+console.log(bft(a, 'h'));
 
 
 
