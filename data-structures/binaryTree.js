@@ -34,18 +34,21 @@ c.right = f;
 // d   e   f
 
 
-function dft(root, t) {
-    if (root === null) return false;
-    if (root.val === t) return true;
-    return dft(root.left, t) || dft(root.right, t);
-}
-console.log(dft(a, 'b'));
-console.log(dft(a, 'z'));
 
-// function bft(root) {
-    
-// }
+function bft(root, t) {
+    if (root === null) return false;
+    const queue = [root];
+    while (queue.length > 0) {
+        const current = queue.shift();
+        if (current.val === t) return true;
+        if (current.left !== null) queue.push(current.left);
+        if (current.right !== null) queue.push(current.right);
+    }
+    return false;
+}
 // console.log(bft(a));
+console.log(bft(a, 'a'));
+console.log(bft(a, 'z'));
 
 
 
