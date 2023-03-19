@@ -23,4 +23,15 @@ function selectionSort(list) {
     return selectionSort(list);
 }
 
+// Method 2: Using reduce
+// function selectionSort(list, results=[]) {
+//     if (list.length === 0) return results;
+//     const min = list.reduce((a,b) => a < b ? a : b);
+//     results.push(min);
+//     const minIndex = list.indexOf(min);
+//     list.splice(minIndex, 1);
+//     return selectionSort(list, results);
+// }
+
 console.log(selectionSort(testArray));
+
