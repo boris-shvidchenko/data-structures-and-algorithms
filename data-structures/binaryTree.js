@@ -1,23 +1,38 @@
-// // Sets up a generic node for a binary tree
-// class Node {
-//     constructor(val) {
-//         this.val = val;    // Value of the node
-//         this.left = null;  // Left edge
-//         this.right = null; // Right edge
-//     }
-// }
+// Sets up a generic node for a binary tree
+class Node {
+    constructor(val) {
+        this.val = val;    // Value of the node
+        this.left = null;  // Left edge
+        this.right = null; // Right edge
+    }
+}
 
-// const a = new Node('a');
-// const b = new Node('b');
-// const c = new Node('c');
-// const d = new Node('d');
-// const e = new Node('e');
-// const f = new Node('f');
-// a.left = b;
-// a.right = c;
-// b.left = d;
-// b.right = e;
-// c.right = f;
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+function bft(root, t) {
+    if (root === null) return false;
+    const queue = [root];
+    while (queue.length > 0) {
+        let cur = queue.shift();
+        if (cur.val === t) return true;
+        if (cur.left !== null) queue.push(cur.left);
+        if (cur.right !== null) queue.push(cur.right);
+    }
+    return false;
+}
+console.log(bft(a, 'a'));
+console.log(bft(a, 'z'));
+console.log(bft(a, 'f'));
 
 // const g = new Node(3);
 // const h = new Node(11);
@@ -31,10 +46,10 @@
 // h.right = k;
 // i.right = l;
 
-// // === Algorithms ===
+// === Algorithms ===
 
-// // Binary Tree depth first traversal algorithm
-// // Prompt: Write a function that take in the root of a binary tree and returns an array with all of the values in the tree in depth-first order. Depth-first traversal means traverse top-down from left to right. 
+// Binary Tree depth first traversal algorithm
+// Prompt: Write a function that take in the root of a binary tree and returns an array with all of the values in the tree in depth-first order. Depth-first traversal means traverse top-down from left to right. 
 
 // // Iterative
 // function depthFirstIterative(root) {
@@ -175,94 +190,3 @@
 
 // // Test
 // console.log(maxPathSum(g));
-
-
-class Node {
-    constructor(val) {
-        this.val = val;
-        this.edges = [];
-    }
-    connect(node) {
-        this.edges.push(node);
-        node.edges.push(this);
-    }
-}
-
-class Graph {
-    constructor(nodes) {
-        this.nodes = [...nodes]
-    }
-    sp(start, end) {
-        const visited = {};
-        const queue = [start];
-        visited[start.val] = null;
-        while (queue.length > 0) {
-            const current = queue.shift();
-            if (current === end) {
-                return this.rp(visited, end);
-            }
-            for (let adj of current.edges) {
-                if (!visited.hasOwnProperty(adj.val)) {
-                    queue.push(adj);
-                    visited[adj.val] = current;
-                }
-            }
-        }
-    }
-    rp(visited, end) {
-        let current = end;
-        let path = [];
-        while (current !== null) {
-            path.push(current.val);
-            current = visited[current.val];
-        }
-        console.log(path.reverse());
-    }
-}
-
-const a = new Node('A');
-const b = new Node('B');
-const c = new Node('C');
-const d = new Node('D');
-const e = new Node('E');
-const f = new Node('F');
-const g = new Node('G');
-
-a.connect(b);
-b.connect(c);
-c.connect(d);
-d.connect(b);
-d.connect(e);
-e.connect(f);
-f.connect(g);
-g.connect(a);
-g.connect(b);
-
-// const DFW = new Node('DFW');
-// const JFK = new Node('JFK');
-// const LAX = new Node('LAX');
-// const HNL = new Node('HNL');
-// const SAN = new Node('SAN');
-// const EWR = new Node('EWR');
-// const BOS = new Node('BOS');
-// const MIA = new Node('MIA');
-// const MCO = new Node('MCO');
-// const PBI = new Node('PBI');
-// const HKG = new Node('HKG');
-
-// DFW.connect(JFK);
-// DFW.connect(LAX);
-// JFK.connect(BOS);
-// JFK.connect(MIA);
-// LAX.connect(HNL);
-// LAX.connect(EWR);
-// LAX.connect(SAN);
-// SAN.connect(HKG);
-// MIA.connect(MCO);
-// MIA.connect(PBI);
-// MCO.connect(PBI);
-
-const newGraph = new Graph([a,b,c,d,e,f,g]);
-
-newGraph.sp(a, f);
-newGraph.sp(a, e);
