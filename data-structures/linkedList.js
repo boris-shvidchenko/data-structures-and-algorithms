@@ -100,16 +100,21 @@ class LinkedList {
 // Test
 const list = new LinkedList();
 list.append('a');
+list.print();
 list.append('b');
+list.print();
 list.append('c');
+list.print();
 // a -> b -> c -> etc.
 list.contains('a'); // true
 list.contains('z'); // false
-list.print();
 list.remove('b'); // a -> c -> etc.
+list.print();
 list.appendAt(1,'z');
 list.print();
 list.contains('z'); // true
+list.delAll();
+list.print();
 
 
 
