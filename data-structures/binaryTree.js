@@ -1,177 +1,268 @@
-// Sets up a generic node for a binary tree
+// // Sets up a generic node for a binary tree
+// class Node {
+//     constructor(val) {
+//         this.val = val;    // Value of the node
+//         this.left = null;  // Left edge
+//         this.right = null; // Right edge
+//     }
+// }
+
+// const a = new Node('a');
+// const b = new Node('b');
+// const c = new Node('c');
+// const d = new Node('d');
+// const e = new Node('e');
+// const f = new Node('f');
+// a.left = b;
+// a.right = c;
+// b.left = d;
+// b.right = e;
+// c.right = f;
+
+// const g = new Node(3);
+// const h = new Node(11);
+// const i = new Node(4);
+// const j = new Node(4);
+// const k = new Node(2);
+// const l = new Node(1);
+// g.left = h;
+// g.right = i;
+// h.left = j;
+// h.right = k;
+// i.right = l;
+
+// // === Algorithms ===
+
+// // Binary Tree depth first traversal algorithm
+// // Prompt: Write a function that take in the root of a binary tree and returns an array with all of the values in the tree in depth-first order. Depth-first traversal means traverse top-down from left to right. 
+
+// // Iterative
+// function depthFirstIterative(root) {
+//     if (root === null) return [];
+//     const result = [];
+//     const stack = [root];
+//     while (stack.length > 0) {
+//         const current = stack.pop();
+//         result.push(current.val);
+//         if (current.right) stack.push(current.right);
+//         if (current.left) stack.push(current.left);
+//     }
+//     return result;
+// }
+// // Test
+// // console.log(depthFirstIterative(a));
+
+// // Recursive
+// function depthFirstRecursive(root) {
+//     if (root === null) return [];
+//     const leftValues = depthFirstRecursive(root.left);
+//     const rightValues = depthFirstRecursive(root.right);
+//     return [root.val, ...leftValues, ...rightValues];
+// }
+// // Test
+// // console.log(depthFirstRecursive(a));
+
+// // Search for target value in tree (depth first), return T/F if it exists.
+// function depthFirstSearch(root, target) {
+//     if (root === null) return false;
+//     if (root.val === target) return true;
+//     return depthFirstSearch(root.left, target) || depthFirstSearch(root.right, target);
+// }
+// // Test
+// // console.log(depthFirstSearch(a, 'e'));
+
+// // Binary Tree breadth first traversal algorithm
+// // Prompt: Write a function that takes the root of a binary tree and returns an array in breadth-first (level) order. Depth-first traverses top-down from left to right by level.
+
+// function breadthFirst(root) {
+//     if (root === null) return [];
+//     const result = [];
+//     const queue = [root];
+//     while (queue.length > 0) {
+//         const current = queue.shift();
+//         result.push(current.val);
+//         if (current.left !== null) queue.push(current.left);
+//         if (current.right !== null) queue.push(current.right);
+//     }
+//     return result;
+// }
+// // Test
+// // console.log(breadthFirst(a));
+
+// // Search for target value in tree (breadth first), return T/F if it exists.
+
+// function breadthFirstSearch(root, target) {
+//     if (root === null) return false;
+//     const queue = [root];
+//     while (queue.length > 0) {
+//         const current = queue.shift();
+//         if (current.val === target) return true
+//         if (current.left) queue.push(current.left);
+//         if (current.right) queue.push(current.right)
+//     }
+//     return false;
+// }
+// // Test
+// // console.log(breadthFirstSearch(a,'e'));
+
+// // Tree Sum 
+// // Prompt: Return the sum of a tree
+
+// // Recursive
+// function treeSumRecursive(root) {
+//     if (root === null) return 0;
+//     return root.val + treeSumRecursive(root.left) + treeSumRecursive(root.right);
+// }
+// // Test
+// // console.log(treeSum(g));
+
+// // Iterative
+// function treeSumIterative(root) {
+//     if (root === null) return 0;
+//     let totalSum = 0;
+//     const queue = [root];
+//     while (queue.length > 0) {
+//         const current = queue.shift();
+//         totalSum += current.val;
+//         if (current.left !== null) queue.push(current.left);
+//         if (current.right !== null) queue.push(current.right);
+//     }
+//     return totalSum;
+// }
+// // Test
+// // console.log(treeSumIterative(g));
+
+// // Tree Min
+// // Prompt: Return the minimum value of a tree
+
+// // Recursive
+// function treeMinRecursive(root){
+//     if (root === null) return Infinity;
+//     const leftMin = treeMinRecursive(root.left);
+//     const rightMin = treeMinRecursive(root.right);
+//     return Math.min(root.val, leftMin, rightMin);
+// }
+// // Test
+// // console.log(treeMinRecursive(g));
+
+// // Iterative
+// function treeMinIterative(root){
+//     let smallest = Infinity; // Inifinity will be the default value
+//     const stack = [root];
+//     while (stack.length > 0) {
+//         const current = stack.pop();
+//         if (current.val < smallest) smallest = current.val;
+//         if (current.left !== null) stack.push(current.left);
+//         if (current.right !== null) stack.push(current.right);
+//     }
+//     return smallest;
+// }
+// // Test
+// // console.log(treeMinIterative(g));
+
+// // Max root to leaf path sum
+// // Prompt: Return the max sum of all possible paths in a tree.
+
+// function maxPathSum(root) {
+//     if (root === null) return -Infinity;
+//     if (root.left === null && root.right === null) return root.val;
+//     const maxChildPathSum = Math.max(
+//         maxPathSum(root.left),
+//         maxPathSum(root.right)
+//     );
+//     return root.val + maxChildPathSum;
+// }
+
+// // Test
+// console.log(maxPathSum(g));
+
+
 class Node {
     constructor(val) {
-        this.val = val;    // Value of the node
-        this.left = null;  // Left edge
-        this.right = null; // Right edge
+        this.val = val;
+        this.edges = [];
+    }
+    connect(node) {
+        this.edges.push(node);
+        node.edges.push(this);
     }
 }
 
-const a = new Node('a');
-const b = new Node('b');
-const c = new Node('c');
-const d = new Node('d');
-const e = new Node('e');
-const f = new Node('f');
-a.left = b;
-a.right = c;
-b.left = d;
-b.right = e;
-c.right = f;
-
-const g = new Node(3);
-const h = new Node(11);
-const i = new Node(4);
-const j = new Node(4);
-const k = new Node(2);
-const l = new Node(1);
-g.left = h;
-g.right = i;
-h.left = j;
-h.right = k;
-i.right = l;
-
-// === Algorithms ===
-
-// Binary Tree depth first traversal algorithm
-// Prompt: Write a function that take in the root of a binary tree and returns an array with all of the values in the tree in depth-first order. Depth-first traversal means traverse top-down from left to right. 
-
-// Iterative
-function depthFirstIterative(root) {
-    if (root === null) return [];
-    const result = [];
-    const stack = [root];
-    while (stack.length > 0) {
-        const current = stack.pop();
-        result.push(current.val);
-        if (current.right) stack.push(current.right);
-        if (current.left) stack.push(current.left);
+class Graph {
+    constructor(nodes) {
+        this.nodes = [...nodes]
     }
-    return result;
-}
-// Test
-// console.log(depthFirstIterative(a));
-
-// Recursive
-function depthFirstRecursive(root) {
-    if (root === null) return [];
-    const leftValues = depthFirstRecursive(root.left);
-    const rightValues = depthFirstRecursive(root.right);
-    return [root.val, ...leftValues, ...rightValues];
-}
-// Test
-// console.log(depthFirstRecursive(a));
-
-// Search for target value in tree (depth first), return T/F if it exists.
-function depthFirstSearch(root, target) {
-    if (root === null) return false;
-    if (root.val === target) return true;
-    return depthFirstSearch(root.left, target) || depthFirstSearch(root.right, target);
-}
-// Test
-// console.log(depthFirstSearch(a, 'e'));
-
-// Binary Tree breadth first traversal algorithm
-// Prompt: Write a function that takes the root of a binary tree and returns an array in breadth-first (level) order. Depth-first traverses top-down from left to right by level.
-
-function breadthFirst(root) {
-    if (root === null) return [];
-    const result = [];
-    const queue = [root];
-    while (queue.length > 0) {
-        const current = queue.shift();
-        result.push(current.val);
-        if (current.left !== null) queue.push(current.left);
-        if (current.right !== null) queue.push(current.right);
+    sp(start, end) {
+        const visited = {};
+        const queue = [start];
+        visited[start.val] = null;
+        while (queue.length > 0) {
+            const current = queue.shift();
+            if (current === end) {
+                return this.rp(visited, end);
+            }
+            for (let adj of current.edges) {
+                if (!visited.hasOwnProperty(adj.val)) {
+                    queue.push(adj);
+                    visited[adj.val] = current;
+                }
+            }
+        }
     }
-    return result;
-}
-// Test
-// console.log(breadthFirst(a));
-
-// Search for target value in tree (breadth first), return T/F if it exists.
-
-function breadthFirstSearch(root, target) {
-    if (root === null) return false;
-    const queue = [root];
-    while (queue.length > 0) {
-        const current = queue.shift();
-        if (current.val === target) return true
-        if (current.left) queue.push(current.left);
-        if (current.right) queue.push(current.right)
+    rp(visited, end) {
+        let current = end;
+        let path = [];
+        while (current !== null) {
+            path.push(current.val);
+            current = visited[current.val];
+        }
+        console.log(path.reverse());
     }
-    return false;
-}
-// Test
-// console.log(breadthFirstSearch(a,'e'));
-
-// Tree Sum 
-// Prompt: Return the sum of a tree
-
-// Recursive
-function treeSumRecursive(root) {
-    if (root === null) return 0;
-    return root.val + treeSumRecursive(root.left) + treeSumRecursive(root.right);
-}
-// Test
-// console.log(treeSum(g));
-
-// Iterative
-function treeSumIterative(root) {
-    if (root === null) return 0;
-    let totalSum = 0;
-    const queue = [root];
-    while (queue.length > 0) {
-        const current = queue.shift();
-        totalSum += current.val;
-        if (current.left !== null) queue.push(current.left);
-        if (current.right !== null) queue.push(current.right);
-    }
-    return totalSum;
-}
-// Test
-// console.log(treeSumIterative(g));
-
-// Tree Min
-// Prompt: Return the minimum value of a tree
-
-// Recursive
-function treeMinRecursive(root){
-    if (root === null) return Infinity;
-    const leftMin = treeMinRecursive(root.left);
-    const rightMin = treeMinRecursive(root.right);
-    return Math.min(root.val, leftMin, rightMin);
-}
-// Test
-// console.log(treeMinRecursive(g));
-
-// Iterative
-function treeMinIterative(root){
-    let smallest = Infinity; // Inifinity will be the default value
-    const stack = [root];
-    while (stack.length > 0) {
-        const current = stack.pop();
-        if (current.val < smallest) smallest = current.val;
-        if (current.left !== null) stack.push(current.left);
-        if (current.right !== null) stack.push(current.right);
-    }
-    return smallest;
-}
-// Test
-// console.log(treeMinIterative(g));
-
-// Max root to leaf path sum
-// Prompt: Return the max sum of all possible paths in a tree.
-
-function maxPathSum(root) {
-    if (root === null) return -Infinity;
-    if (root.left === null && root.right === null) return root.val;
-    const maxChildPathSum = Math.max(
-        maxPathSum(root.left),
-        maxPathSum(root.right)
-    );
-    return root.val + maxChildPathSum;
 }
 
-// Test
-console.log(maxPathSum(g));
+const a = new Node('A');
+const b = new Node('B');
+const c = new Node('C');
+const d = new Node('D');
+const e = new Node('E');
+const f = new Node('F');
+const g = new Node('G');
+
+a.connect(b);
+b.connect(c);
+c.connect(d);
+d.connect(b);
+d.connect(e);
+e.connect(f);
+f.connect(g);
+g.connect(a);
+g.connect(b);
+
+// const DFW = new Node('DFW');
+// const JFK = new Node('JFK');
+// const LAX = new Node('LAX');
+// const HNL = new Node('HNL');
+// const SAN = new Node('SAN');
+// const EWR = new Node('EWR');
+// const BOS = new Node('BOS');
+// const MIA = new Node('MIA');
+// const MCO = new Node('MCO');
+// const PBI = new Node('PBI');
+// const HKG = new Node('HKG');
+
+// DFW.connect(JFK);
+// DFW.connect(LAX);
+// JFK.connect(BOS);
+// JFK.connect(MIA);
+// LAX.connect(HNL);
+// LAX.connect(EWR);
+// LAX.connect(SAN);
+// SAN.connect(HKG);
+// MIA.connect(MCO);
+// MIA.connect(PBI);
+// MCO.connect(PBI);
+
+const newGraph = new Graph([a,b,c,d,e,f,g]);
+
+newGraph.sp(a, f);
+newGraph.sp(a, e);
