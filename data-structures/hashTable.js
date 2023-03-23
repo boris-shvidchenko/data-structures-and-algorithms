@@ -2,137 +2,83 @@
 // key -> /hash function/ -> index => value
 // 3 operations must be supported 1) store a key/value pair 2) Retrieve a key/value pair 3) Delete a key/value pair.
 
-// class HashTable {
-//     constructor(size) {
-//         this.table = new Array(size);
-//         this.size = size;
-//     }
-
-//     // Hash Function - creates an index
-//     hash(key) {
-//         let total = 0;
-//         for (let i = 0; i < key.length; i++) {
-//             // charCodeAt returns an integer between 0-65535, representing the UTF-8 code for the specified character, this will be the unique index
-//             total += key.charCodeAt(i); 
-//         }
-//         return total % this.size;
-//     }
-
-//     // Set
-//     set(key,value) {
-//         const index = this.hash(key);
-//         const bucket = this.table[index];
-//         // collison check
-//         if (!bucket) { 
-//             this.table[index] = [[key, value]];
-//         } else {
-//             const sameKeyItem = bucket.find(item => item[0] === key);
-//             if (sameKeyItem) {
-//                 sameKeyItem[1] = value;
-//             } else {
-//                 bucket.push([key, value]);
-//             }
-//         }
-//     }
-
-//     // Get
-//     get(key) {
-//         const index = this.hash(key);
-//         const bucket = this.table[index];
-//         // collison check
-//         if (bucket) {
-//             const sameKeyItem = bucket.find(item => item[0] === key);
-//             if (sameKeyItem) {
-//                 return sameKeyItem[1];
-//             } 
-//         }
-//         return undefined;
-//     }
-
-//     // Remove
-//     remove(key) {
-//         const index = this.hash(key);
-//         const bucket = this.table[index];
-//         // collison check
-//         if (bucket) {
-//             const sameKeyItem = bucket.find(item => item[0] === key);
-//             if (sameKeyItem) {
-//                 bucket.splice(bucket.indexOf(key), 1);
-//             }
-//         }
-//     }
-
-//     // Prints the content of the hash table
-//     display() {
-//         this.table.forEach(value => {
-//             if (value !== undefined) {
-//                 const index = this.table.indexOf(value);
-//                 console.log(`${index} > [${value}]`)
-//             }
-//         })
-//     }
-// }
-
-// const table = new HashTable(50);
-// table.set('name', 'Ryan');
-// table.set('age', 25);
-// table.set('color', 'red');
-// table.display();
-// console.log(table.get('name'));
-// table.remove('color');
-// table.set('mane', 'Clark');
-// table.display();
-
-class HashMap {
+class HashTable {
     constructor(size) {
         this.table = new Array(size);
         this.size = size;
     }
+
+    // Hash Function - creates an index
     hash(key) {
         let total = 0;
         for (let i = 0; i < key.length; i++) {
-            total += key.charCodeAt(i);
+            // charCodeAt returns an integer between 0-65535, representing the UTF-8 code for the specified character, this will be the unique index
+            total += key.charCodeAt(i); 
         }
         return total % this.size;
     }
-    add(key, val) {
+
+    // Set
+    set(key,value) {
         const index = this.hash(key);
         const bucket = this.table[index];
-        if (!bucket) {
-            this.table[index] = [[key, val]];
-            return;
+        // collison check
+        if (!bucket) { 
+            this.table[index] = [[key, value]];
         } else {
-            const collision = bucket.find(i => i[0] === key);
-            if (collision) {
-                collision[1] = val;
+            const sameKeyItem = bucket.find(item => item[0] === key);
+            if (sameKeyItem) {
+                sameKeyItem[1] = value;
             } else {
-                bucket.push([key, val]);
+                bucket.push([key, value]);
             }
         }
     }
+
+    // Get
+    get(key) {
+        const index = this.hash(key);
+        const bucket = this.table[index];
+        // collison check
+        if (bucket) {
+            const sameKeyItem = bucket.find(item => item[0] === key);
+            if (sameKeyItem) {
+                return sameKeyItem[1];
+            } 
+        }
+        return undefined;
+    }
+
+    // Remove
     remove(key) {
         const index = this.hash(key);
         const bucket = this.table[index];
+        // collison check
         if (bucket) {
-            const collision = bucket.find(i => i[0] === key);
-            if (collision) {
-                bucket.splice(bucket.indexOf(collision), 1);
+            const sameKeyItem = bucket.find(item => item[0] === key);
+            if (sameKeyItem) {
+                bucket.splice(bucket.indexOf(key), 1);
             }
         }
     }
-    print() {
-        this.table.forEach(i => console.log(i));
+
+    // Prints the content of the hash table
+    display() {
+        this.table.forEach(value => {
+            if (value !== undefined) {
+                const index = this.table.indexOf(value);
+                console.log(`${index} > [${value}]`)
+            }
+        })
     }
 }
 
-const hm = new HashMap(50);
-hm.add('name', 'Boris');
-hm.add('age', '40');
-hm.add('color', 'red');
-hm.print();
-hm.add('age', '25');
-hm.print();
-hm.add('gae', '4')
-hm.print();
-hm.remove('age')
-hm.print();
+const table = new HashTable(50);
+table.set('name', 'Ryan');
+table.set('age', 25);
+table.set('color', 'red');
+table.display();
+console.log(table.get('name'));
+table.remove('color');
+table.set('mane', 'Clark');
+table.display();
