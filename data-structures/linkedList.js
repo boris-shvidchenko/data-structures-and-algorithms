@@ -97,42 +97,104 @@
 //     }
 // }
 
-// Test
-// const list = new LinkedList();
-// list.append('a');
-// list.append('b');
-// list.append('c');
-// // a -> b -> c -> etc.
-// list.contains('a'); // true
-// list.contains('z'); // false
-// list.print();
-// list.remove('b'); // a -> c -> etc.
-// list.appendAt(1,'z');
-// list.print();
-// list.contains('z'); // true
-
-const testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-function binarySearch(list, t) {
-    if (list.length === 1) {
-        if (list[0] === t) return true;
-        return false;
-    } else {
-        const mid = Math.floor(list.length/2);
-        if (t === list[mid]) return true;
-        if (t < list[mid]) {
-            const left = list.slice(0, mid);
-            return binarySearch(left, t);
-        } else {
-            const right = list.slice(mid);
-            return binarySearch(right, t);
-        }
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.next = null;
     }
 }
 
-// Test log 
-console.log(binarySearch(testArray,2))
-console.log(binarySearch(testArray,25))
+class LinkedList {
+    constructor() {
+        this.head = null;
+        this.length = 0;
+    }
+    append(node) {
+        let newNode = new Node(node);
+        let current = this.head;
+        if (this.head === null) {
+            this.head = newNode;
+            this.length++;
+            return;
+        }
+        while (current.next !== null) {
+            current = current.next;
+        }
+        current.next = newNode;
+        this.length++;
+    }
+    print() {
+        let str = '';
+        let current = this.head;
+        while (current !== null) {
+            str += current.val + ' > ';
+            current = current.next;
+        }
+        console.log(str);
+    }
+    contains(node) {
+        let current = this.head;
+        while (current !== null) {
+            if (current.val === node) {
+                console.log('True');
+                return;
+            }
+            current = current.next;
+        }
+        console.log('False');
+    }
+    remove(node) {
+        let current = this.head;
+        let prev;
+        if (this.head.val === node) {
+            this.head = current.next;
+            this.length--;
+            return;
+        }
+        while (current.val !== node) {
+            prev = current;
+            current = current.next;
+        }
+        prev.next = current.next;
+        this.length--;
+    }
+    appendAt(index, node) {
+        let newNode = new Node(node);
+        let current = this.head;
+        let prev;
+        let currentIndex = 0;
+        if (index === 0) {
+            this.head = newNode;
+            newNode.next = current;
+            this.length++;
+            return;
+        } 
+        while (currentIndex < index) {
+            prev = current;
+            current = current.next;
+            currentIndex++;
+        }
+        prev.next = newNode;
+        newNode.next = current;
+        this.length++;
+    }
+}
 
+// Test
+const list = new LinkedList();
+list.append('a');
+list.print();
+list.append('b');
+list.print();
+list.append('c');
+// a -> b -> c -> etc.
+list.contains('a'); // true
+list.contains('z'); // false
+list.print();
+list.remove('b'); // a -> c -> etc.
+list.print();
+list.appendAt(1,'z');
+list.print();
+list.contains('z'); // true
 
 
