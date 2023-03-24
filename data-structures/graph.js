@@ -238,21 +238,33 @@ class Graph {
     constructor(nodes) {
         this.nodes = [...nodes];
     }
-    dft(start, end, visited = new Set()) {
-        if (start === end) {
-            console.log('true')
-        }
-        visited.add(start);
-        for (let adj of start.edges) {
-            if (!visited.has(adj)) {
-                visited.add(adj);
-                this.dft(adj, end, visited);
+    sp(start, end) {
+        const visited = {};
+        const queue = [start];
+        visited[start.value] = null;
+        while (queue.length > 0) {
+            const current = queue.shift();
+            if (current === end) {
+                return this.rp(visited, end);
+            }
+            for (let adj of current.edges) {
+                if (!visited.hasOwnProperty(adj.value)) {
+                    visited[adj.value] = current;
+                    queue.push(adj);
+                }
             }
         }
     }
-    // bft(start, end) {}
-    // sp(start, end) {}
-    // rp(visited, end) {}
+
+    rp(visited, end) {
+        let current = end;
+        let path = [];
+        while (current !== null) {
+            path.push(current.value);
+            current = visited[current.value];
+        }
+        return path.reverse();
+    }
 }
 
 const DFW = new Node('DFW');
@@ -282,8 +294,8 @@ MIA.connect(PBI);
 MCO.connect(PBI);
 
 // graph.bft(DFW, PBI);
-graph.dft(DFW, HKG);
+// graph.dft(DFW, HKG);
 
 // Practice Question
 // Given 2 airports find the smallest distance between the 2. (ex: DFW and PBI > DFW-JFK-MIA-PBI)
-// console.log(graph.sp(DFW, PBI));
+console.log(graph.sp(DFW, PBI));
