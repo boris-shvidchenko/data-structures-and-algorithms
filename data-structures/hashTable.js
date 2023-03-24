@@ -73,6 +73,47 @@
 //     }
 // }
 
+class HashTable {
+    constructor(size) {
+        this.size = size;
+        this.table = new Array(size);
+    }
+    hash(k) {
+        let total = 0;
+        for (let i = 0; i < k.length; i++) {
+            total += k.charCodeAt(i);
+        }
+        return total % this.size;
+    }
+    set(k,v) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[k,v]];
+        } else {
+            const sameKey = bucket.find(i => i[0] === k);
+            if (sameKey) {
+                sameKey[1] = v;
+            } else {
+                bucket.push([k,v]);
+            }
+        } 
+    }
+    display() {
+        this.table.forEach(value => console.log(value));
+    }
+    remove(k) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (bucket) {
+            const sameKey = bucket.find(i => i[0] === k);
+            if (sameKey) {
+                bucket.splice(bucket.indexOf(sameKey), 1);
+            }
+        }
+    }
+}
+
 const table = new HashTable(50);
 table.set('name', 'Ryan');
 table.set('age', 25);
