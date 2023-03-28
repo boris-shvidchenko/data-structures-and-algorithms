@@ -35,37 +35,34 @@
 
 // console.log(selectionSort(testArray));
 
-class Node {
-    constructor(val) {
-        this.val = val;
-        this.left = null;
-        this.right = null;
+class Stack {
+    constructor() {
+        this.stack = [];
+    }
+    add(val) {
+        this.stack.push(val);
+    }
+    print() {
+        let str = '';
+        this.stack.forEach(i => str += i + '/');
+        console.log(str);
+    }
+    remove() {
+        this.stack.shift();
+    }
+    removeAll() {
+        this.stack = [];
     }
 }
 
-const a = new Node('a');
-const b = new Node('b');
-const c = new Node('c');
-const d = new Node('d');
-const e = new Node('e');
-const f = new Node('f');
-a.left = b;
-a.right = c;
-b.left = d;
-b.right = e;
-c.right = f;
-
-
-function bft(root, t) {
-    if (root === null) return false;
-    let queue = [root];
-    while (queue.length > 0) {
-        let current = queue.shift();
-        if (current.val === t) return true;
-        if (current.left !== null) queue.push(current.left);
-        if (current.right !== null) queue.push(current.right);
-    }
-    return false;
-}
-console.log(bft(a, 'a'));
-console.log(bft(a, 'z'));
+const stack = new Stack();
+stack.add(1);
+stack.print();
+stack.add(2);
+stack.print();
+stack.add(3);
+stack.print();
+stack.remove();
+stack.print();
+stack.removeAll();
+stack.print();
