@@ -35,54 +35,94 @@
 
 // console.log(selectionSort(testArray));
 
-class Hash {
-    constructor(size) {
-        this.size = size;
-        this.table = new Array(size);
-    }
-    hash(k) {
-        let total = 0;
-        for (let i = 0; i < k.length; i++) {
-            total += k.charCodeAt(i);
-        }
-        return total % this.size;
-    }
-    add(k,v) {
-        let index = this.hash(k);
-        let bucket = this.table[index];
-        if (!bucket) {
-            this.table[index] = [[k,v]];
-        } else {
-            const sameKey = bucket.find(i => i[0] === k);
-            if (sameKey) {
-                sameKey[1] = v;
-            } else {
-                bucket.push([k,v]);
-            }
-        }
-    }
-    remove(k) {
-        let index = this.hash(k);
-        let bucket = this.table[index];
-        if (bucket) {
-            const sameKey = bucket.find(i => i[0] === k);
-            if (sameKey) {
-                bucket.splice(bucket.indexOf(sameKey), 1);
-            }
-        }
-    }
-    print() {
-        this.table.forEach(i => console.log(i));
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.next = null;
     }
 }
 
-const hash = new Hash(20);
-hash.add('name', 'ryan')
-hash.add('age', '34')
-hash.add('color', 'red')
-hash.print();
-hash.add('mane', 'brad')
-hash.add('age', '10')
-hash.print()
-hash.remove('color')
-hash.print()
+class LinkedList {
+    constructor() {
+        this.head = null;
+        this.length = 0;
+    }
+    add(node) {
+        const newNode = new Node(node);
+        let current = this.head;
+        if (this.head === null) {
+            this.head = newNode;
+        } else {
+            while (current.next !== null) {
+                current = current.next
+            }
+            current.next = newNode;
+        }
+        this.length++;
+    }
+    print() {
+        let str = '';
+        let current = this.head;
+        while (current !== null) {
+            str += current.val + '/';
+            current = current.next;
+        }
+        console.log(str);
+    }
+    remove(node) {
+        let current = this.head;
+        let prev;
+        if (this.head.val === node) {
+            this.head = current.next;
+            this.length--;
+            return;
+        }
+        while (current !== null) {
+            if (current.val === node) {
+                prev.next = current.next;
+                this.length--;
+                return;
+
+            }
+            prev = current;
+            current = current.next;
+        }
+    }
+    addAt(node, index) {
+        const newNode = new Node(node);
+        let current = this.head;
+        let prev;
+        let currentIndex = 0;
+        if (index === 0) {
+            this.head = newNode;
+            newNode.next = current;
+            this.length++;
+            return;
+        }
+        while (currentIndex < index) {
+            prev = current;
+            current = current.next;
+            currentIndex++;
+        }
+        prev.next = newNode;
+        newNode.next = current;
+        this.length++;
+    }
+}
+
+const list = new LinkedList();
+list.add('A');
+list.print();
+list.add('B');
+list.print();
+list.add('C');
+list.print();
+list.add('D');
+list.print();
+list.add('E');
+list.print();
+list.remove('A')
+list.print();
+list.addAt('Z', 0)
+list.print();
+
