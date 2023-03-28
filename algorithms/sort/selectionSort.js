@@ -35,3 +35,54 @@
 
 // console.log(selectionSort(testArray));
 
+class Hash {
+    constructor(size) {
+        this.size = size;
+        this.table = new Array(size);
+    }
+    hash(k) {
+        let total = 0;
+        for (let i = 0; i < k.length; i++) {
+            total += k.charCodeAt(i);
+        }
+        return total % this.size;
+    }
+    add(k,v) {
+        let index = this.hash(k);
+        let bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[k,v]];
+        } else {
+            const sameKey = bucket.find(i => i[0] === k);
+            if (sameKey) {
+                sameKey[1] = v;
+            } else {
+                bucket.push([k,v]);
+            }
+        }
+    }
+    remove(k) {
+        let index = this.hash(k);
+        let bucket = this.table[index];
+        if (bucket) {
+            const sameKey = bucket.find(i => i[0] === k);
+            if (sameKey) {
+                bucket.splice(bucket.indexOf(sameKey), 1);
+            }
+        }
+    }
+    print() {
+        this.table.forEach(i => console.log(i));
+    }
+}
+
+const hash = new Hash(20);
+hash.add('name', 'ryan')
+hash.add('age', '34')
+hash.add('color', 'red')
+hash.print();
+hash.add('mane', 'brad')
+hash.add('age', '10')
+hash.print()
+hash.remove('color')
+hash.print()
