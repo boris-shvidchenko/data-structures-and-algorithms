@@ -35,34 +35,62 @@
 
 // console.log(selectionSort(testArray));
 
-class Stack {
-    constructor() {
-        this.stack = [];
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.edges = [];
     }
-    add(val) {
-        this.stack.push(val);
-    }
-    print() {
-        let str = '';
-        this.stack.forEach(i => str += i + '/');
-        console.log(str);
-    }
-    remove() {
-        this.stack.shift();
-    }
-    removeAll() {
-        this.stack = [];
+    connect(node) {
+        this.edges.push(node);
+        node.edges.push(this);
     }
 }
 
-const stack = new Stack();
-stack.add(1);
-stack.print();
-stack.add(2);
-stack.print();
-stack.add(3);
-stack.print();
-stack.remove();
-stack.print();
-stack.removeAll();
-stack.print();
+class Graph {
+    constructor(nodes) {
+        this.nodes = [...nodes];
+    }
+    sp(start, end) {
+        let visited = {};
+        let queue = [start];
+        visited[start.val] = null;
+        while (queue.length > 0) {
+            let current = queue.shift();
+            if (current === end) {
+                return this.rp(visited, end);
+            }
+            for (let adj of current.edges) {
+                if (!visited.hasOwnProperty(adj.val)) {
+                    visited[adj.val] = current;
+                    queue.push(adj);
+                }
+            }
+        }
+    }
+    rp(visited, end) {
+        let current = end;
+        let path = [];
+        while (current !== null) {
+            path.push(current.val);
+            current = visited[current.val];
+        }
+        return path.reverse();
+    }
+}
+
+const a = new Node('A');
+const b = new Node('B');
+const c = new Node('C');
+const d = new Node('D');
+const e = new Node('E');
+const f = new Node('F');
+a.connect(b);
+b.connect(c);
+c.connect(d);
+d.connect(e);
+e.connect(f);
+f.connect(a);
+const graph = new Graph([a,b,c,d,e,f])
+
+console.log(graph.sp(a, e));
+console.log(graph.sp(a, c));
