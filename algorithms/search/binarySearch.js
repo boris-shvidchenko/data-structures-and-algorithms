@@ -27,16 +27,13 @@ const testArray = [9,4,8,3,-1,-10,2,5,7,6,9,4,8,3,1,10,2,5,-7,6];
 // Test log 
 // console.log(binarySearch(testArray,2))
 
-const quickSort = (list) => {
-    if (list.length < 1) return list;
-    const left = [];
-    const right = [];
-    const pivot = list[0];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] <= pivot) left.push(list[i]);
-        if (list[i] > pivot) right.push(list[i]);
-    }
-    return [...quickSort(left), pivot, ...quickSort(right)]
+const sSort = (list, sorted=[]) => {
+    if (list.length === 0) return sorted;
+    const min = list.reduce((a,b) => a < b ? a : b);
+    sorted.push(min);
+    const minIndex = list.indexOf(min);
+    list.splice(minIndex, 1);
+    return sSort(list, sorted);
 }
 
-console.log(quickSort(testArray));
+console.log(sSort(testArray));
