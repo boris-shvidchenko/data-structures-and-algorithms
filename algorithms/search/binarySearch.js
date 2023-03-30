@@ -1,11 +1,10 @@
-// == Binary Search ==
-// Searchs an array for a target value by 1) splitting the array in half, 2) identifying whether the target value is ===, >, or < the value in the middle of the array, 3) removing the portion of the array that is < or > the target value, 3) repeats the process until the target value is identified. This algorithm assumes that the array is sorted.
-// Runtime: O(log(n)) / Binary
+// // == Binary Search ==
+// // Searchs an array for a target value by 1) splitting the array in half, 2) identifying whether the target value is ===, >, or < the value in the middle of the array, 3) removing the portion of the array that is < or > the target value, 3) repeats the process until the target value is identified. This algorithm assumes that the array is sorted.
+// // Runtime: O(log(n)) / Binary
 
 // const testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-const testArray = [9,4,8,3,-1,-10,2,5,7,6,9,4,8,3,1,10,2,5,-7,6];
 
-// Returns the index of the target value within the provided array
+// // Returns the index of the target value within the provided array
 // function binarySearch(array, targetValue) {
 //     const midPoint = Math.floor(array.length/2);
 //     // First statement is the base case
@@ -24,31 +23,23 @@ const testArray = [9,4,8,3,-1,-10,2,5,7,6,9,4,8,3,1,10,2,5,-7,6];
 //     }
 // }
 
-// Test log 
+// // Test log 
 // console.log(binarySearch(testArray,2))
 
-function mSort(list) {
-    if (list.length === 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(mSort(left), mSort(right));
- }
-
-function sort(left, right) {
-    let leftIndex = 0;
-    let rightIndex = 0;
-    const result = [];
-    while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            result.push(left[leftIndex]);
-            leftIndex++;
-        } else {
-            result.push(right[rightIndex]);
-            rightIndex++;
-        }
-    }
-    return result.concat(left.slice(leftIndex), right.slice(rightIndex));
+const fib = (val) => {
+    if (val <= 2) return 1;
+    let table = new Array(val + 1).fill(0);
+    table[1] = 1;
+    for (let i = 0; i < val; i++) {
+        table[i+1] += table[i];
+        table[i+2] += table[i];
+    }    
+    return table[val];
 }
 
-console.log(mSort(testArray));
+
+// 1,2,3,4,5.....etc
+// 1,1,2,3,5,8...etc
+
+console.log(fib(20));
+console.log(fib(300));
