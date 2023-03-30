@@ -255,101 +255,59 @@
 // // Practice Question
 // // Given 2 airports find the smallest distance between the 2. (ex: DFW and PBI > DFW-JFK-MIA-PBI)
 // // console.log(graph.shortestPath(DFW, PBI));
-// linked list
+
 // hashmap
 // binary tree
 // graph
 
-class Node {
-    constructor(val) {
-        this.val = val;
-        this.next = null;
+class Hash {
+    constructor(size) {
+        this.size = size;
+        this.map = new Array(size);
     }
-}
-
-class List {
-    constructor() {
-        this.head = null;
-        this.length = 0;
+    hash(k){
+        let total = 0;
+        for (let i = 0; i < k.length; i++) {
+            total += k.charCodeAt(i);
+        }
+        return total % this.size;
     }
-    add(node) {
-        const newNode = new Node(node);
-        let current = this.head;
-        if (this.head === null) {
-            this.head = newNode;
+    add(k,v) {
+        const index = this.hash(k);
+        const bucket = this.map[index];
+        if (!bucket) {
+            this.map[index] =[[k,v]];
         } else {
-            while (current.next!== null) {
-                current = current.next;
+            const sameKey = bucket.find(i => i[0] === k);
+            if (sameKey) { 
+                sameKey[1] = v;
+            } else {
+                bucket.push([k,v]);
             }
-            current.next = newNode;
         }
-        this.length++;
+
     }
-    remove(node) {
-        let current = this.head;
-        let prev;
-        if (this.head.val === node) {
-            this.head = current.next;
-            this.length--;
-            return;
-        }
-        while (current !== null) {
-            if (current.val === node) {
-                prev.next = current.next;
-                this.length--;
-                return;
+    remove(k) {
+        const index = this.hash(k);
+        const bucket = this.map[index];
+        if (bucket) {
+            const sameKey = bucket.find(i => i[0] === k);
+            if (sameKey) {
+                bucket.splice(bucket.indexOf(sameKey), 1);
             }
-            prev = current;
-            current = current.next;
         }
-    }
-    addAt(node, index) {
-        const newNode = new Node(node);
-        let current = this.head;
-        let prev;
-        let currentIndex = 0;
-        if (index === 0) {
-            this.head = newNode;
-            newNode.next = current;
-            this.length++;
-            return;
-        }
-        while (currentIndex < index) {
-            prev = current;
-            current = current.next;
-            currentIndex++;
-        }
-        prev.next = newNode;
-        newNode.next = current;
-        this.length++;
-    }
-    delAll() {
-        this.head = null;
-        this.length = 0;
     }
     print() {
-        let str = '';
-        let current = this.head;
-        while (current !== null) {
-            str += current.val + ' > ';
-            current = current.next;
-        }
-        console.log(str);
+        this.map.forEach(i => console.log(i));
     }
 }
 
-const list = new List();
-list.add('A');
-list.print();
-list.add('B');
-list.print();
-list.add('C');
-list.print();
-list.remove('A');
-list.print();
-list.addAt('Z', 0);
-list.print();
-list.addAt('J', 2);
-list.print();
-list.delAll();
-list.print();
+const hashMap = new Hash(60);
+hashMap.add('name', 'ryan');
+hashMap.add('color', 'red');
+hashMap.add('age', '25');
+hashMap.print();
+hashMap.add('name', 'boris');
+hashMap.add('mane', 'Tim');
+hashMap.remove('color');
+hashMap.print();
