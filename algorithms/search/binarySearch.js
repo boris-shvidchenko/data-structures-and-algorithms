@@ -1,6 +1,6 @@
-// // == Binary Search ==
-// // Searchs an array for a target value by 1) splitting the array in half, 2) identifying whether the target value is ===, >, or < the value in the middle of the array, 3) removing the portion of the array that is < or > the target value, 3) repeats the process until the target value is identified. This algorithm assumes that the array is sorted.
-// // Runtime: O(log(n)) / Binary
+// == Binary Search ==
+// Searchs an array for a target value by 1) splitting the array in half, 2) identifying whether the target value is ===, >, or < the value in the middle of the array, 3) removing the portion of the array that is < or > the target value, 3) repeats the process until the target value is identified. This algorithm assumes that the array is sorted.
+// Runtime: O(log(n)) / Binary
 
 // const testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -26,20 +26,41 @@
 // // Test log 
 // console.log(binarySearch(testArray,2))
 
-const fib = (val) => {
-    if (val <= 2) return 1;
-    let table = new Array(val + 1).fill(0);
-    table[1] = 1;
-    for (let i = 0; i < val; i++) {
-        table[i+1] += table[i];
-        table[i+2] += table[i];
-    }    
-    return table[val];
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
 }
 
+const a = new Node('A');
+const b = new Node('B');
+const c = new Node('C');
+const d = new Node('D');
+const e = new Node('E');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
 
-// 1,2,3,4,5.....etc
-// 1,1,2,3,5,8...etc
+//     a
+//    / \
+//   b   c
+//  / \
+// d   e
 
-console.log(fib(20));
-console.log(fib(300));
+function bft(root, t) {
+    if (root === null) return false;
+    const queue = [root];
+    while (queue.length > 0) {
+        const current = queue.shift();
+        if (current.val === t) return true;
+        if (current.left !== null) queue.push(current.left);
+        if (current.right !== null) queue.push(current.right);
+    }
+    return false;
+}
+
+console.log(bft(a, 'C'));
+console.log(bft(a, 'Z'));
