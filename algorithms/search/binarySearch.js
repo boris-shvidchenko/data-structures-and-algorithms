@@ -27,13 +27,28 @@ const testArray = [9,4,8,3,-1,-10,2,5,7,6,9,4,8,3,1,10,2,5,-7,6];
 // Test log 
 // console.log(binarySearch(testArray,2))
 
-const sSort = (list, sorted=[]) => {
-    if (list.length === 0) return sorted;
-    const min = list.reduce((a,b) => a < b ? a : b);
-    sorted.push(min);
-    const minIndex = list.indexOf(min);
-    list.splice(minIndex, 1);
-    return sSort(list, sorted);
+function mSort(list) {
+    if (list.length === 1) return list;
+    const mid = Math.floor(list.length/2);
+    const left = list.slice(0, mid);
+    const right = list.slice(mid);
+    return sort(mSort(left), mSort(right));
+ }
+
+function sort(left, right) {
+    let leftIndex = 0;
+    let rightIndex = 0;
+    const result = [];
+    while (leftIndex < left.length && rightIndex < right.length) {
+        if (left[leftIndex] < right[rightIndex]) {
+            result.push(left[leftIndex]);
+            leftIndex++;
+        } else {
+            result.push(right[rightIndex]);
+            rightIndex++;
+        }
+    }
+    return result.concat(left.slice(leftIndex), right.slice(rightIndex));
 }
 
-console.log(sSort(testArray));
+console.log(mSort(testArray));
