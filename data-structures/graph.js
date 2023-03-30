@@ -256,58 +256,6 @@
 // // Given 2 airports find the smallest distance between the 2. (ex: DFW and PBI > DFW-JFK-MIA-PBI)
 // // console.log(graph.shortestPath(DFW, PBI));
 
-// hashmap
 // binary tree
 // graph
 
-class Hash {
-    constructor(size) {
-        this.size = size;
-        this.map = new Array(size);
-    }
-    hash(k){
-        let total = 0;
-        for (let i = 0; i < k.length; i++) {
-            total += k.charCodeAt(i);
-        }
-        return total % this.size;
-    }
-    add(k,v) {
-        const index = this.hash(k);
-        const bucket = this.map[index];
-        if (!bucket) {
-            this.map[index] =[[k,v]];
-        } else {
-            const sameKey = bucket.find(i => i[0] === k);
-            if (sameKey) { 
-                sameKey[1] = v;
-            } else {
-                bucket.push([k,v]);
-            }
-        }
-
-    }
-    remove(k) {
-        const index = this.hash(k);
-        const bucket = this.map[index];
-        if (bucket) {
-            const sameKey = bucket.find(i => i[0] === k);
-            if (sameKey) {
-                bucket.splice(bucket.indexOf(sameKey), 1);
-            }
-        }
-    }
-    print() {
-        this.map.forEach(i => console.log(i));
-    }
-}
-
-const hashMap = new Hash(60);
-hashMap.add('name', 'ryan');
-hashMap.add('color', 'red');
-hashMap.add('age', '25');
-hashMap.print();
-hashMap.add('name', 'boris');
-hashMap.add('mane', 'Tim');
-hashMap.remove('color');
-hashMap.print();
