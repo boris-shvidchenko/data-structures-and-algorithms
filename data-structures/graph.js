@@ -256,3 +256,76 @@
 // // Given 2 airports find the smallest distance between the 2. (ex: DFW and PBI > DFW-JFK-MIA-PBI)
 // // console.log(graph.shortestPath(DFW, PBI));
 
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.edges = [];
+    }
+    connect(node) {
+        this.edges.push(node);
+        node.edges.push(this);
+    }
+}
+
+class Graph {
+    constructor(nodes) {
+        this.nodes = [...nodes];
+    }
+    sp(start, end) {
+        let visited = {};
+        let queue = [start];
+        visited[start.val] = null;
+        while (queue.length > 0) {
+            const current = queue.shift();
+            if (current === end) {
+                return this.rp(visited, end);
+            }
+            for (let adj of current.edges) {
+                if (!visited.hasOwnProperty(adj.val)) {
+                    queue.push(adj);
+                    visited[adj.val] = current;
+                }
+            }
+        }
+    }
+    rp(visited, end) {
+        let current = end;
+        let path = [];
+        while (current !== null) {
+            path.push(current.val);
+            current = visited[current.val];
+        }
+        return path.reverse();
+    }
+
+}
+
+const DFW = new Node('DFW');
+const JFK = new Node('JFK');
+const LAX = new Node('LAX');
+const HNL = new Node('HNL');
+const SAN = new Node('SAN');
+const EWR = new Node('EWR');
+const BOS = new Node('BOS');
+const MIA = new Node('MIA');
+const MCO = new Node('MCO');
+const PBI = new Node('PBI');
+const HKG = new Node('HKG');
+
+const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
+
+DFW.connect(JFK);
+DFW.connect(LAX);
+JFK.connect(BOS);
+JFK.connect(MIA);
+LAX.connect(HNL);
+LAX.connect(EWR);
+LAX.connect(SAN);
+SAN.connect(HKG);
+MIA.connect(MCO);
+MIA.connect(PBI);
+MCO.connect(PBI);
+
+
+console.log(graph.sp(DFW, HNL));
+console.log(graph.sp(HKG, PBI));
