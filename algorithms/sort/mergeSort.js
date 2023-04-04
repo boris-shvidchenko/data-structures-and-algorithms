@@ -34,94 +34,63 @@
 // console.log(mergeSort(testArray)); 
 
 
-// linked list
 // graph
 
 class Node {
     constructor(val) {
         this.val = val;
-        this.next = null;
+        this.edges = [];
+    }
+    connect(node) {
+        this.edges.push(node);
+        node.edges.push(this);
     }
 }
 
-class LinkedList {
-    constructor() {
-        this.length = 0;
-        this.head = null;
+class Graph {
+    constructor(...nodes) {
+        this.nodes = [...nodes];
     }
-    print() {
-        let str = '';
-        let current = this.head;
+    sp(start, end) {
+        let visited = {};
+        let queue = [start];
+        visited[start.val] = null;
+        while (queue.length > 0) {
+            let current = queue.shift();
+            if (current === end) {
+                return this.rp(visited, end);
+            }
+            for (let adj of current.edges) {
+                if (!visited.hasOwnProperty(adj.val)) {
+                    visited[adj.val] = current;
+                    queue.push(adj);
+                }
+            }
+        }
+    }
+    rp(visited, end) {
+        let current = end;
+        let path = [];
         while (current !== null) {
-            str += current.val + '>';
-            current = current.next;
+            path.push(current.val);
+            current = visited[current.val];
         }
-        console.log(str);
-    }
-    add(node) {
-        const newNode = new Node(node);
-        let current = this.head;
-        if (this.head === null) {
-            this.head = newNode;
-        } else {
-            while (current.next !== null) {
-                current = current.next;
-            }
-            current.next = newNode;
-        }
-        this.length++;
-
-    }
-    remove(node) {
-        let current = this.head;
-        let prev;
-        if (this.head.val === node) {
-            this.head = current.next;
-            this.length--;
-            return;
-        }
-        while (current.val !== node) {
-            prev = current;
-            current = current.next;
-        }
-        prev.next = current.next;
-        this.length--;
-    }
-    addAt(node, index) {
-        const newNode = new Node(node);
-        let current = this.head;
-        let prev;
-        let currentIndex = 0;
-        if (index === 0) {
-            this.head = newNode;
-            newNode.next = current;
-        } else {
-            while (currentIndex < index) {
-                prev = current;
-                current = current.next;
-                currentIndex++;
-            }
-            prev.next = newNode;
-            newNode.next = current;
-        }
-        this.length++;
-    }
-    delAll() {
-        this.length = 0;
-        this.head = null;
+        return path.reverse();
     }
 }
 
-const list = new LinkedList();
-list.add('1');
-list.print();
-list.add('2');
-list.print();
-list.add('3');
-list.print();
-list.remove('3')
-list.print();
-list.addAt('4', 0);
-list.print();
-list.delAll();
-list.print();
+const a = new Node('A');
+const b = new Node('B');
+const c = new Node('C');
+const d = new Node('D');
+const e = new Node('E');
+const f = new Node('F');
+const graph = new Graph([a,b,c,d,e,f]);
+a.connect(b);
+b.connect(c);
+c.connect(d);
+c.connect(e);
+d.connect(f);
+
+console.log(graph.sp(a, f));
+console.log(graph.sp(a, d));
