@@ -36,59 +36,70 @@
 // console.log(selectionSort(testArray));
 
 
-// hash
 // graph
 // binary tree
 // merge sort
 
-class Hash {
-    constructor(size) {
-        this.size = size;
-        this.table = new Array(size);
+
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.edges = [];
     }
-    hash(k) {
-        let total = 0;
-        for (let i = 0; i < k.length; i++) {
-            total += k.charCodeAt(i);
-        }
-        return total % this.size;
-    }
-    add(k,v) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        if (!bucket) {
-            this.table[index] = [[k,v]];
-        } else {
-            const sameKey = bucket.find(item => item[0] === k);
-            if (sameKey) {
-                sameKey[1] = v;
-            } else {
-                bucket.push([k,v])
-            }
-        }
-    }
-    remove(k) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        if (bucket) {
-            const sameKey = bucket.find(item => item[0] === k);
-            if (sameKey) {
-                bucket.splice(bucket.indexOf(sameKey), 1);
-            }
-        }
-    }
-    print() {
-        this.table.forEach(item => console.log(item));
+    connect(node) {
+        this.edges.push(node);
+        node.edges.push(this);
     }
 }
 
-const newHashMap = new Hash(50);
-newHashMap.add('name', 'boris');
-newHashMap.add('age', '25');
-newHashMap.add('color', 'blue');
-newHashMap.print();
-newHashMap.add('mane','ryan');
-newHashMap.print();
-newHashMap.remove('color');
-newHashMap.add('name', 'tim')
-newHashMap.print();
+class Graph {
+    constructor(nodes) {
+        this.nodes = [...nodes]
+    }
+    sp(start, end) {
+        const visited = {};
+        const queue = [start];
+        visited[start.val] = null;
+        while (queue.length > 0) {
+            const current = queue.shift();
+            if (current === end) {
+                return this.rp(visited, end);
+            }
+            for (let adj of current.edges) {
+                if (!visited.hasOwnProperty(adj.val)) {
+                    visited[adj.val] = current;
+                    queue.push(adj);
+                }
+            }
+        }
+    }
+    rp(visited, end){
+        let current = end;
+        let path = [];
+        while (current !== null) {
+            path.push(current.val);
+            current = visited[current.val];
+        }
+        return path.reverse();
+    }
+}
+
+const a = new Node('A');
+const b = new Node('B');
+const c = new Node('C');
+const d = new Node('D');
+const e = new Node('E');
+const f = new Node('F');
+const g = new Node('G');
+const graph = new Graph([a,b,c,d,e,f,g]);
+a.connect(b);
+a.connect(c);
+b.connect(c);
+c.connect(d);
+d.connect(e);
+e.connect(f);
+e.connect(g);
+
+
+console.log(graph.sp(a,g));
+
