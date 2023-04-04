@@ -2,7 +2,7 @@
 // Sorts an array by splitting the array into subarrays of size 1 (one element/item per array). Then, adjacent arrays are sorted and merged. This continues until a single array exists with sorted values.
 // Runtime: O(n(log(n))) / Quasilinear
 
-const testArray = [9,4,8,3,1,10,2,5,7,6,9,4,8,3,1,10,2,5,7,6,-400];
+const testArray = [9,4,8,3,1,100,2,5,7,6,9,4,8,3,1,10,2,5,7,6,-200];
 
 // // Splits arrays in two
 // function mergeSort(list) {
@@ -31,34 +31,25 @@ const testArray = [9,4,8,3,1,10,2,5,7,6,9,4,8,3,1,10,2,5,7,6,-400];
 //     return resultsArray.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
 // }
 
-function mergeSort(list) {
-    if (list.length <= 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(mergeSort(left), mergeSort(right));
-}
+// console.log(mergeSort(testArray)); 
 
-function sort(left, right) {    
-    let leftIndex = 0;
-    let rightIndex = 0;
-    const result = [];
-    while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            result.push(left[leftIndex]);
-            leftIndex++;
+function quickSort(list) {
+    // if (list.length === 0) return list;
+    let left = [];
+    let right = [];
+    let pivot = list[0];
+    for (let i = 1; i < list.length; i++) {
+        if (list[i] < pivot) {
+            left.push(list[i]);
         } else {
-            result.push(right[rightIndex]);
-            rightIndex++;
+            right.push(list[i]);
         }
     }
-    return result.concat(left.slice(leftIndex), right.slice(rightIndex));
+    return [...quickSort(left), pivot, ...quickSort(right)];
 }
 
-console.log(mergeSort(testArray)); 
+console.log(quickSort(testArray));
 
-
-// merge sort
 // quick sort
 // linked list
 // graph
