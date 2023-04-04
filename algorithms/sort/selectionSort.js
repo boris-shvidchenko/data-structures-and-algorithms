@@ -36,6 +36,38 @@
 // console.log(selectionSort(testArray));
 
 
-// binary tree
-// merge sort
+
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+const a = new Node('A');
+const b = new Node('B');
+const c = new Node('C');
+const d = new Node('D');
+const e = new Node('E');
+const f = new Node('F');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+function bft(root, target) {
+    if (root === null) return false;;
+    const queue = [root];
+    while (queue.length > 0) {
+        const current = queue.shift();
+        if (current.val === target) return true;
+        if (current.left !== null) queue.push(current.left);
+        if (current.right !== null) queue.push(current.right);
+    }
+    return false;;
+}
+console.log(bft(a, 'A'));
+console.log(bft(a, 'K'));
 
