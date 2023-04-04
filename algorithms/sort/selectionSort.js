@@ -36,16 +36,59 @@
 // console.log(selectionSort(testArray));
 
 
-const fib = (v) => {
-    if (v <= 2) return 1;
-    const table = new Array(v+1).fill(0);
-    table[1] = 1;
-    for (let i = 0; i < v; i++) {
-        table[i+1] += table[i];
-        table[i+2] += table[i];
+// hash
+// graph
+// binary tree
+// merge sort
+
+class Hash {
+    constructor(size) {
+        this.size = size;
+        this.table = new Array(size);
     }
-    return table[v];
+    hash(k) {
+        let total = 0;
+        for (let i = 0; i < k.length; i++) {
+            total += k.charCodeAt(i);
+        }
+        return total % this.size;
+    }
+    add(k,v) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[k,v]];
+        } else {
+            const sameKey = bucket.find(item => item[0] === k);
+            if (sameKey) {
+                sameKey[1] = v;
+            } else {
+                bucket.push([k,v])
+            }
+        }
+    }
+    remove(k) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (bucket) {
+            const sameKey = bucket.find(item => item[0] === k);
+            if (sameKey) {
+                bucket.splice(bucket.indexOf(sameKey), 1);
+            }
+        }
+    }
+    print() {
+        this.table.forEach(item => console.log(item));
+    }
 }
 
-console.log(fib(20));
-console.log(fib(200));
+const newHashMap = new Hash(50);
+newHashMap.add('name', 'boris');
+newHashMap.add('age', '25');
+newHashMap.add('color', 'blue');
+newHashMap.print();
+newHashMap.add('mane','ryan');
+newHashMap.print();
+newHashMap.remove('color');
+newHashMap.add('name', 'tim')
+newHashMap.print();
