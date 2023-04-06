@@ -31,41 +31,81 @@ const testArray = [9,4,80,3,1,10,2,5,7,6,9,4,8,3,1,10,2,5,7,6,-100];
 //     return resultsArray.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
 // }
 
-// binary tree
-// hash
+
 // graph
 
 class Node {
     constructor(val) {
         this.val = val;
-        this.left = null;
-        this.right = null;
+        this.edges = [];
+    }
+    connect(node) {
+        this.edges.push(node);
+        node.edges.push(this);
     }
 }
 
-const a = new Node('A');
-const b = new Node('B');
-const c = new Node('C');
-const d = new Node('D');
-const e = new Node('E');
-const f = new Node('F');
-a.left = b;
-a.right = c;
-b.left = d;
-b.right = e;
-c.right = f;
-
-
-function bft(root, target) {
-    if (root === null) return false;
-    const queue = [root];
-    while (queue.length > 0) {
-        const current = queue.shift();
-        if (current.val === target) return true;
-        if (current.left !== null) queue.push(current.left);
-        if (current.right !== null) queue.push(current.right);
+class Graph {
+    constructor(nodes) {
+        this.nodes = [...nodes]
     }
-    return false;
+    sp(start, end) {
+        const visited = {};
+        const queue = [start];
+        visited[start.val] = null;
+        while (queue.length > 0) {
+            const current = queue.shift();
+            if (current === end) {
+                return this.rp(visited, end);
+            }
+            for (let adj of current.edges) {
+                if (!visited.hasOwnProperty(adj.val)) {
+                    queue.push(adj);
+                    visited[adj.val] = current;
+                }
+            }
+        }
+    }
+    rp(visited, end) {
+        let current = end;
+        let path = [];
+        while (current !== null) {
+            path.push(current.val);;
+            current = visited[current.val];
+        }
+        return path.reverse();
+    }
 }
-console.log(bft(a, 'A'));
-console.log(bft(a, 'Z'));
+
+const DFW = new Node('DFW');
+const JFK = new Node('JFK');
+const LAX = new Node('LAX');
+const HNL = new Node('HNL');
+const SAN = new Node('SAN');
+const EWR = new Node('EWR');
+const BOS = new Node('BOS');
+const MIA = new Node('MIA');
+const MCO = new Node('MCO');
+const PBI = new Node('PBI');
+const HKG = new Node('HKG');
+
+const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
+
+DFW.connect(JFK);
+DFW.connect(LAX);
+JFK.connect(BOS);
+JFK.connect(MIA);
+LAX.connect(HNL);
+LAX.connect(EWR);
+LAX.connect(SAN);
+SAN.connect(HKG);
+MIA.connect(MCO);
+MIA.connect(PBI);
+MCO.connect(PBI);
+
+// graph.bft(DFW, PBI);
+// graph.dft(DFW, HKG);
+
+
+console.log(graph.sp(DFW, JFK));
+console.log(graph.sp(DFW, MIA));
