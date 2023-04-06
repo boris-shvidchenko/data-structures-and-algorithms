@@ -31,25 +31,21 @@ const testArray = [9,4,80,3,1,10,2,5,7,6,9,4,8,3,1,10,2,5,7,6,-100];
 //     return resultsArray.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
 // }
 
-// quick sort
 // binary tree
 // hash
 // graph
 // fib (memo/tab)
 
-function quickSort(list) {
-    if (list.length <= 1) return list;
-    const left = [];
-    const right = []
-    const pivot = list[0];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < pivot) {
-            left.push(list[i]);
-        } else {
-            right.push(list[i]);
-        }
+function fib(v) {
+    if (v <= 2) return 2;
+    const table = new Array(v+1).fill(0);
+    table[1] = 1;
+    for (let i = 0; i < v; i++) {
+        table[i+1] += table[i];
+        table[i+2] += table[i];
     }
-    return [...quickSort(left), pivot, ...quickSort(right)];
+    return table[v];
 }
 
-console.log(quickSort(testArray)); 
+console.log(fib(20))
+console.log(fib(300))
