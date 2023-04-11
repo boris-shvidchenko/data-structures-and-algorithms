@@ -31,28 +31,22 @@ const testArray = [9,4,8,3,1,10,2,5,7,6,9,4,8,3,1,10,2,5,7,6];
 //     return resultsArray.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
 // }
 
-function mergeSort(list) {
-    if (list.length === 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(mergeSort(left), mergeSort(right));
-}
+// quick sort
+// selection sort
 
-function sort(left, right) {
-    let leftIndex = 0;
-    let rightIndex = 0;
-    let results = [];
-    while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            results.push(left[leftIndex]);
-            leftIndex++;
+function quickSort(list) {
+    if (list.length <= 1) return list;
+    const pivot = list[0];
+    const left = [];
+    const right = [];
+    for (let i = 1; i < list.length; i++) {
+        if (list[i] < pivot) {
+            left.push(list[i]);
         } else {
-            results.push(right[rightIndex]);
-            rightIndex++;
+            right.push(list[i]);
         }
     }
-    return results.concat(left.slice(leftIndex), right.slice(rightIndex));
-}
+    return [...quickSort(left), pivot, ...quickSort(right)]
+}   
 
-console.log(mergeSort(testArray)); 
+console.log(quickSort(testArray));
