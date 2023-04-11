@@ -2,7 +2,7 @@
 // Sorts an array by splitting the array into subarrays of size 1 (one element/item per array). Then, adjacent arrays are sorted and merged. This continues until a single array exists with sorted values.
 // Runtime: O(n(log(n))) / Quasilinear
 
-const testArray = [9,4,8,3,1,10,2,5,7,6,9,4,8,3,1,10,2,5,7,6];
+const testArray = [9,4,8,3,1,10,2];
 
 // // // Splits arrays in two
 // function mergeSort(list) {
@@ -31,22 +31,15 @@ const testArray = [9,4,8,3,1,10,2,5,7,6,9,4,8,3,1,10,2,5,7,6];
 //     return resultsArray.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
 // }
 
-// quick sort
 // selection sort
 
-function quickSort(list) {
-    if (list.length <= 1) return list;
-    const pivot = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < pivot) {
-            left.push(list[i]);
-        } else {
-            right.push(list[i]);
-        }
-    }
-    return [...quickSort(left), pivot, ...quickSort(right)]
-}   
+function sort(list, results=[]) {
+    if (list.length === 0) return results;
+    const min = Math.min(...list);
+    const minIndex = list.indexOf(min);
+    results.push(min);
+    list.splice(minIndex, 1);
+    return sort(list, results);
+}
 
-console.log(quickSort(testArray));
+console.log(sort(testArray));
