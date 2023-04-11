@@ -33,3 +33,56 @@
 
 // hash
 // binary tree
+
+class Hash {
+    constructor(size) {
+        this.size = size;
+        this.table = Array(size);
+    }
+    hash(k) {
+        let total = 0;
+        for (let i = 0; i < k.length; i++) {
+            total += k.charCodeAt(i);
+        }
+        return total % this.size;
+    }
+    add(k,v) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[k,v]];
+        } else {
+            const sameKey = bucket.find(i => i[0] === k);
+            if (sameKey) {
+                sameKey[1] = v;
+            } else {
+                bucket.push([k,v]);
+            }
+        }
+    }
+    remove(k) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (bucket) {
+            const sameKey = bucket.find(i => i[0] === k);
+            if (sameKey) {
+                bucket.splice(bucket.indexOf(sameKey), 1);
+            } 
+        }
+    }
+    print() {
+        this.table.forEach(item => console.log(item));
+    }
+}
+
+const hashMap = new Hash(50);
+hashMap.add('name', 'bob');
+hashMap.add('age', '50');
+hashMap.add('color', 'blue');
+hashMap.print();
+hashMap.add('name', 'megan');
+hashMap.add('ega', '40');
+hashMap.remove('color');
+hashMap.print();
+
+
