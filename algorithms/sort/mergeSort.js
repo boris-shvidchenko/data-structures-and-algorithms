@@ -35,17 +35,22 @@ const testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 // console.log(mergeSort(testArray)); 
 
-function fib(v) {
-    if (v <= 2) return 1;
-    const table = Array(v + 1).fill(0);
-    table[1] = 1;
-    for (let i = 0; i<v; i++) {
-        table[i+1] += table[i];
-        table[i+2] += table[i];
+const binarySearch = (list, target) => {
+    if (list.length === 1) {
+        if (list[0] === target) return true;
+        return false;
+    } else {
+        const mid = Math.floor(list.length/2);
+        if (list[mid] === target) return true;
+        if (list[mid] < target) {
+            const right = list.slice(mid);
+            return binarySearch(right, target);
+        } else {
+            const left = list.slice(0, mid);
+            return binarySearch(left, target);
+        }
     }
-    return table[v];
-}
+};
 
-
-console.log(fib(20));
-console.log(fib(200));
+console.log(binarySearch(testArray, 7));
+console.log(binarySearch(testArray, 100));
