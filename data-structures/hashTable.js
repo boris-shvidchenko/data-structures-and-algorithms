@@ -83,86 +83,34 @@
 // table.set('mane', 'Clark');
 // table.display();
 
-// graph
 // merge sort
 // tree
 // hash
 
-// const list = [9,8,7,4,6,5,1,3,4,2,6,6,66,23,-10,0,23,4.7];
+const list = [9,8,7,4,6,5,1,3,4,2,6,6,66,23,-10,0,23,4.7];
 
-class Node {
-    constructor(val) {
-        this.val = val;
-        this.edges = [];
-    }
-    connect(node) {
-        this.edges.push(node);
-        node.edges.push(this);
-    }
+function mergeSort(list) {
+    if (list.length === 1) return list;
+    const mid = Math.floor(list.length/2);
+    const left = list.slice(0, mid);
+    const right = list.slice(mid);
+    return sort(mergeSort(left), mergeSort(right));
 }
 
-class Graph {
-    constructor(nodes) {
-        this.nodes = [...nodes];
-    }
-    sp(start, end) {
-        let visited = {};
-        let q = [start];
-        visited[start.val] = null;
-        while(q.length > 0) {
-            let current = q.shift();
-            if (current === end) {
-                return this.rp(visited, end);
-            } 
-            for (let adj of current.edges) {
-                if (!visited.hasOwnProperty(adj.val)) {
-                    q.push(adj);
-                    visited[adj.val] = current;
-                }
-            }          
+function sort(left, right) {
+    let res = [];
+    let leftIndex = 0;
+    let rightIndex = 0;
+    while (leftIndex < left.length && rightIndex < right.length) {
+        if (left[leftIndex] < right[rightIndex]) {
+            res.push(left[leftIndex]);
+            leftIndex++;
+        } else {
+            res.push(right[rightIndex]);
+            rightIndex++;
         }
     }
-    rp(visited, end) {
-        let current = end;
-        let path = [];
-        while (current !== null) {
-            path.push(current.val);
-            current = visited[current.val];
-        }
-        return path.reverse();
-    }
+    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
 }
 
-const DFW = new Node('DFW');
-const JFK = new Node('JFK');
-const LAX = new Node('LAX');
-const HNL = new Node('HNL');
-const SAN = new Node('SAN');
-const EWR = new Node('EWR');
-const BOS = new Node('BOS');
-const MIA = new Node('MIA');
-const MCO = new Node('MCO');
-const PBI = new Node('PBI');
-const HKG = new Node('HKG');
-
-const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
-
-DFW.connect(JFK);
-DFW.connect(LAX);
-JFK.connect(BOS);
-JFK.connect(MIA);
-LAX.connect(HNL);
-LAX.connect(EWR);
-LAX.connect(SAN);
-SAN.connect(HKG);
-MIA.connect(MCO);
-MIA.connect(PBI);
-MCO.connect(PBI);
-
-// graph.bft(DFW, PBI);
-// graph.dft(DFW, HKG);
-
-// Practice Question
-// Given 2 airports find the smallest distance between the 2. (ex: DFW and PBI > DFW-JFK-MIA-PBI)
-console.log(graph.sp(DFW, PBI));
-
+console.log(mergeSort(list));
