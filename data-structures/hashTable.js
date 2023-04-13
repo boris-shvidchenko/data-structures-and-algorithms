@@ -83,34 +83,41 @@
 // table.set('mane', 'Clark');
 // table.display();
 
-// merge sort
 // tree
 // hash
 
-const list = [9,8,7,4,6,5,1,3,4,2,6,6,66,23,-10,0,23,4.7];
-
-function mergeSort(list) {
-    if (list.length === 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(mergeSort(left), mergeSort(right));
-}
-
-function sort(left, right) {
-    let res = [];
-    let leftIndex = 0;
-    let rightIndex = 0;
-    while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            res.push(left[leftIndex]);
-            leftIndex++;
-        } else {
-            res.push(right[rightIndex]);
-            rightIndex++;
-        }
+class Node {
+    constructor(val) {
+        this.val = val;    // Value of the node
+        this.left = null;  // Left edge
+        this.right = null; // Right edge
     }
-    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
 }
 
-console.log(mergeSort(list));
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+
+function bft(root, target) {
+    if (root === null) return false;
+    const queue = [root];
+    while (queue.length > 0) {
+        const current = queue.shift();
+        if (current.val === target) return true;
+        if (current.left !== null) queue.push(current.left);
+        if (current.right !== null) queue.push(current.right);
+    }
+    return false;
+}
+
+console.log(bft(a, 'a'));
+console.log(bft(a, 'z'));
