@@ -83,7 +83,6 @@
 // table.set('mane', 'Clark');
 // table.display();
 
-// linked list
 // graph
 // merge sort
 // tree
@@ -94,85 +93,76 @@
 class Node {
     constructor(val) {
         this.val = val;
-        this.next = null;
+        this.edges = [];
+    }
+    connect(node) {
+        this.edges.push(node);
+        node.edges.push(this);
     }
 }
-class LinkedList {
-    constructor() {
-        this.head = null;
-        this.length = 0;
+
+class Graph {
+    constructor(nodes) {
+        this.nodes = [...nodes];
     }
-    append(v) {
-        const newNode = new Node(v);
-        let current = this.head;
-        if (this.head === null) {
-            this.head = newNode;
-        } else {
-            while (current.next !== null) {
-                current = current.next;
-            }
-            current.next = newNode;
+    sp(start, end) {
+        let visited = {};
+        let q = [start];
+        visited[start.val] = null;
+        while(q.length > 0) {
+            let current = q.shift();
+            if (current === end) {
+                return this.rp(visited, end);
+            } 
+            for (let adj of current.edges) {
+                if (!visited.hasOwnProperty(adj.val)) {
+                    q.push(adj);
+                    visited[adj.val] = current;
+                }
+            }          
         }
-        this.length++;
     }
-    delAll() {
-        this.head = null;
-        this.length = 0;
-    }
-    print() {
-        let str = '';
-        let current = this.head;
+    rp(visited, end) {
+        let current = end;
+        let path = [];
         while (current !== null) {
-            str += current.val + '>';
-            current = current.next;
+            path.push(current.val);
+            current = visited[current.val];
         }
-        console.log(str);
-    }
-    remove(v) {
-        let current = this.head;
-        let prev;
-        if (current?.val === v) {
-            this.head = current.next;
-        } else {
-            while (current.val !== v) {
-                prev = current;
-                current = current.next;
-            }
-            prev.next = current.next;
-        }
-        this.length--;
-    }
-    appendAt(v, index) {
-        const newNode = new Node(v);
-        let current = this.head;
-        let currentIndex = 0;
-        let prev;
-        if (index === 0) {
-            this.head = newNode;
-            newNode.next = current;
-        } else {
-            while (currentIndex < index) {
-                prev = current;
-                current = current.next;
-                currentIndex++;
-            }
-            prev.next = newNode;
-            newNode.next = current;
-        }
-        this.length++;
+        return path.reverse();
     }
 }
 
-// for remove try to remove last item
+const DFW = new Node('DFW');
+const JFK = new Node('JFK');
+const LAX = new Node('LAX');
+const HNL = new Node('HNL');
+const SAN = new Node('SAN');
+const EWR = new Node('EWR');
+const BOS = new Node('BOS');
+const MIA = new Node('MIA');
+const MCO = new Node('MCO');
+const PBI = new Node('PBI');
+const HKG = new Node('HKG');
 
-const linkedList = new LinkedList();
-linkedList.append('A');
-linkedList.print();
-linkedList.append('B');
-linkedList.print();
-linkedList.append('C');
-linkedList.print();
-linkedList.remove('C');
-linkedList.print();
-linkedList.appendAt('Z', 0);
-linkedList.print();
+const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
+
+DFW.connect(JFK);
+DFW.connect(LAX);
+JFK.connect(BOS);
+JFK.connect(MIA);
+LAX.connect(HNL);
+LAX.connect(EWR);
+LAX.connect(SAN);
+SAN.connect(HKG);
+MIA.connect(MCO);
+MIA.connect(PBI);
+MCO.connect(PBI);
+
+// graph.bft(DFW, PBI);
+// graph.dft(DFW, HKG);
+
+// Practice Question
+// Given 2 airports find the smallest distance between the 2. (ex: DFW and PBI > DFW-JFK-MIA-PBI)
+console.log(graph.sp(DFW, PBI));
+
