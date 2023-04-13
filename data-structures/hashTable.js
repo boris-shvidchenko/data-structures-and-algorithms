@@ -83,41 +83,49 @@
 // table.set('mane', 'Clark');
 // table.display();
 
-// tree
-// hash
+class Hash {
+    constructor(size) {
+        this.size = size;
+        this.table = new Array(size);
+    }
+    hash(k) {
+        let total = 0;
+        for (let i = 0; i < k.length; i++) {
+            total += k.charCodeAt(i);
+        }
+        return total % this.size;
+    }
+    set(k, v) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[k,v]];
+        } else {
+            const col = bucket.find(i => i[0] === k);
+            if (col) {
+                col[1] = v;
+            } else {
+                bucket.push([k,v]);
+            }
+        }
 
-class Node {
-    constructor(val) {
-        this.val = val;    // Value of the node
-        this.left = null;  // Left edge
-        this.right = null; // Right edge
+    }
+    remove(k) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        const col = bucket.find(i => i[0] === k);
+        bucket.splice(bucket.indexOf(col), 1);
+    }
+    display() {
+        this.table.forEach(value => console.log(value));
     }
 }
 
-const a = new Node('a');
-const b = new Node('b');
-const c = new Node('c');
-const d = new Node('d');
-const e = new Node('e');
-const f = new Node('f');
-a.left = b;
-a.right = c;
-b.left = d;
-b.right = e;
-c.right = f;
-
-
-function bft(root, target) {
-    if (root === null) return false;
-    const queue = [root];
-    while (queue.length > 0) {
-        const current = queue.shift();
-        if (current.val === target) return true;
-        if (current.left !== null) queue.push(current.left);
-        if (current.right !== null) queue.push(current.right);
-    }
-    return false;
-}
-
-console.log(bft(a, 'a'));
-console.log(bft(a, 'z'));
+const table = new Hash(50);
+table.set('name', 'Ryan');
+table.set('age', 25);
+table.set('color', 'red');
+table.display();
+table.remove('color');
+table.set('mane', 'Clark');
+table.display();
