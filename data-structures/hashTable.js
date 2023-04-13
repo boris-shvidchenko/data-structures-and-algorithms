@@ -83,27 +83,96 @@
 // table.set('mane', 'Clark');
 // table.display();
 
-// quick sort
 // linked list
 // graph
 // merge sort
 // tree
 // hash
 
-const list = [9,8,7,4,6,5,1,3,4,2,6,6,66,23,-10,0,23,4.7];
+// const list = [9,8,7,4,6,5,1,3,4,2,6,6,66,23,-10,0,23,4.7];
 
-function quickSort(list) {
-    if (list.length === 0) return list;
-    const pivot = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < pivot) {
-            left.push(list[i])
-        } else {
-            right.push(list[i]);
-        }
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.next = null;
     }
-    return [...quickSort(left), pivot, ...quickSort(right)]
 }
-console.log(quickSort(list));
+class LinkedList {
+    constructor() {
+        this.head = null;
+        this.length = 0;
+    }
+    append(v) {
+        const newNode = new Node(v);
+        let current = this.head;
+        if (this.head === null) {
+            this.head = newNode;
+        } else {
+            while (current.next !== null) {
+                current = current.next;
+            }
+            current.next = newNode;
+        }
+        this.length++;
+    }
+    delAll() {
+        this.head = null;
+        this.length = 0;
+    }
+    print() {
+        let str = '';
+        let current = this.head;
+        while (current !== null) {
+            str += current.val + '>';
+            current = current.next;
+        }
+        console.log(str);
+    }
+    remove(v) {
+        let current = this.head;
+        let prev;
+        if (current?.val === v) {
+            this.head = current.next;
+        } else {
+            while (current.val !== v) {
+                prev = current;
+                current = current.next;
+            }
+            prev.next = current.next;
+        }
+        this.length--;
+    }
+    appendAt(v, index) {
+        const newNode = new Node(v);
+        let current = this.head;
+        let currentIndex = 0;
+        let prev;
+        if (index === 0) {
+            this.head = newNode;
+            newNode.next = current;
+        } else {
+            while (currentIndex < index) {
+                prev = current;
+                current = current.next;
+                currentIndex++;
+            }
+            prev.next = newNode;
+            newNode.next = current;
+        }
+        this.length++;
+    }
+}
+
+// for remove try to remove last item
+
+const linkedList = new LinkedList();
+linkedList.append('A');
+linkedList.print();
+linkedList.append('B');
+linkedList.print();
+linkedList.append('C');
+linkedList.print();
+linkedList.remove('C');
+linkedList.print();
+linkedList.appendAt('Z', 0);
+linkedList.print();
