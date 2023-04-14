@@ -14,88 +14,15 @@
 // // Iteration works just like with an array
 // for (let char of nums) console.log(char); 
 
-// linked
-// selection sort
+const array = [2,9,4,0,-100,333.99,3.9,0.1,333,2,6,4,109];
 
-class Node {
-    constructor(val) {
-        this.val = val;
-        this.next = null;
-    }
+function selectionSort(list, sorted=[]) {
+    if (list.length === 0) return sorted;
+    const min = Math.min(...list);
+    const minIndex = list.indexOf(min);
+    sorted.push(min);
+    list.splice(minIndex, 1);
+    return selectionSort(list, sorted);
 }
 
-class LinkedList {
-    constructor() {
-        this.length = 0;
-        this.head = null;
-    }
-    append(v) {
-        const newNode = new Node(v);
-        let current = this.head;
-        if (this.head === null) {
-            this.head = newNode;
-        } else {
-            while (current.next !== null) {
-                current = current.next;
-            }
-            current.next = newNode;
-        }
-        this.length++;
-    }
-    appendAt(i, v) {
-        const newNode = new Node(v);
-        let current = this.head;
-        let currentIndex = 0;
-        let prev;
-        if (i === 0) {
-            this.head = newNode;
-            newNode.next = current;
-        } else {
-            while (currentIndex < i) {
-                prev = current;
-                current = current.next;
-                currentIndex++;
-            }
-            prev.next = newNode;
-            newNode.next = current;
-        }
-        this.length++;
-    }
-    remove(v) {
-        let current = this.head;
-        let prev;
-        if (this.head.val === v) {
-            this.head = current.next;
-        } else {
-            while (current.val !== v) {
-                prev = current;
-                current = current.next;
-            } 
-            prev.next = current.next;
-        }
-        this.length--;
-    }
-    print() {
-        let str = '';
-        let current = this.head;
-        while (current !== null) {
-            str += current.val + '>';
-            current = current.next;
-        }
-        console.log(str);
-    }
-}
-
-// Test
-const list = new LinkedList();
-list.append('a');
-list.append('b');
-list.append('c');
-list.print();
-list.remove('b'); 
-list.appendAt(1,'z');
-list.print();
-list.appendAt(0,'p');
-list.print();
-list.remove('p');
-list.print();
+console.log(selectionSort(array));
