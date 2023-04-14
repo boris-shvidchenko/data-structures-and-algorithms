@@ -22,4 +22,4 @@ function gridTraveler2(x,y, memo = {}) {
 }
 
 // Test
-console.log(gridTraveler2(20, 20)); 
+console.log(gridTraveler2(20, 20));
