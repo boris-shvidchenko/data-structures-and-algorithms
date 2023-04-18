@@ -17,18 +17,5 @@
 // merge sort
 // quick sort
 // b search
-// fab tab/memo
 
-const fib = (v) => {
-    if (v <= 2) return 1;
-    const table = new Array(v+1).fill(0);
-    table[1] = 1;
-    for (let i = 0; i < v; i++) {
-        table[i+1] += table[i];
-        table[i+2] += table[i];
-    }
-    return table[v];
-}
 
-console.log(fib(20))
-console.log(fib(200))
