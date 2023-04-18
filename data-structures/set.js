@@ -21,87 +21,39 @@
 // b search
 // fab tab/memo
 
+
 class Node {
     constructor(v) {
         this.v = v;
-        this.next = null;
+        this.left = null;
+        this.right = null;
     }
 }
 
-class LinkedList {
-    constructor() {
-        this.length = 0;
-        this.head = null;
-    }
-    append(n) {
-        const newNode = new Node(n);
-        if (this.head === null) {
-            this.head = newNode;
-        } else {
-            let cur = this.head;
-            while (cur.next !== null) {
-                cur = cur.next;
-            }
-            cur.next = newNode;
-        }
-        this.length++;
-    }
-    appendAt(n, i) {
-        const newNode = new Node(n);
-        let cur = this.head;
-        let curIndex = 0;
-        let prev;
-        if (i === 0) {
-            this.head = newNode;
-            newNode.next = cur;
-        } else {
-            while (curIndex < i) {
-                prev = cur;
-                cur = cur.next;
-                curIndex++;
-            }
-            prev.next = newNode; // here
-            newNode.next = cur;
-        }
-        this.length++;
-    }
-    remove(n) {
-        let cur = this.head;
-        let prev;
-        if (n === this.head.v) {
-            this.head = cur.next;
-        } else {
-            while (cur !== null) {
-                if (cur.v === n) {
-                    prev.next = cur.next; // here
-                    return;
-                }
-                prev = cur;
-                cur = cur.next;
-            }
-        }
-        this.length--;
-    }
-    print() {
-        let str = '';
-        let cur = this.head;
-        while (cur !== null) {
-            str += cur.v + '>';
-            cur = cur.next;
-        }
-        console.log(str);
-    }
-}
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
 
-// Test
-const list = new LinkedList();
-list.append('a');
-list.append('b');
-list.append('c');
-list.print();
-list.remove('b'); 
-list.appendAt('z', 1);
-list.print();
-list.appendAt('p', 0);
-list.remove('p'); 
-list.print();
+
+function bft(root, target) {
+    if (root === null) return false;
+    const q = [root];
+    while (q.length > 0) {
+        const cur = q.shift();
+        if (cur.v === target) return true;
+        if (cur.left !== null) q.push(cur.left);
+        if (cur.right !== null) q.push(cur.right);
+    }
+    return false;
+}
+// console.log(bft(a))
+console.log(bft(a, 'a'))
+console.log(bft(a, 'o'))
