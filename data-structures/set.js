@@ -14,46 +14,54 @@
 // // Iteration works just like with an array
 // for (let char of nums) console.log(char); 
 
-// tree
-// hash
 // merge sort
 // quick sort
 // b search
 // fab tab/memo
 
-
-class Node {
-    constructor(v) {
-        this.v = v;
-        this.left = null;
-        this.right = null;
+class HashMap {
+    constructor(size) {
+        this.size = size;
+        this.table = new Array(size);
+    }
+    hash(k) {
+        let total = 0;
+        for (let i=0; i<k.length; i++) {
+            total += k.charCodeAt(i);
+        }
+        return total % this.size;
+    }
+    set(k,v) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[k,v]]; 
+        } else {
+            const same = bucket.find(i => i[0] === k);
+            if (same) {
+                same[1] = v;
+            } else {
+                bucket.push([k,v]);
+            }
+        }
+    }
+    remove(k) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        const same = bucket.find(i => i[0] === k);
+        bucket.splice(bucket.indexOf(same), 1);
+    }
+    display() {
+        this.table.forEach(item => console.log(item));
     }
 }
 
-const a = new Node('a');
-const b = new Node('b');
-const c = new Node('c');
-const d = new Node('d');
-const e = new Node('e');
-const f = new Node('f');
-a.left = b;
-a.right = c;
-b.left = d;
-b.right = e;
-c.right = f;
-
-
-function bft(root, target) {
-    if (root === null) return false;
-    const q = [root];
-    while (q.length > 0) {
-        const cur = q.shift();
-        if (cur.v === target) return true;
-        if (cur.left !== null) q.push(cur.left);
-        if (cur.right !== null) q.push(cur.right);
-    }
-    return false;
-}
-// console.log(bft(a))
-console.log(bft(a, 'a'))
-console.log(bft(a, 'o'))
+const table = new HashMap(50);
+table.set('name', 'Ryan');
+table.set('age', 25);
+table.set('color', 'red');
+table.display();
+// console.log(table.get('name'));
+table.remove('color');
+table.set('mane', 'Clark');
+table.display();
