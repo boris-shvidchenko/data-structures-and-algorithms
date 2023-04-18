@@ -24,7 +24,6 @@ function bestSum1(target, numbers, memo={}) {
 console.log(bestSum1(100, [1,2,5,25]));
 
 // Tabulation approach
-
 function bestSum2(target, numbers) {
     const table = Array(target + 1).fill(null);
     table[0] = [];
