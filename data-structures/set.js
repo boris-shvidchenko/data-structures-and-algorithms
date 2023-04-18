@@ -14,8 +14,6 @@
 // // Iteration works just like with an array
 // for (let char of nums) console.log(char); 
 
-
-// l list
 // tree
 // hash
 // merge sort
@@ -26,70 +24,84 @@
 class Node {
     constructor(v) {
         this.v = v;
-        this.edges = [];
-    }
-    connect(n) {
-        this.edges.push(n);
-        n.edges.push(this);
+        this.next = null;
     }
 }
 
-class Graph {
-    constructor(nodes) {
-        this.nodes = [...nodes]
+class LinkedList {
+    constructor() {
+        this.length = 0;
+        this.head = null;
     }
-    sp(start, end) {
-        const visited = {};
-        const q = [start];
-        visited[start.v] = null;
-        while (q.length > 0) {
-            const cur = q.shift();
-            if (cur === end) {
-                return this.rp(visited, end);
+    append(n) {
+        const newNode = new Node(n);
+        if (this.head === null) {
+            this.head = newNode;
+        } else {
+            let cur = this.head;
+            while (cur.next !== null) {
+                cur = cur.next;
             }
-            for (let a of cur.edges) {
-                if (!visited.hasOwnProperty(a.v)) {
-                    visited[a.v] = cur;
-                    q.push(a);
+            cur.next = newNode;
+        }
+        this.length++;
+    }
+    appendAt(n, i) {
+        const newNode = new Node(n);
+        let cur = this.head;
+        let curIndex = 0;
+        let prev;
+        if (i === 0) {
+            this.head = newNode;
+            newNode.next = cur;
+        } else {
+            while (curIndex < i) {
+                prev = cur;
+                cur = cur.next;
+                curIndex++;
+            }
+            prev.next = newNode; // here
+            newNode.next = cur;
+        }
+        this.length++;
+    }
+    remove(n) {
+        let cur = this.head;
+        let prev;
+        if (n === this.head.v) {
+            this.head = cur.next;
+        } else {
+            while (cur !== null) {
+                if (cur.v === n) {
+                    prev.next = cur.next; // here
+                    return;
                 }
+                prev = cur;
+                cur = cur.next;
             }
         }
+        this.length--;
     }
-    rp(visited, end) {
-        let cur = end;
-        let path = [];
+    print() {
+        let str = '';
+        let cur = this.head;
         while (cur !== null) {
-            path.push(cur.v);
-            cur = visited[cur.v];
-        } 
-        return path.reverse();
+            str += cur.v + '>';
+            cur = cur.next;
+        }
+        console.log(str);
     }
 }
 
-const DFW = new Node('DFW');
-const JFK = new Node('JFK');
-const LAX = new Node('LAX');
-const HNL = new Node('HNL');
-const SAN = new Node('SAN');
-const EWR = new Node('EWR');
-const BOS = new Node('BOS');
-const MIA = new Node('MIA');
-const MCO = new Node('MCO');
-const PBI = new Node('PBI');
-const HKG = new Node('HKG');
-
-const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
-
-DFW.connect(JFK);
-DFW.connect(LAX);
-JFK.connect(BOS);
-JFK.connect(MIA);
-LAX.connect(HNL);
-LAX.connect(EWR);
-LAX.connect(SAN);
-SAN.connect(HKG);
-MIA.connect(MCO);
-MIA.connect(PBI);
-MCO.connect(PBI);
-
-console.log(graph.sp(DFW, PBI));
+// Test
+const list = new LinkedList();
+list.append('a');
+list.append('b');
+list.append('c');
+list.print();
+list.remove('b'); 
+list.appendAt('z', 1);
+list.print();
+list.appendAt('p', 0);
+list.remove('p'); 
+list.print();
