@@ -19,49 +19,16 @@
 // b search
 // fab tab/memo
 
-class HashMap {
-    constructor(size) {
-        this.size = size;
-        this.table = new Array(size);
+const fib = (v) => {
+    if (v <= 2) return 1;
+    const table = new Array(v+1).fill(0);
+    table[1] = 1;
+    for (let i = 0; i < v; i++) {
+        table[i+1] += table[i];
+        table[i+2] += table[i];
     }
-    hash(k) {
-        let total = 0;
-        for (let i=0; i<k.length; i++) {
-            total += k.charCodeAt(i);
-        }
-        return total % this.size;
-    }
-    set(k,v) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        if (!bucket) {
-            this.table[index] = [[k,v]]; 
-        } else {
-            const same = bucket.find(i => i[0] === k);
-            if (same) {
-                same[1] = v;
-            } else {
-                bucket.push([k,v]);
-            }
-        }
-    }
-    remove(k) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        const same = bucket.find(i => i[0] === k);
-        bucket.splice(bucket.indexOf(same), 1);
-    }
-    display() {
-        this.table.forEach(item => console.log(item));
-    }
+    return table[v];
 }
 
-const table = new HashMap(50);
-table.set('name', 'Ryan');
-table.set('age', 25);
-table.set('color', 'red');
-table.display();
-// console.log(table.get('name'));
-table.remove('color');
-table.set('mane', 'Clark');
-table.display();
+console.log(fib(20))
+console.log(fib(200))
