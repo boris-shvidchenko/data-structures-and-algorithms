@@ -14,19 +14,93 @@
 // // Iteration works just like with an array
 // for (let char of nums) console.log(char); 
 
-//sel sort
-//link
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.next = null;
+    }
+}
 
-const arr = [4,21,6,-0.9,-1,21,12414,2,-12312313];
+class LinkedList {
+    constructor() {
+        this.length = 0;
+        this.head = null;
+    }
+    append(node) {
+        const newNode = new Node(node);
+        let current = this.head;
+        if (this.head == null) {
+            this.head = newNode;
+            this.length++;
+            return;
+        }
+        while (current.next != null) {
+            current = current.next;
+        }
+        current.next = newNode;
+        this.length++;
+    }
+    appendAt(node, index) {
+        const newNode = new Node(node);
+        let current = this.head;
+        let currentIndex = 0;
+        let prev;
+        if (index === 0) {
+            this.head = newNode;
+            newNode.next = current;
+            this.length++;
+            return;
+        }
+        while (currentIndex < index) {
+            prev = current;
+            current = current.next;
+            currentIndex++;
+        }
+        prev.next = newNode;
+        newNode.next = current;
+        this.length++;
+    }
+    remove(node) {
+        let current = this.head;
+        let prev;
+        if (this.head.val === node) {
+            this.head = current.next;
+            this.length--;
+            return;
+        }
+        while (current !== null) {
+            if (current.val === node) {
+                prev.next = current.next;
+                this.length--;
+                return;
+            }
+            prev = current;
+            current = current.next;
+        }
+    }
+    delAll() {
+        this.length = 0;
+        this.head = null;
+    }
+    print() {
+        let str = '';
+        let current = this.head;
+        while (current !== null) {
+            str += current.val + '>';
+            current = current.next;
+        }
+        console.log(str);
+    }
+}
 
-const selSort = (list, res=[]) => {
-    if (list.length === 0) return res;
-    // const min = Math.min(...list);
-    const min = list.reduce((a,b) => a < b ? b : a);
-    const minIndex = list.indexOf(min);
-    res.push(min);
-    list.splice(minIndex, 1);
-    return selSort(list, res);
-};
-
-console.log(selSort(arr));
+// Test
+const list = new LinkedList();
+list.append('a');
+list.append('b');
+list.append('c');
+list.print();
+list.remove('a'); 
+list.appendAt('z', 0);
+list.print();
+list.delAll();
+list.print();
