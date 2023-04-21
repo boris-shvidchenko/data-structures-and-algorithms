@@ -19,4 +19,40 @@
 //link
 
 
+class Node {
+    constructor(v) {
+        this.v = v;
+        this.left = null;
+        this.right = null;
+    }
+}
 
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+
+function bft(root, t) {
+
+    if (root === null) return false;
+    const queue = [root];
+    while (queue.length > 0) {
+        const current = queue.shift();
+        if (current.v === t) return true;
+        if (current.left !== null) queue.push(current.left);
+        if (current.right !== null) queue.push(current.right);
+    }
+    return false;
+    
+}
+// console.log(bft(a))
+console.log(bft(a, 'a'))
+console.log(bft(a, 'z'))
