@@ -14,45 +14,19 @@
 // // Iteration works just like with an array
 // for (let char of nums) console.log(char); 
 
-//tree
 //sel sort
 //link
 
+const arr = [4,21,6,-0.9,-1,21,12414,2,-12312313];
 
-class Node {
-    constructor(v) {
-        this.v = v;
-        this.left = null;
-        this.right = null;
-    }
-}
+const selSort = (list, res=[]) => {
+    if (list.length === 0) return res;
+    // const min = Math.min(...list);
+    const min = list.reduce((a,b) => a < b ? b : a);
+    const minIndex = list.indexOf(min);
+    res.push(min);
+    list.splice(minIndex, 1);
+    return selSort(list, res);
+};
 
-const a = new Node('a');
-const b = new Node('b');
-const c = new Node('c');
-const d = new Node('d');
-const e = new Node('e');
-const f = new Node('f');
-a.left = b;
-a.right = c;
-b.left = d;
-b.right = e;
-c.right = f;
-
-
-function bft(root, t) {
-
-    if (root === null) return false;
-    const queue = [root];
-    while (queue.length > 0) {
-        const current = queue.shift();
-        if (current.v === t) return true;
-        if (current.left !== null) queue.push(current.left);
-        if (current.right !== null) queue.push(current.right);
-    }
-    return false;
-    
-}
-// console.log(bft(a))
-console.log(bft(a, 'a'))
-console.log(bft(a, 'z'))
+console.log(selSort(arr));
