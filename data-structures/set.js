@@ -14,52 +14,29 @@
 // // Iteration works just like with an array
 // for (let char of nums) console.log(char); 
 
-// hash
-// bi search
+let array = [1,2,3,4,5,6,7,8,9,10];
 
-class Hash {
-    constructor(size) {
-        this.size = size;
-        this.table = new Array(size);
-    }
-    hash(k) {
-        let total = 0;
-        for (let i=0; i<k.length; i++) {
-            total += k.charCodeAt(i);
-        }
-        return total % this.size;
-    }
-    add(k, v) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        if (!bucket) {
-            this.table[index] = [[k,v]];
+
+const bSearch = (list, t) => {
+    if (list.length === 1) {
+        if (list[0] === t) return true;
+        return false;
+    } else {
+        const mid = Math.floor(list.length / 2);
+        if (list[mid] === t) {
+            return true;
         } else {
-            const sameKey = bucket.find(i => i[0] === k);
-            if (sameKey) {
-                sameKey[1] = v;
+            if (t < list[mid]) {
+                const left = list.slice(0, mid);
+                return bSearch(left, t);
             } else {
-                bucket.push([k,v]);
+                const right = list.slice(mid);
+                return bSearch(right, t);
             }
         }
     }
-    remove(k) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        const sameKey = bucket.find(i => i[0] === k);
-        bucket.splice(bucket.indexOf(sameKey), 1);
-    }
-    print() {
-        this.table.forEach(i => console.log(i));
-    }
 }
 
-const h = new Hash(50);
-h.add('name', 'boris');
-h.add('age', '25');
-h.add('color', 'red');
-h.print();
-h.add('mane', 'bob');
-h.add('age', '30');
-// h.remove('age');
-h.print();
+
+console.log(bSearch(array, 7));
+console.log(bSearch(array, 70));
