@@ -14,7 +14,6 @@
 // // Iteration works just like with an array
 // for (let char of nums) console.log(char); 
 
-// quick sort
 // tree
 // graph
 // fib memo/tab
@@ -22,27 +21,41 @@
 // hash
 // bi search
 
-const list = [2,4,23,-0.9,-300,222,32,1.4];
+// const list = [2,4,23,-0.9,-300,222,32,1.4];
 
-const qS = (array) => {
-    if (array.length <= 1) return array;
-    const pivot = array[0];
-    const left = [];
-    const right = [];
-    // for (let i = 1; i < array.length; i++) {
-    //     if (array[i] < pivot) {
-    //         left.push(array[i]);
-    //     } else {
-    //         right.push(array[i]);
-    //     }        
-    // }
-    array.forEach((i, ind) => {
-        if (ind !== 0) {
-            if (array[i] <= pivot) left.push(array[i]);
-            if (array[i] > pivot) right.push(array[i]);
-        }
-    })
-    return [...qS(left), pivot, ...qS(right)]
-};
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
 
-console.log(qS(list));
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+
+function bft(root, t) {
+    if (root === null) return false;
+    const q = [root];
+    while (q.length > 0) {
+        const cur = q.shift();
+        if (cur.val === t) return true;
+        if (cur.left !== null) q.push(cur.left);
+        if (cur.right !== null) q.push(cur.right);
+    }
+    return false;
+}
+// console.log(bft(a));
+console.log(bft(a, 'c'));
+console.log(bft(a, 'z'));
+
