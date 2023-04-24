@@ -14,103 +14,52 @@
 // // Iteration works just like with an array
 // for (let char of nums) console.log(char); 
 
-// linke list
 // hash
 // bi search
 
-// const list = [2,4,23,-0.9,-300,222,32,1.4];
-
-class Node {
-    constructor(val) {
-        this.val = val;
-        this.next = null;
+class Hash {
+    constructor(size) {
+        this.size = size;
+        this.table = new Array(size);
     }
-}
-
-class LinkedList {
-    constructor() {
-        this.length = 0;
-        this.head = null;
+    hash(k) {
+        let total = 0;
+        for (let i=0; i<k.length; i++) {
+            total += k.charCodeAt(i);
+        }
+        return total % this.size;
     }
-    append(node) {
-        const newNode = new Node(node);
-        let current = this.head;
-        if (this.head === null) {
-            this.head = newNode;
+    add(k, v) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[k,v]];
         } else {
-            while (current.next !== null) {
-                current = current.next;
+            const sameKey = bucket.find(i => i[0] === k);
+            if (sameKey) {
+                sameKey[1] = v;
+            } else {
+                bucket.push([k,v]);
             }
-            current.next = newNode;
         }
-        this.length++;
     }
-    appendAt(node, index) {
-        const newNode = new Node(node);
-        let current = this.head;
-        let currentIndex = 0;
-        let prev;
-        if (index === 0) {
-            this.head = newNode;
-            newNode.next = current;
-        } else {
-            while (currentIndex < index) {
-                prev = current;
-                current = current.next;
-                currentIndex++;
-            }
-            prev.next = newNode;
-            newNode.next = current;
-        }
-        this.length++;
-    }
-    remove(node) {
-        let current = this.head;
-        let prev;
-        if (this.head.val === node) {
-            this.head = current.next;
-        } else {
-            while (current !== null) {
-                prev = current;
-                current = current.next;
-                if (current.val === node) {
-                    prev.next = current.next;
-                    return;
-                } 
-            }
-        }
-        this.length--;
-    }
-    contains(node) {
-        let current = this.head;
-        while (current !== null) {
-            if (current.val === node) {
-                return true;
-            }
-            current = current.next;
-        }
-        return false;
+    remove(k) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        const sameKey = bucket.find(i => i[0] === k);
+        bucket.splice(bucket.indexOf(sameKey), 1);
     }
     print() {
-        let current = this.head;
-        let str = '';
-        while (current !== null) {
-            str += current.val + '>';
-            current = current.next;
-        } 
-        console.log(str);
+        this.table.forEach(i => console.log(i));
     }
 }
 
-// Test
-const list = new LinkedList();
-list.append('a');
-list.append('b');
-list.append('c');
-console.log(list.contains('a')); // true
-console.log(list.contains('z')); // false
-list.print();
-list.remove('a'); // a -> c -> etc.
-list.appendAt('z', 0);
-list.print();
-console.log(list.contains('z')); // true
+const h = new Hash(50);
+h.add('name', 'boris');
+h.add('age', '25');
+h.add('color', 'red');
+h.print();
+h.add('mane', 'bob');
+h.add('age', '30');
+// h.remove('age');
+h.print();
