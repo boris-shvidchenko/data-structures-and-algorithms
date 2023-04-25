@@ -2,7 +2,8 @@
 // Searchs an array for a target value by 1) splitting the array in half, 2) identifying whether the target value is ===, >, or < the value in the middle of the array, 3) removing the portion of the array that is < or > the target value, 3) repeats the process until the target value is identified. This algorithm assumes that the array is sorted.
 // Runtime: O(log(n)) / Binary
 
-const testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+// const testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const testArray = [8, 4, 2, 10, 9, 7, 6, 1, 3, 5, 5, -0.8, -203, 0.99, 1.2];
 
 // Returns the index of the target value within the provided array
 // function binarySearch(array, targetValue) {
@@ -23,22 +24,29 @@ const testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 //     }
 // }
 
-const binarySearch = (list, target) => {
-    if (list.length === 1) {
-        if (list[0] === target) return true;
-        return false;
-    } else {
-        const mid = Math.floor(list.length/2);
-        if (list[mid] === target) return true;
-        if (target < list[mid]) {
-            const left = list.slice(0, mid);
-            return binarySearch(left, target);
-        } else {
-            const right = list.slice(mid);
-            return binarySearch(right, target);
-        }
-    }
+function mergeSort(list) {
+    if (list.length <= 1) return list;
+    const mid = Math.floor(list.length/2);
+    const left = list.slice(0, mid);
+    const right = list.slice(mid);
+    return sort(mergeSort(left), mergeSort(right));
 }
 
-// Test log 
-console.log(binarySearch(testArray,20))
+function sort(left, right) {
+    let leftIndex = 0;
+    let rightIndex = 0;
+    let res = [];
+    while (leftIndex < left.length && rightIndex < right.length) {
+        if (left[leftIndex] < right[rightIndex]) {
+            res.push(left[leftIndex]);
+            leftIndex++;
+        } else {
+            res.push(right[rightIndex]);
+            rightIndex++;
+        }
+    }
+    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
+}
+
+console.log(mergeSort(testArray));
+
