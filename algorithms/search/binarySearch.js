@@ -3,7 +3,7 @@
 // Runtime: O(log(n)) / Binary
 
 // const testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-const testArray = [8, 4, 2, 10, 9, 7, 6, 1, 3, 5, 5, -0.8, -203, 0.99, 1.2];
+const testArray = [8, 4, 2, 10, 9, 7, 6, 100000, 3, 5, 5, -0.8, -203, 0.99, 1.2];
 
 // Returns the index of the target value within the provided array
 // function binarySearch(array, targetValue) {
@@ -24,29 +24,14 @@ const testArray = [8, 4, 2, 10, 9, 7, 6, 1, 3, 5, 5, -0.8, -203, 0.99, 1.2];
 //     }
 // }
 
-function mergeSort(list) {
-    if (list.length <= 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(mergeSort(left), mergeSort(right));
+const selectionSort = (list, res=[]) => {
+    if (list.length === 0) return res;
+    const min = list.reduce((a,b) => a > b ? a : b);
+    const minIndex = list.indexOf(min);
+    res.push(min);
+    list.splice(minIndex, 1);
+    return selectionSort(list, res);
 }
 
-function sort(left, right) {
-    let leftIndex = 0;
-    let rightIndex = 0;
-    let res = [];
-    while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            res.push(left[leftIndex]);
-            leftIndex++;
-        } else {
-            res.push(right[rightIndex]);
-            rightIndex++;
-        }
-    }
-    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
-}
-
-console.log(mergeSort(testArray));
+console.log(selectionSort(testArray));
 
