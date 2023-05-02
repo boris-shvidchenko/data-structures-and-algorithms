@@ -16,36 +16,76 @@
 
 
 
-// graph
-// tree
-
-
 class Node {
     constructor(val) {
         this.val = val;
-        this.right = null;
-        this.left = null;
+        this.edges = [];
+    }
+    connect(node) {
+        this.edges.push(node);
+        node.edges.push(this);
     }
 }
 
-const a = new Node('a');
-const b = new Node('b');
-const c = new Node('c');
-const d = new Node('d');
-const e = new Node('e');
-const f = new Node('f');
-a.left = b;
-a.right = c;
-b.left = d;
-b.right = e;
-c.right = f;
-
-
-function dft(root, t) {
-    if (root === null) return false;
-    if (root.val === t) return true;
-    return dft(root.left, t) || dft(root.right, t);
+class Graph {
+    constructor(nodes) {
+        this.nodes = [...nodes];
+    }
+    sp(start, end) {
+        const visited = {};
+        const q = [start];
+        visited[start.val] = null;
+        while (q.length > 0) {
+            const cur = q.shift();
+            if (cur === end) {
+                return this.rp(visited, end);
+            }
+            for (let a of cur.edges) {
+                if (!visited.hasOwnProperty(a.val)) {
+                    visited[a.val] = cur;
+                    q.push(a);
+                }
+            }
+        }  
+    }
+    rp(visited, end) {
+        let cur = end;
+        let path = [];
+        while (cur !== null) {
+            path.push(cur.val);
+            cur = visited[cur.val];
+        }
+        return path.reverse();
+    }
 }
-// console.log(dft(a));
-console.log(dft(a, 'c'));
-console.log(dft(a, 'y'));
+
+
+const DFW = new Node('DFW');
+const JFK = new Node('JFK');
+const LAX = new Node('LAX');
+const HNL = new Node('HNL');
+const SAN = new Node('SAN');
+const EWR = new Node('EWR');
+const BOS = new Node('BOS');
+const MIA = new Node('MIA');
+const MCO = new Node('MCO');
+const PBI = new Node('PBI');
+const HKG = new Node('HKG');
+
+const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
+
+DFW.connect(JFK);
+DFW.connect(LAX);
+JFK.connect(BOS);
+JFK.connect(MIA);
+LAX.connect(HNL);
+LAX.connect(EWR);
+LAX.connect(SAN);
+SAN.connect(HKG);
+MIA.connect(MCO);
+MIA.connect(PBI);
+MCO.connect(PBI);
+
+// graph.bft(DFW, PBI);
+// graph.dft(DFW, HKG);
+console.log(graph.sp(DFW, PBI));
