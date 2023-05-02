@@ -18,17 +18,34 @@
 
 // graph
 // tree
-// selection sort
 
-const array = [10, 0, 0.9, -30, 4, 4, -0.08];
 
-function selSort(list, res=[]) {
-    if (list.length === 0) return res;
-    const min = Math.min(...list);
-    const minIndex = list.indexOf(min);
-    res.unshift(min);
-    list.splice(minIndex, 1);
-    return selSort(list, res);
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.right = null;
+        this.left = null;
+    }
 }
 
-console.log(selSort(array));
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+
+function dft(root, t) {
+    if (root === null) return false;
+    if (root.val === t) return true;
+    return dft(root.left, t) || dft(root.right, t);
+}
+// console.log(dft(a));
+console.log(dft(a, 'c'));
+console.log(dft(a, 'y'));
