@@ -15,24 +15,50 @@
 // for (let char of nums) console.log(char); 
 
 
-const array = [0,1,2,3,4,5,6,7,8,9,10];
-
-const bSearch = (list, target) => {
-    console.log(list);
-    if (list.length === 1) {
-        if (list[0] === target) return true;
-        return false;
-    } else {
-        const mid = Math.floor(list.length/2);
-        if (list[mid] === target) return true;
-        if (target < list[mid]) {
-            return bSearch(list.slice(0, mid), target);
-        } else {
-            return bSearch(list.slice(mid), target);
+class HashMap {
+    constructor(size) {
+        this.size = size;
+        this.table = new Array(size);
+    }
+    hash(k) {
+        let total = 0;
+        for (let i = 0; i < k.length; i++) {
+            total += k.charCodeAt(i);
         }
+        return total % this.size;
+    }
+    add(k,v) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[k,v]];
+        } else {
+            const sameKey = bucket.find(i => i[0] === k);
+            if (sameKey) {
+                sameKey[1] = v;
+            } else {
+                bucket.push([k,v]);
+            }
+        }
+
+    }
+    remove(k) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        const sameKey = bucket.find(i => i[0] === k);
+        bucket.splice(bucket.indexOf(sameKey), 1);
+    }
+    print() {
+        this.table.forEach(i => console.log(i));
     }
 }
 
-console.log(bSearch(array, 5));
-console.log(bSearch(array, 90));
-console.log(bSearch(array, 1));
+const hm = new HashMap(30);
+hm.add('name', 'bob');
+hm.add('color', 'red');
+hm.add('age', '30');
+hm.print();
+hm.remove('age');
+hm.add('name', 'green');
+hm.add('roloc', 'purple')
+hm.print();
