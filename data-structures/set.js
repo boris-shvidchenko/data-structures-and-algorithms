@@ -15,21 +15,20 @@
 // for (let char of nums) console.log(char); 
 
 
-// fib
+
 // graph
 // tree
 // selection sort
 
-const fib = (val) => {
-    if (val <= 2) return 1;
-    const table = new Array(val + 1).fill(0);
-    table[1] = 1;
-    for (let i = 0; i < val; i++) {
-        table[i+1] += table[i];
-        table[i+2] += table[i];
-    }
-    return table[val];
+const array = [10, 0, 0.9, -30, 4, 4, -0.08];
+
+function selSort(list, res=[]) {
+    if (list.length === 0) return res;
+    const min = Math.min(...list);
+    const minIndex = list.indexOf(min);
+    res.unshift(min);
+    list.splice(minIndex, 1);
+    return selSort(list, res);
 }
 
-console.log(fib(20));
-console.log(fib(200));
+console.log(selSort(array));
