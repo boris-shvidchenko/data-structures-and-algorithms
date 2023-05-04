@@ -27,6 +27,22 @@ b.left = d;
 b.right = e;
 c.right = f;
 
+
+function dft(root, tar) {
+    if (root === null) return false;
+    const q = [root];
+    while (q.length > 0) {
+        const cur = q.shift();
+        if (cur.val === tar) return true;
+        if (cur.left !== null) q.push(cur.left);
+        if (cur.right !== null) q.push(cur.right);
+    }
+    return false;
+}
+// console.log(dft(a));
+console.log(dft(a, 'c'));
+console.log(dft(a, 'z'));
+
 // const g = new Node(3);
 // const h = new Node(11);
 // const i = new Node(4);
