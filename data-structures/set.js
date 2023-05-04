@@ -14,94 +14,37 @@
 // // Iteration works just like with an array
 // for (let char of nums) console.log(char); 
 
-// l list
-// stack
 
-class Node {
-    constructor(val) {
-        this.val = val;
-        this.next = null;
-    }
-}
+// first in last out
+// a/b/c/d ...
 
-class LinkedList {
+class Queue {
+
     constructor() {
-        this.length = 0;
-        this.head = null;
+        this.stack = [];
     }
-    append(node) {
-        const newNode = new Node(node);
-        if (this.head === null) {
-            this.head = newNode;
-        } else {
-            let current = this.head;
-            while (current.next !== null) {
-                current = current.next;
-            }
-            current.next = newNode;
-        }
-        this.length++;
+
+    add(val) {
+        this.stack.unshift(val);
     }
-    appendAt(node, index) {
-        const newNode = new Node(node);
-        let current = this.head;
-        let currentIndex = 0;
-        let prev;
-        if (index === 0) {
-            this.head = newNode;
-            newNode.next = current;
-        } else {
-            while (currentIndex < index) {
-                prev = current;
-                current = current.next;
-                currentIndex++;
-            }
-            prev.next = newNode;
-            newNode.next = current;
-        }
-        this.length++;
+
+    rmv() {
+        this.stack.pop();
     }
-    remove(node) {
-        let current = this.head;
-        let prev;
-        if (this.head.val === node) {
-            this.head = current.next;
-        } else {
-            while (current.val !== node) {
-                prev = current;
-                current = current.next;
-            }
-            prev.next = current.next;
-        }
-        this.length--;
-    }
-    removeAll() {
-        this.length = 0;
-        this.head = null;
-    }
+
     print() {
         let str = '';
-        let current = this.head;
-        while (current !== null) {
-            str += current.val + '>';
-            current = current.next;
-        }
+        this.stack.forEach(i => str += i);
         console.log(str);
     }
 }
 
-const list = new LinkedList();
-list.append('A');
-list.append('B');
-list.append('C');
-list.print();
-list.appendAt('Z', 0);
-list.print();
-list.appendAt('X', 2);
-list.print();
-list.remove('B');
-list.remove('Z');
-list.print();
-list.removeAll();
-list.print();
-
+const newQueue = new Queue();
+newQueue.add('A');
+newQueue.add('B');
+newQueue.add('C');
+newQueue.print();
+newQueue.rmv();
+newQueue.print();
+newQueue.rmv();
+newQueue.print();
