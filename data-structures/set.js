@@ -15,36 +15,20 @@
 // for (let char of nums) console.log(char); 
 
 
-// first in last out
-// a/b/c/d ...
+const v = 'boooksareeesweeeeet';
 
-class Queue {
-
+class customSet {
     constructor() {
-        this.stack = [];
+        this.set = [];
     }
+    add(str) {
 
-    add(val) {
-        this.stack.unshift(val);
-    }
+        const strArray = str.split('');
+        strArray.forEach(i => !this.set.includes(i) ? this.set.push(i) : null);
+        console.log(this.set);
 
-    rmv() {
-        this.stack.pop();
-    }
-
-    print() {
-        let str = '';
-        this.stack.forEach(i => str += i);
-        console.log(str);
     }
 }
 
-const newQueue = new Queue();
-newQueue.add('A');
-newQueue.add('B');
-newQueue.add('C');
-newQueue.print();
-newQueue.rmv();
-newQueue.print();
-newQueue.rmv();
-newQueue.print();
+const newSet = new customSet();
+newSet.add(v);
