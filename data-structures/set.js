@@ -15,20 +15,28 @@
 // for (let char of nums) console.log(char); 
 
 
-const v = 'boooksareeesweeeeet';
 
-class customSet {
-    constructor() {
-        this.set = [];
-    }
-    add(str) {
+// function fib(v, memo={}) {
+//     if (v <= 2) return 1;
+//     if (v in memo) return memo[v];
+//     memo[v] = fib(v-1, memo) + fib(v-2, memo);
+//     return memo[v];
+// }
 
-        const strArray = str.split('');
-        strArray.forEach(i => !this.set.includes(i) ? this.set.push(i) : null);
-        console.log(this.set);
+// console.log(fib(2));
+// console.log(fib(3));
 
-    }
+function climbStairs(n, memo={}) {
+    if (n <= 1) return 1;
+    if (n in memo) return memo[n];
+    memo[n] = climbStairs(n-1, memo) + climbStairs(n-2, memo);
+    return memo[n]; 
 }
 
-const newSet = new customSet();
-newSet.add(v);
+console.log(climbStairs(4)); // 2
+console.log(climbStairs(5)); // 3
+
+
+// n = 1, 2, 3, 4, 5
+//   [ 1, 2 ,3 ,5 ,8 ,13]
+
