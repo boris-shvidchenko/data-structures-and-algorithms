@@ -4,32 +4,17 @@
 
 const testArray = [5, 4, 6, 1, 2, 3, 10, 9, 7, 8];
 
-// function quickSort(list) {
-//     //Base case
-//     if (list.length <=1) return list;
-//     const pivot = list[0];
-//     let left = [];
-//     let right = [];
-//     for (let i = 1; i<list.length; i++) {
-//         if (list[i] < pivot) {
-//             left.push(list[i])
-//         } else {
-//             right.push(list[i])
-//         }
-//     }
-//     return [...quickSort(left), pivot, ...quickSort(right)];
-// }
-
-const quickSort = (list) => {
-    if (list.length <= 1) return list;
+function quickSort(list) {
+    //Base case
+    if (list.length <=1) return list;
     const pivot = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
+    let left = [];
+    let right = [];
+    for (let i = 1; i<list.length; i++) {
         if (list[i] < pivot) {
-            left.push(list[i]);
+            left.push(list[i])
         } else {
-            right.push(list[i]);
+            right.push(list[i])
         }
     }
     return [...quickSort(left), pivot, ...quickSort(right)];
