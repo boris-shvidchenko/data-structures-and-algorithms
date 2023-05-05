@@ -20,16 +20,25 @@
 // b sear
 // leet prob
 
-const fib = (v) => {
-    if (v <= 2) return 1;
-    const table = new Array(v+1).fill(0);
-    table[1] = 1;
-    for (let i = 0; i < v; i++) {
-        table[i+1] += table[i];
-        table[i+2] += table[i];
+const arr = [1,2,3,4,5,6,7,8,9,10];
+
+const bSearch = (list, tar) => {
+    console.log(list);
+    if (list.length === 1) {
+        if (list[0] === tar) return true;
+        return false;
+    } else {
+        const mid = Math.floor(list.length / 2);
+        if (list[mid] === tar) return true;
+        if (tar < list[mid]) {
+            return bSearch(list.slice(0, mid), tar);
+        } else {
+            return bSearch(list.slice(mid), tar);
+        }
     }
-    return table[v];
 }
 
-console.log(fib(30))
-console.log(fib(300))
+console.log(bSearch(arr, 5));
+console.log(bSearch(arr, 2));
+console.log(bSearch(arr, -10));
+console.log(bSearch(arr, 89));
