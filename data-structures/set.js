@@ -20,48 +20,16 @@
 // b sear
 // leet prob
 
-class Hash {
-    constructor(size) {
-        this.table = new Array(size);
-        this.size = size;
+const fib = (v) => {
+    if (v <= 2) return 1;
+    const table = new Array(v+1).fill(0);
+    table[1] = 1;
+    for (let i = 0; i < v; i++) {
+        table[i+1] += table[i];
+        table[i+2] += table[i];
     }
-    hash(k){
-        let t = 0;
-        for (let i = 0; i < k.length; i++) {
-            t += k.charCodeAt(i);
-        }
-        return t % this.size;
-    }
-    add(k,v){
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        if (!bucket) {
-            this.table[index] = [[k,v]];
-        } else {
-            const sameKey = bucket.find(i => i[0] === k);
-            if (sameKey) {
-                sameKey[1] = v;
-            } else {
-                bucket.push([k,v]);
-            }
-        }
-    }
-    rem(k){
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        const sameKey = bucket.find(i => i[0] === k);
-        bucket.splice(bucket.indexOf(sameKey), 1);
-    }
-    print(){
-        this.table.forEach(i => console.log(i));
-    }
+    return table[v];
 }
 
-const table = new Hash(50);
-table.add('name', 'Ryan');
-table.add('age', 25);
-table.add('color', 'red');
-table.print();
-table.rem('color');
-table.add('mane', 'Clark');
-table.print();
+console.log(fib(30))
+console.log(fib(300))
