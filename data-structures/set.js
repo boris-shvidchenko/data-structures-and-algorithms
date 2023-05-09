@@ -14,25 +14,39 @@
 // // Iteration works just like with an array
 // for (let char of nums) console.log(char); 
 
-// hash
-// merge
-// tree
-// quick sort
-
-const quickSort = (list) => {
-    if (list.length <= 1) return list;
-    const pivot = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < pivot) {
-            left.push(list[i]);
-        } else {
-            right.push(list[i]);
-        }
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
     }
-    return [...quickSort(left), pivot, ...quickSort(right)];
 }
 
-const arr = [5,2,1,-9,0.6,333,333,-0.3];
-console.log(quickSort(arr));
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+
+
+function bft(root, target) {
+    if (root === null) return false;
+    const queue = [root];
+    while (queue.length > 0) {
+        const cur = queue.shift();
+        if (cur.val === target) return true;
+        if (cur.left !== null) queue.push(cur.left);
+        if (cur.right !== null) queue.push(cur.right);
+    }
+    return false;
+}
+// console.log(bft(a));
+console.log(bft(a, 'b'));
+console.log(bft(a, 'z'));
