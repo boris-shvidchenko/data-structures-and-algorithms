@@ -4,24 +4,36 @@
 
 const testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-// Returns the index of the target value within the provided array
-function binarySearch(array, targetValue) {
-    const midPoint = Math.floor(array.length/2);
-    // First statement is the base case
-    if (array.length === 1) {
-        if (targetValue === array[midPoint]) {
-            return `Index of ${array[midPoint]} is ${testArray.indexOf(array[midPoint])}`; 
-        } else {
-            return `${targetValue} is not in [${testArray}]`;
-        }
-    } else if (targetValue < array[midPoint]) {
-        const arrayLeft = array.slice(0, midPoint);
-        return binarySearch(arrayLeft, targetValue);
+// // Returns the index of the target value within the provided array
+// function binarySearch(array, targetValue) {
+//     const midPoint = Math.floor(array.length/2);
+//     // First statement is the base case
+//     if (array.length === 1) {
+//         if (targetValue === array[midPoint]) {
+//             return `Index of ${array[midPoint]} is ${testArray.indexOf(array[midPoint])}`; 
+//         } else {
+//             return `${targetValue} is not in [${testArray}]`;
+//         }
+//     } else if (targetValue < array[midPoint]) {
+//         const arrayLeft = array.slice(0, midPoint);
+//         return binarySearch(arrayLeft, targetValue);
+//     } else {
+//         const arrayRight = array.slice(midPoint);
+//         return binarySearch(arrayRight, targetValue);
+//     }
+// }
+
+const binarySearch = (list, target) => {
+    if (list.length === 1) {
+        if (list[0] === target) return true;
+        return false;
     } else {
-        const arrayRight = array.slice(midPoint);
-        return binarySearch(arrayRight, targetValue);
+        const mid = Math.floor(list.length / 2);
+        if (list[mid] === target) return true;
+        if (target < list[mid]) return binarySearch(list.slice(0, mid), target);
+        return binarySearch(list.slice(mid), target);
     }
 }
 
 // Test log 
-console.log(binarySearch(testArray,2))
+console.log(binarySearch(testArray,30))
