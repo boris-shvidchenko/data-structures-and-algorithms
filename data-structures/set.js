@@ -17,24 +17,48 @@
 // graph
 // hash
 
-class CustomSet {
-    constructor() {
-        this.set = [];
+class HashTable {
+    constructor(size) {
+        this.size = size;
+        this.table = new Array(size);
     }
-    add(val) {
-        if (!this.set.includes(val)) this.set.push(val);
+    hash(k) {
+        let total = 0;
+        for (let i = 0; i < k.length; i++) {
+            total += k.charCodeAt(i);
+        }
+        return total % this.size;
     }
-    print() {
-        console.log(this.set);
+    set(k, v) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[k,v]];
+        } else {
+            const sameKey = bucket.find(i => i[0] === k);
+            if (sameKey) {
+                sameKey[1] = v;
+            } else {
+                bucket.push([k,v]);
+            }
+        }
+    }
+    remove(k) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        const sameKey = bucket.find(i => i[0] === k);
+        bucket.splice(bucket.indexOf(sameKey), 1);
+    }
+    display() {
+        this.table.forEach(item => console.log(item));
     }
 }
 
-const newSet = new CustomSet();
-newSet.add('A');
-newSet.add('B');
-newSet.add('C');
-newSet.add('C');
-newSet.add('D');
-newSet.add('E');
-newSet.add('E');
-newSet.print();
+const table = new HashTable(50);
+table.set('name', 'Ryan');
+table.set('age', 25);
+table.set('color', 'red');
+table.display();
+table.remove('color');
+table.set('mane', 'Clark');
+table.display();
