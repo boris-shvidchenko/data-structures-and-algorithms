@@ -14,26 +14,16 @@
 // // Iteration works just like with an array
 // for (let char of nums) console.log(char); 
 
-// bsearch
-// llist
 // fmemo
 // selsort (move to file)
 // string methods
 
-const array = [1,2,3,4,5,6,7,8,9,10];
-
-const bSearch = (list, target) => {
-    if (list.length === 1) {
-        if (list[0] === target) return true;
-        return false;
-    } else {
-        const mid = Math.floor(list.length/2);
-        if (list[mid] === target) return true;
-        if (target < list[mid]) return bSearch(list.slice(0, mid), target);
-        return bSearch(list.slice(mid), target);
-    }
+const fib = (v, memo={}) => {
+    if (v <= 2) return 1;
+    if (v in memo) return memo[v];
+    memo[v] = fib(v-1, memo) + fib(v-2, memo);
+    return memo[v];
 }
 
-console.log(bSearch(array, 3));
-console.log(bSearch(array, 30));
-console.log(bSearch(array, 5));
+console.log(fib(10))
+console.log(fib(106))
