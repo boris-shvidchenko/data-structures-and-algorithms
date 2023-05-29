@@ -12,86 +12,26 @@
 
 
 // merge sort
-// quick sort
-// sel sort
-// graph
 // hash
 // b tree
 
-// const arr = [10, 1, -3, 30, 0.4, -9.4, 121];
+const arr = [10, 1, -3, 30, 0.4, -9.4, 121];
 
 
-class Node {
-    constructor(val) {
-        this.val = val;
-        this.edges = [];
-    }
-    connect(node) {
-        this.edges.push(node);
-        node.edges.push(this);
-    }
-}
 
-class Graph {
-    constructor(nodes) {
-        this.nodes = [...nodes];
-    }
-
-    sp(start, end) {
-        const q = [start];
-        const visited = {};
-        visited[start.val] = null;
-        while (q.length > 0) {
-            let cur = q.shift();
-            if (cur === end) {
-                return this.rp(visited, end);
-            } 
-            for (let a of cur.edges) {
-                if (!visited.hasOwnProperty(a.val)) {
-                    visited[a.val] = cur;
-                    q.push(a);
-                }
-            }
+function quickSort(list) {
+    if (list.length === 0) return list;
+    const pivot = list[0];
+    const left = [];
+    const right = [];
+    for (let i = 1; i < list.length; i++) {
+        if (list[i] > pivot) {
+            left.push(list[i]);
+        } else {
+            right.push(list[i]);
         }
     }
-    rp(visited, end) {
-        const path = [];
-        let cur = end;
-        while (cur !== null) {
-            path.push(cur.val);
-            cur = visited[cur.val];
-        }
-        return path.reverse();
-    }
+    return [...quickSort(left), pivot, ...quickSort(right)];
 }
 
-const DFW = new Node('DFW');
-const JFK = new Node('JFK');
-const LAX = new Node('LAX');
-const HNL = new Node('HNL');
-const SAN = new Node('SAN');
-const EWR = new Node('EWR');
-const BOS = new Node('BOS');
-const MIA = new Node('MIA');
-const MCO = new Node('MCO');
-const PBI = new Node('PBI');
-const HKG = new Node('HKG');
-
-const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
-
-DFW.connect(JFK);
-DFW.connect(LAX);
-JFK.connect(BOS);
-JFK.connect(MIA);
-LAX.connect(HNL);
-LAX.connect(EWR);
-LAX.connect(SAN);
-SAN.connect(HKG);
-MIA.connect(MCO);
-MIA.connect(PBI);
-MCO.connect(PBI);
-
-// graph.bft(DFW, PBI);
-// graph.dft(DFW, HKG);
-
-console.log(graph.sp(DFW, PBI));
+console.log(quickSort(arr));
