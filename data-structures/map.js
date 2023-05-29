@@ -11,33 +11,39 @@
 
 
 
-// merge sort
-// b tree
-
-const arr = [10, 1, -3, 30, 0.4, -9.4, 121];
-
-function mergeSort(list) {
-    if (list.length <= 1) return list;
-    const mid = Math.floor(list.length / 2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(mergeSort(left), mergeSort(right));
-}
-
-function sort(left, right) {
-    let leftIndex = 0;
-    let rightIndex = 0;
-    let res = [];
-    while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            res.push(left[leftIndex]);
-            leftIndex++;
-        } else {
-            res.push(right[rightIndex]);
-            rightIndex++;
-        }
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
     }
-    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
 }
 
-console.log(mergeSort(arr));
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+function bft(root, target) {
+    if (root === null) return false;
+    const q = [root];
+    while (q.length > 0) {
+        const cur = q.shift();
+        if (cur.val === target) return true;
+        if (cur.left !== null) q.push(cur.left);
+        if (cur.right !== null) q.push(cur.right);
+    }
+    return false;
+}
+
+// console.log(bft(a));
+console.log(bft(a, 'd'));
+console.log(bft(a, 'z'));
+
