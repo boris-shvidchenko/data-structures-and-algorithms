@@ -15,23 +15,53 @@
 // hash
 // b tree
 
-const arr = [10, 1, -3, 30, 0.4, -9.4, 121];
+// const arr = [10, 1, -3, 30, 0.4, -9.4, 121];
 
-
-
-function quickSort(list) {
-    if (list.length === 0) return list;
-    const pivot = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] > pivot) {
-            left.push(list[i]);
-        } else {
-            right.push(list[i]);
-        }
+class HashMap {
+    constructor(size) {
+        this.size = size;
+        this.table = new Array(size);
     }
-    return [...quickSort(left), pivot, ...quickSort(right)];
+    hash(k) {
+        let total = 0;
+        for (let i = 0; i < k.length; i++) {
+            total += k.charCodeAt(i);
+        }
+        return total % this.size;
+    }
+    add(k,v) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[k,v]];
+        } else {
+            const sameKey = bucket.find(i => i[0] === k);
+            if (sameKey) {
+                sameKey[1] = v;
+            } else {
+                bucket.push([k,v]);
+            }
+        }
+
+    }
+    remove(k) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        const sameKey = bucket.find(i => i[0] === k);
+        bucket.splice(bucket.indexOf(sameKey), 1);
+    }
+    print() {
+        this.table.forEach(i => console.log(i));
+    }
 }
 
-console.log(quickSort(arr));
+
+
+const table = new HashMap(50);
+table.add('name', 'Ryan');
+table.add('age', 25);
+table.add('color', 'red');
+table.print();
+table.remove('color');
+table.add('mane', 'Clark');
+table.print();
