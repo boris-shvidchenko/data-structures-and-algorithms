@@ -14,54 +14,51 @@
 // // Iteration works just like with an array
 // for (let char of nums) console.log(char); 
 
-// quick sort
-// sel sort
-// fib tab
 // b tree
 // graph
 // leet code ?
 // dsa notes review ?
 
-const arr = [2,0,-5,100,9.4,10,10];
-
-const quickSort = (list) => {
-    if (list.length <= 1) return list;
-    const pivot = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < pivot) {
-            left.push(list[i]);
-        } else {
-            right.push(list[i]);
-        }
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
     }
-    return [...quickSort(left), pivot, ...quickSort(right)];
 }
 
-// console.log(quickSort(arr));
+const a = new Node('A');
+const b = new Node('B');
+const c = new Node('C');
+const d = new Node('D');
+const e = new Node('E');
+const f = new Node('F');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
 
-function selSort(list, res=[]) {
-    if (list.length === 0) return res;
-    const min = Math.min(...list);
-    const minIndex = list.indexOf(min);
-    res.push(min);
-    list.splice(minIndex, 1);
-    return selSort(list, res);
+function dft(root, tar) {
+    if (root === null) return false;
+    if (root.val === tar) return true;
+    return dft(root.left, tar) || dft(root.right, tar);
 }
+// console.log(dft(a))
+// console.log(dft(a, 'C'))
+// console.log(dft(a, 'Z'))
 
-// console.log(selSort(arr));
-
-const fib = (val) => {
-    if (val <= 2) return 1;
-    const table = new Array(val + 1).fill(0);
-    table[1] = 1;
-    for (let i = 0; i < val; i++) {
-        table[i + 1] += table[i];
-        table[i + 2] += table[i];
-    } 
-    return table[val];
+function bft(root, tar) {
+    if (root === null) return false;
+    const q = [root];
+    while (q.length > 0) {
+        const cur = q.shift();
+        if (cur.val === tar) return true;
+        if (cur.left !== null) q.push(cur.left);
+        if (cur.right !== null) q.push(cur.right);
+    }
+    return false;
 }
-
-console.log(fib(20));
-console.log(fib(200));
+// console.log(bft(a))
+console.log(bft(a, 'C'))
+console.log(bft(a, 'Z'))
