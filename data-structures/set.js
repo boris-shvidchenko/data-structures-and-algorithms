@@ -50,4 +50,18 @@ function selSort(list, res=[]) {
     return selSort(list, res);
 }
 
-console.log(selSort(arr));
+// console.log(selSort(arr));
+
+const fib = (val) => {
+    if (val <= 2) return 1;
+    const table = new Array(val + 1).fill(0);
+    table[1] = 1;
+    for (let i = 0; i < val; i++) {
+        table[i + 1] += table[i];
+        table[i + 2] += table[i];
+    } 
+    return table[val];
+}
+
+console.log(fib(20));
+console.log(fib(200));
