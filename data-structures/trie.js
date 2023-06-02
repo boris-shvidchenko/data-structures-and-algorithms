@@ -63,44 +63,37 @@
 // trie.insert('Goodbye');
 // trie.print();
 
-// const a = new Node('a');
-// const b = new Node('b');
-// const c = new Node('c');
-// const d = new Node('d');
-// const e = new Node('e');
-// const f = new Node('f');
-// a.left = b;
-// a.right = c;
-// b.left = d;
-// b.right = e;
-// c.right = f;
-
-// merge sort
-
-const arr = [9,0,-3,5.6,5,5,100,-40];
-
-function mergesort(list) {
-    if (list.length <= 1) return list;
-    const mid = Math.floor(list.length / 2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(mergesort(left), mergesort(right));
-}
-
-function sort(left, right) {
-    let leftIndex = 0;
-    let rightIndex = 0;
-    let res = [];
-    while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            res.push(left[leftIndex]);
-            leftIndex++;
-        } else {
-            res.push(right[rightIndex]);
-            rightIndex++;
-        }
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
     }
-    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
 }
 
-console.log(mergesort(arr));
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+function bft(root, t) {
+    if (root === null) return false;
+    const q = [root];
+    while (q.length > 0) {
+        const cur = q.shift();
+        if (cur.val === t) return true;
+        if (cur.left !== null) q.push(cur.left);
+        if (cur.right !== null) q.push(cur.right);
+    }
+    return false;
+}
+// console.log(bft(a));
+console.log(bft(a, 'd'));
+console.log(bft(a, 'z'));
