@@ -97,52 +97,41 @@
 // console.log(heap.data.join(' > '));
 
 
-// binary search
-// merge sort
 // b tree dft list
 // graph
 
-// const arr1 = [0,1,2,3,4,5,6,7,8,9,10];
-const arr2 = [4,8,0.5,-50,5,5,23,1000,203.4,2];
 
-const bS = (list, t) => {
-    if (list.length === 1) {
-        if (list[0] === t) return true;
-        return false;
-    } else {
-        const mid = Math.floor(list.length/2);
-        if (list[mid] === t) return true;
-        if (t < list[mid]) return bS(list.slice(0, mid), t);
-        return bS(list.slice(mid), t);
+class Node {
+    constructor(v) {
+        this.v = v;
+        this.left = null;
+        this.right = null;
     }
-};
-
-// console.log(bS(arr1, 4));
-// console.log(bS(arr1, 0));
-// console.log(bS(arr1, 40));
-
-function mergeSort(list) {
-    if (list.length <= 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(mergeSort(left), mergeSort(right));
 }
 
-function sort(left, right) {
-    let lIndex = 0;
-    let rIndex = 0;
-    let res = [];
-    while (lIndex < left.length && rIndex < right.length) {
-        if (left[lIndex] < right[rIndex]) {
-            res.push(left[lIndex]);
-            lIndex++;
-        } else {
-            res.push(right[rIndex]);
-            rIndex++;
-        }
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+function dft(root) {
+    if (root === null) return [];
+    const q = [root];
+    const res = [];
+    while (q.length > 0) {
+        const cur = q.shift();
+        res.push(cur.v);
+        if (cur.left !== null) q.push(cur.left);
+        if (cur.right !== null) q.push(cur.right);
     }
-    return res.concat(left.slice(lIndex), right.slice(rIndex));
+    return res;
 }
 
-console.log(mergeSort(arr2));
+console.log(dft(a));
