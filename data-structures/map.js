@@ -10,26 +10,35 @@
 // for (let country of countries) console.log(country[0] + ' > ' + country[1]);
 
 
-// hash
 // b tree - dft search
 
 
-const arr = [2,2,0,40,-90,-4,5.993,5.990,1,34,3];
-
-const quickSort = (list) => {
-    if (list.length <= 1) return list;
-    const pivot = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < pivot) {
-            left.push(list[i]);
-        } else {
-            right.push(list[i]);
-        }
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
     }
-    return [...quickSort(left), pivot, ...quickSort(right)]
 }
 
-console.log(quickSort(arr));
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
 
+
+const dft = (root, val) => {
+    if (root === null) return false;
+    if (root.val === val) return true;
+    return dft(root.left, val) || dft(root.right, val);
+}
+
+console.log(dft(a, 'd'));
+console.log(dft(a, 'z'));
