@@ -97,41 +97,78 @@
 // console.log(heap.data.join(' > '));
 
 
-// b tree dft list
 // graph
 
 
 class Node {
     constructor(v) {
         this.v = v;
-        this.left = null;
-        this.right = null;
+        this.edges = [];
+    }
+    connect(node) {
+        this.edges.push(node);
+        node.edges.push(this);
     }
 }
 
-const a = new Node('a');
-const b = new Node('b');
-const c = new Node('c');
-const d = new Node('d');
-const e = new Node('e');
-const f = new Node('f');
-a.left = b;
-a.right = c;
-b.left = d;
-b.right = e;
-c.right = f;
-
-function dft(root) {
-    if (root === null) return [];
-    const q = [root];
-    const res = [];
-    while (q.length > 0) {
-        const cur = q.shift();
-        res.push(cur.v);
-        if (cur.left !== null) q.push(cur.left);
-        if (cur.right !== null) q.push(cur.right);
+class Graph {
+    constructor(nodes) {
+        this.nodes = [...nodes];
     }
-    return res;
+    sp(start, end) {
+        const visited = {};
+        const q = [start];
+        visited[start.v] = null;
+        while (q.length > 0) {
+            const cur = q.shift();
+            if (cur === end) {
+                return this.rp(visited, end);
+            }
+            for (let a of cur.edges) {
+                if (!visited.hasOwnProperty(a.v)) {
+                    visited[a.v] = cur;
+                    q.push(a);
+                }
+            }
+        }
+    }
+    rp(visited, end) {
+        const path = [];
+        let cur = end;
+        while (cur !== null) {
+            path.push(cur.v);
+            cur = visited[cur.v];
+        }
+        return path.reverse();
+    }
 }
 
-console.log(dft(a));
+const DFW = new Node('DFW');
+const JFK = new Node('JFK');
+const LAX = new Node('LAX');
+const HNL = new Node('HNL');
+const SAN = new Node('SAN');
+const EWR = new Node('EWR');
+const BOS = new Node('BOS');
+const MIA = new Node('MIA');
+const MCO = new Node('MCO');
+const PBI = new Node('PBI');
+const HKG = new Node('HKG');
+
+const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
+
+DFW.connect(JFK);
+DFW.connect(LAX);
+JFK.connect(BOS);
+JFK.connect(MIA);
+LAX.connect(HNL);
+LAX.connect(EWR);
+LAX.connect(SAN);
+SAN.connect(HKG);
+MIA.connect(MCO);
+MIA.connect(PBI);
+MCO.connect(PBI);
+
+// graph.dft(DFW, HKG);
+// graph.bft(DFW, PBI);
+console.log(graph.sp(DFW, PBI));
