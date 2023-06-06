@@ -9,21 +9,27 @@
 // // Iteration splits each pair into sub-array
 // for (let country of countries) console.log(country[0] + ' > ' + country[1]);
 
-// sel sort
+
 // hash
 // b tree - dft search
-// quick sort
+
 
 const arr = [2,2,0,40,-90,-4,5.993,5.990,1,34,3];
 
-const selSort = (list, res=[]) => {
-    if (list.length === 0) return res;
-    const min = list.reduce((a,b) => a < b ? a : b);
-    const minIndex = list.indexOf(min);
-    res.push(min);
-    list.splice(minIndex, 1);
-    return selSort(list, res);
+const quickSort = (list) => {
+    if (list.length <= 1) return list;
+    const pivot = list[0];
+    const left = [];
+    const right = [];
+    for (let i = 1; i < list.length; i++) {
+        if (list[i] < pivot) {
+            left.push(list[i]);
+        } else {
+            right.push(list[i]);
+        }
+    }
+    return [...quickSort(left), pivot, ...quickSort(right)]
 }
 
-// console.log(selSort(arr));
+console.log(quickSort(arr));
 
