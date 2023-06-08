@@ -2,7 +2,7 @@
 // // Searchs an array for a target value by 1) splitting the array in half, 2) identifying whether the target value is ===, >, or < the value in the middle of the array, 3) removing the portion of the array that is < or > the target value, 3) repeats the process until the target value is identified. This algorithm assumes that the array is sorted.
 // // Runtime: O(log(n)) / Binary
 
-const testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+// const testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 // // Returns the index of the target value within the provided array
 // function binarySearch(array, targetValue) {
@@ -26,27 +26,18 @@ const testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 // // Test log 
 // console.log(binarySearch(testArray,2))
 
-// b search
+
 // fib memo
 // linked list
 // merge sort
 // b tree bft list
 
-function bSearch(list, t) {
-    if (list.length === 1) {
-        if (list[0] === t) return true;
-        return false;
-    } else {
-        const mid = Math.floor(list.length/2);
-        if (list[mid] === t) return true;
-        if (t < list[mid]) {
-            return bSearch(list.slice(0, mid), t);
-        } else {
-            return bSearch(list.slice(mid), t);
-        }
-    }
+const fib = (v, memo={}) => {
+    if (v <= 2) return 1;
+    if (v in memo) return memo[v];
+    memo[v] = fib(v-1, memo) + fib(v-2, memo);
+    return memo[v];
 }
 
-console.log(bSearch(testArray, 6));
-console.log(bSearch(testArray, 2));
-console.log(bSearch(testArray, 250));
+console.log(fib(10))
+console.log(fib(100))
