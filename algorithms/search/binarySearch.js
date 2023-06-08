@@ -27,33 +27,39 @@
 // console.log(binarySearch(testArray,2))
 
 
-// merge sort
 // b tree bft list
 
-const arr = [3,-90,31,5.8,5.67,-7,3,3,21,500];
-
-function mergeSort(list) {
-    if (list.length <= 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(mergeSort(left), mergeSort(right));
-}
-
-function sort(left, right) {
-    let leftIndex = 0;
-    let rightIndex = 0;
-    const res = [];
-    while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            res.push(left[leftIndex]);
-            leftIndex++;
-        } else {
-            res.push(right[rightIndex]);
-            rightIndex++;
-        }
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
     }
-    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
 }
 
-console.log(mergeSort(arr));
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+function bft(root) {
+    if (root === null) return [];
+    const q = [root];
+    const res = [];
+    while (q.length > 0) {
+        const cur = q.shift();
+        res.push(cur.val);
+        if (cur.left !== null) q.push(cur.left);
+        if (cur.right !== null) q.push(cur.right);
+    }
+    return res;
+}
+
+console.log(bft(a));
