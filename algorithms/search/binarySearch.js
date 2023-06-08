@@ -27,85 +27,33 @@
 // console.log(binarySearch(testArray,2))
 
 
-// linked list
 // merge sort
 // b tree bft list
 
-class Node {
-    constructor(val) {
-        this.val = val;
-        this.next = null;
-    }
+const arr = [3,-90,31,5.8,5.67,-7,3,3,21,500];
+
+function mergeSort(list) {
+    if (list.length <= 1) return list;
+    const mid = Math.floor(list.length/2);
+    const left = list.slice(0, mid);
+    const right = list.slice(mid);
+    return sort(mergeSort(left), mergeSort(right));
 }
 
-class LinkedList {
-    constructor() {
-        this.head = null;
-        this.length = 0;
-    }
-    append(node) {
-        const newNode = new Node(node);
-        let cur = this.head;
-        if (this.head === null) {
-            this.head = newNode;
+function sort(left, right) {
+    let leftIndex = 0;
+    let rightIndex = 0;
+    const res = [];
+    while (leftIndex < left.length && rightIndex < right.length) {
+        if (left[leftIndex] < right[rightIndex]) {
+            res.push(left[leftIndex]);
+            leftIndex++;
         } else {
-            while (cur.next !== null) {
-                cur = cur.next;
-            }
-            cur.next = newNode;
+            res.push(right[rightIndex]);
+            rightIndex++;
         }
-        this.length++;
     }
-    appendAt(node, index) {
-        const newNode = new Node(node);
-        let cur = this.head;
-        let curIndex = 0;
-        let prev;
-        if (index === 0) {
-            this.head = newNode;
-            newNode.next = cur;
-        } else {
-            while (curIndex < index) {
-                prev = cur;
-                cur = cur.next;
-                curIndex++;
-            }
-            prev.next = newNode;
-            newNode.next = cur;
-        }
-        this.length++;
-    }
-    remove(node) {
-        let cur = this.head;
-        let prev;
-        if (this.head.val === node) {
-            this.head = cur.next;
-        } else {
-            while (cur.val !== node) {
-                prev = cur;
-                cur = cur.next;
-            }
-            prev.next = cur.next;
-        }
-        this.length--;
-    }
-    print() {
-        let cur = this.head;
-        let str = '';
-        while (cur !== null) {
-            str += cur.val + '>';
-            cur = cur.next;
-        }
-        console.log(str);
-    }
+    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
 }
 
-// Test
-const list = new LinkedList();
-list.append('a');
-list.append('b');
-list.append('c');
-list.print();
-list.remove('b'); // a -> c -> etc.
-list.appendAt('z', 1);
-list.print();
+console.log(mergeSort(arr));
