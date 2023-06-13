@@ -29,19 +29,21 @@
 // stack.print();
 // stack.peek(); // Expects 4
 
-// sel sort
+
 // hash
 // fib tab
 
-const arr = [5,30,-309,4.9,4.8,-9];
 
-function selSort(list, res=[]) {
-    if (list.length === 0) return res;
-    const min = Math.min(...list);
-    const minIndex = list.indexOf(min);
-    res.push(min);
-    list.splice(minIndex, 1);
-    return selSort(list, res);
+const fib = (v) => {
+    if (v <= 2) return 1;
+    const table = new Array(v + 1).fill(0);
+    table[1] = 1;
+    for (let i = 0; i < v; i++) {
+        table[i+1] += table[i];
+        table[i+2] += table[i];
+    }
+    return table[v];
 }
 
-console.log(selSort(arr));
+console.log(fib(10));
+console.log(fib(100));
