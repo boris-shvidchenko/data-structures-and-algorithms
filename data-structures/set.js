@@ -16,17 +16,41 @@
 
 
 
-// fib memo
 // linked list
 // graph
 // btree bft target
 
-const fib = (v, memo={}) => {
-    if (v <= 2) return 1;
-    if (v in memo) return memo[v];
-    memo[v] = fib(v-1, memo) + fib(v-2, memo);
-    return memo[v];
+class Node {
+    constructor(v) {
+        this.v = v;
+        this.left = null;
+        this.right = null;
+    }
 }
 
-console.log(fib(10));
-console.log(fib(100));
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+function bft(root, t) {
+    if (root === null) return false;
+    const queue = [root];
+    while (queue.length > 0) {
+        const cur = queue.shift();
+        if (cur.v === t) return true;
+        if (cur.left !== null) queue.push(cur.left);
+        if (cur.right !== null) queue.push(cur.right);
+    }
+    return false;
+}
+
+console.log(bft(a, 'c'));
+console.log(bft(a, 'z'));
