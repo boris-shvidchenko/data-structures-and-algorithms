@@ -18,39 +18,93 @@
 
 // linked list
 // graph
-// btree bft target
+
 
 class Node {
-    constructor(v) {
-        this.v = v;
-        this.left = null;
-        this.right = null;
+    constructor(val) {
+        this.val = val;
+        this.next = null;
     }
 }
 
-const a = new Node('a');
-const b = new Node('b');
-const c = new Node('c');
-const d = new Node('d');
-const e = new Node('e');
-const f = new Node('f');
-a.left = b;
-a.right = c;
-b.left = d;
-b.right = e;
-c.right = f;
-
-function bft(root, t) {
-    if (root === null) return false;
-    const queue = [root];
-    while (queue.length > 0) {
-        const cur = queue.shift();
-        if (cur.v === t) return true;
-        if (cur.left !== null) queue.push(cur.left);
-        if (cur.right !== null) queue.push(cur.right);
+class LinkedList {
+    constructor() {
+        this.head = null;
+        this.length = 0;
     }
-    return false;
+    append(node) {
+        const newNode = new Node(node);
+        let cur = this.head;
+        if (this.head === null) {
+            this.head = newNode;
+        } else {
+            while (cur.next !== null) {
+                cur = cur.next;
+            }
+            cur.next = newNode;
+        }
+        this.length++;
+    }
+    appendAt(node, index) {
+        const newNode = new Node(node);
+        let cur = this.head;
+        let curIndex = 0;
+        let prev;
+        if (index === 0) {
+            this.head = newNode;
+            newNode.next = cur;
+        } else {
+            while (curIndex < index) {
+                prev = cur;
+                cur = cur.next;
+                curIndex++;
+            }
+            prev.next = newNode;
+            newNode.next = cur;
+        }
+        this.length++;
+    }
+    remove(node) {
+        let cur = this.head;
+        let prev;
+        if (this.head.val === node) {
+            this.head = cur.next;
+        } else {
+            while (cur.val !== node) {
+                prev = cur;
+                cur = cur.next;
+            }
+            prev.next = cur.next;
+        }
+        this.length--;
+    }
+    contains(node) {
+        let cur = this.head;
+        while (cur !== null) {
+            if (cur.val === node) return true;
+            cur = cur.next;
+        }
+        return false;
+    }
+    print() {
+        let str = '';
+        let cur = this.head;
+        while (cur !== null) {
+            str += cur.val + '>';
+            cur = cur.next;
+        }
+        console.log(str);
+    }
 }
 
-console.log(bft(a, 'c'));
-console.log(bft(a, 'z'));
+const list = new LinkedList();
+list.append('a');
+list.append('b');
+list.append('c');
+console.log(list.contains('a')); // true
+console.log(list.contains('z')); // false
+list.print();
+list.remove('b'); // a -> c -> etc.
+list.appendAt('z', 1);
+list.print();
+console.log(list.contains('z')); // true
