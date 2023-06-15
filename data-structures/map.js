@@ -9,41 +9,41 @@
 // // Iteration splits each pair into sub-array
 // for (let country of countries) console.log(country[0] + ' > ' + country[1]);
 
-// bi search
+
 // graph bft list
-// quick sort
 
-const ar1 = [1,2,3,4,5,6,7];
-const ar2 = [9,3,90,-309,9.3,3];
 
-const biSearch = (list, t) => {
-    if (list.length === 1) {
-        if (list[0] === t) return true;
-        return false;
-    } else {
-        const mid = Math.floor(list.length / 2);
-        if (list[mid] === t) return true;
-        if (t < list[mid]) return biSearch(list.slice(0,mid), t);
-        return biSearch(list.slice(mid), t); 
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
     }
 }
 
-// console.log(biSearch(ar1, 2));
-// console.log(biSearch(ar1, 20));
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
 
-function quickSort(list) {
-    if (list.length <= 1) return list;
-    const pivot = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < pivot) {
-            left.push(list[i]);
-        } else {
-            right.push(list[i]);
-        }
+function bft(root) {
+    if (root === null) return [];
+    const q = [root];
+    const res = [];
+    while (q.length > 0) {
+        const cur = q.shift();
+        res.push(cur.val);
+        if (cur.left !== null) q.push(cur.left);
+        if (cur.right !== null) q.push(cur.right);
     }
-    return [...quickSort(right), pivot, ...quickSort(left)];
+    return res;
 }
 
-console.log(quickSort(ar2));
+console.log(bft(a));
