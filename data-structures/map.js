@@ -31,3 +31,19 @@ const biSearch = (list, t) => {
 // console.log(biSearch(ar1, 2));
 // console.log(biSearch(ar1, 20));
 
+function quickSort(list) {
+    if (list.length <= 1) return list;
+    const pivot = list[0];
+    const left = [];
+    const right = [];
+    for (let i = 1; i < list.length; i++) {
+        if (list[i] < pivot) {
+            left.push(list[i]);
+        } else {
+            right.push(list[i]);
+        }
+    }
+    return [...quickSort(right), pivot, ...quickSort(left)];
+}
+
+console.log(quickSort(ar2));
