@@ -52,7 +52,7 @@ class HashTable {
     }
     display() {
         this.table.forEach(i => console.log(i));
-    }
+    } 
 }
 
 const table = new HashTable(50);
