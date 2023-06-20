@@ -10,46 +10,106 @@
 // for (let country of countries) console.log(country[0] + ' > ' + country[1]);
 
 
-// graph
-// btree dfsearch
-
 class Node {
-    constructor(v) {
-        this.v = v;
-        this.left = null;
-        this.right = null;
+    constructor(val) {
+        this.val = val;
+        this.edges = [];
+    }
+    connect(node) {
+        this.edges.push(node);
+        node.edges.push(this);
     }
 }
 
-const g = new Node(3);
-const h = new Node(11);
-const i = new Node(4);
-const j = new Node(4);
-const k = new Node(2);
-const l = new Node(1);
-g.left = h;
-g.right = i;
-h.left = j;
-h.right = k;
-i.right = l;
-
-//    3
-//   / \
-//  11  4
-// /  \  \
-//4   2   1 
-
-function bft(root, t) {
-    if (root === null) return false;
-    const q = [root];
-    while (q.length > 0) {
-        const cur = q.shift();
-        if (cur.v === t) return true;
-        if (cur.left !== null) q.push(cur.left);
-        if (cur.right !== null) q.push(cur.right);
+class Graph {
+    constructor(nodes) {
+        this.nodes = [...nodes];
     }
-    return false;
+    dft(start, end, visited = new Set()) {
+        if (start === end) {
+            console.log('Found node');
+        }
+        visited.add(start);
+        console.log('Node: ', start.val);
+        for (let a of start.edges) {
+            if (!visited.has(a)) {
+                visited.add(a);
+                this.dft(a, end, visited);
+            }
+        }
+    }
+    bft(start, end) {
+        const visited = new Set();
+        const q = [start];
+        while (q.length > 0) {
+            const cur = q.shift();
+            visited.add(cur);
+            if (cur === end) {
+                console.log('Found node');
+            }
+            console.log('Node: ', cur.val);
+            for (let a of cur.edges) {
+                if (!visited.has(a)) {
+                    visited.add(a);
+                    q.push(a);
+                }
+            }
+        }
+    }
+    sp(start, end) {
+        const visited = {};
+        const q = [start];
+        visited[start.val] = null;
+        while (q.length > 0) {
+            const cur = q.shift();
+            if (cur === end) {
+                return this.rp(visited, end);
+            }
+            for (let a of cur.edges) {
+                if (!visited.hasOwnProperty(a.val)) {
+                    visited[a.val] = cur;
+                    q.push(a);
+                }
+            }
+        }
+    }
+    rp(visited, end) {
+        let cur = end;
+        const path = [];
+        while (cur !== null) {
+            path.push(cur.val);
+            cur = visited[cur.val];
+        }
+        return path.reverse();
+    }
 }
 
-console.log(bft(g, 2));
-console.log(bft(g, 20));
+const DFW = new Node('DFW');
+const JFK = new Node('JFK');
+const LAX = new Node('LAX');
+const HNL = new Node('HNL');
+const SAN = new Node('SAN');
+const EWR = new Node('EWR');
+const BOS = new Node('BOS');
+const MIA = new Node('MIA');
+const MCO = new Node('MCO');
+const PBI = new Node('PBI');
+const HKG = new Node('HKG');
+
+const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
+
+DFW.connect(JFK);
+DFW.connect(LAX);
+JFK.connect(BOS);
+JFK.connect(MIA);
+LAX.connect(HNL);
+LAX.connect(EWR);
+LAX.connect(SAN);
+SAN.connect(HKG);
+MIA.connect(MCO);
+MIA.connect(PBI);
+MCO.connect(PBI);
+
+// graph.dft(DFW, HKG);
+// graph.bft(DFW, PBI);
+console.log(graph.sp(DFW, PBI));
