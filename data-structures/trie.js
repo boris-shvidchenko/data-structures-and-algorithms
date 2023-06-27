@@ -65,30 +65,49 @@
 
 // graph
 // btree
-// fib both
 
-const fib = (v, memo={}) => {
-    if (v <= 2) return 1;
-    if (v in memo) return memo[v];
-    memo[v] = fib(v-1, memo) + fib(v-2, memo);
-    return memo[v];
-}
-
-console.log(fib(10))
-console.log(fib(100))
-
-const fib2 = (v) => {
-    if (v <= 2) return 1;
-    const table = new Array(v + 1).fill(0);
-    table[1] = 1;
-    for (let i = 0; i < v; i++) {
-        table[i + 1] += table[i];
-        table[i + 2] += table[i];
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
     }
-    return table[v];
 }
 
-console.log('========================')
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
 
-console.log(fib2(20))
-console.log(fib2(200))
+function dft(r, t) {
+    if (r === null) return false;
+    if (r.val === t) return true;
+    return dft(r.left, t) || dft(r.right, t);
+}
+
+// console.log(dft(a))
+// console.log(dft(a, 'b'))
+// console.log(dft(a, 'z'))
+
+function bft(r, t) {
+    if (r === null) return false;
+    const q = [r];
+    while (q.length > 0) {
+        const cur = q.shift();
+        if (cur.val === t) return true;
+        if (cur.left !== null) q.push(cur.left);
+        if (cur.right !== null) q.push(cur.right);
+    }
+    return false;
+}
+
+// console.log(bft(a))
+console.log(bft(a, 'b'))
+console.log(bft(a, 'z'))
