@@ -17,75 +17,31 @@
 
 // bts dft
 
-const ar = [1,2,3,4,5,6,7,8,9,10];
-const ar2 = [49,7,-90,90,4.5,4.6];
-
-function bSearch(list, t) {
-    if (list.length === 1) {
-        if (list[0] === t) return true;
-        return false;
-    } else {
-        const mid = Math.floor(list.length/2);
-        if (list[mid] === t) return true;
-        if (t < list[mid]) return bSearch(list.slice(0, mid), t);
-        return bSearch(list.slice(mid), t);
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
     }
 }
 
-// console.log(bSearch(ar, 2));
-// console.log(bSearch(ar, 20));
-// console.log(bSearch(ar, 10));
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
 
-function selSort(list, res=[]) {
-    if (list.length === 0) return res;
-    const min = Math.min(...list);
-    const minIndex = list.indexOf(min);
-    res.push(min);
-    list.splice(minIndex, 1);
-    return selSort(list, res);
+function dft(root, t) {
+    if (root === null) return false;
+    if (root.val === t) return true;
+    return dft(root.left, t) || dft(root.right, t);
 }
 
-// console.log(selSort(ar2));
-
-function qSort(list) {
-    if (list.length <= 1) return list;
-    const piv = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < piv) {
-            left.push(list[i]);
-        } else {
-            right.push(list[i]);
-        }
-    }
-    return [...qSort(left), piv, ...qSort(right)];
-}
-
-// console.log(qSort(ar2));
-
-function mergeSort(list) {
-    if (list.length <= 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(mergeSort(left), mergeSort(right));
-}
-
-function sort(left, right) {
-    let leftIndex = 0;
-    let rightIndex = 0;
-    const res = [];
-    while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            res.push(left[leftIndex]);
-            leftIndex++;
-        } else {
-            res.push(right[rightIndex]);
-            rightIndex++;
-        }
-    }
-    return res.concat(left.splice(leftIndex), right.splice(rightIndex));
-}
-
-// console.log(mergeSort(ar2));
+console.log(dft(a, 'c'))
+console.log(dft(a, 'u'))
