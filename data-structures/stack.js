@@ -31,33 +31,87 @@
 
 
 
-const ar2 = [2,-894444,0.3,3.5,-5.8,2000];
-
-
 // linked list
 
-function merge(list) {
-    if (list.length <= 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(merge(left), merge(right));
-}
-
-function sort(left, right) {
-    let li = 0;
-    let ri = 0;
-    const res = [];
-    while (li < left.length && ri < right.length) {
-        if (left[li] < right[ri]) {
-            res.push(left[li]);
-            li++;
-        } else {
-            res.push(right[ri]);
-            ri++;
-        }
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.next = null;
     }
-    return res.concat(left.slice(li), right.slice(ri));
 }
 
-console.log(merge(ar2));
+class LinkedList {
+    constructor() {
+        this.head = null;
+        this.length === 0;
+    }
+    append(node) {
+        const newNode = new Node(node);
+        if (this.head === null) {
+            this.head = newNode;
+        } else {
+            let cur = this.head;
+            while (cur.next !== null) {
+                cur = cur.next;
+            }
+            cur.next = newNode;
+        }
+        this.length++;
+    }
+    appendAt(node, index) {
+        const newNode = new Node(node);
+        let cur = this.head;
+        let curIndex = 0;
+        let prev;
+        if (index === 0) {
+            this.head = newNode;
+            newNode.next = cur;
+        } else {
+            while (curIndex < index) {
+                prev = cur;
+                cur = cur.next;
+                curIndex++;
+            }
+            prev.next = newNode;
+            newNode.next = cur;
+        }
+        this.length++;
+    }
+    print() {
+        let str = '';
+        let cur = this.head;
+        while (cur !== null) {
+            str += cur.val + '>';
+            cur = cur.next;
+        }
+        console.log(str);
+    }
+    remove(node) {
+        let cur = this.head;
+        let prev;
+        if (this.head.val === node) {
+            this.head = cur.next;
+        } else {
+            while (cur.val !== node) {
+                prev = cur;
+                cur = cur.next;
+            }
+            prev.next = cur.next;
+        }
+        this.length--;
+    }
+}
+
+
+
+
+// Test
+const list = new LinkedList();
+list.append('a');
+list.append('b');
+list.append('c');
+list.print();
+list.remove('b'); // a -> c -> etc.
+list.appendAt('z', 0);
+list.print();
+
