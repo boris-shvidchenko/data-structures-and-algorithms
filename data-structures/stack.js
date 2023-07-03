@@ -31,51 +31,33 @@
 
 
 
-const ar1 = [1,2,3,4,5,6];
-const ar2 = [2,-89,0.3,3.5,-5.8,2000];
+const ar2 = [2,-894444,0.3,3.5,-5.8,2000];
 
-// merge
+
 // linked list
 
-function bS(list, t) {
-    if (list.length === 1) {
-        if (list[0] === t) return true;
-        return false;
-    } else {
-        const mid = Math.floor(list.length / 2);
-        if (list[mid] === t) return true;
-        if (t < list[mid]) return bS(list.slice(0, mid), t);
-        return bS(list.slice(mid), t);
-    }
+function merge(list) {
+    if (list.length <= 1) return list;
+    const mid = Math.floor(list.length/2);
+    const left = list.slice(0, mid);
+    const right = list.slice(mid);
+    return sort(merge(left), merge(right));
 }
 
-// console.log(bS(ar1, 3));
-// console.log(bS(ar1, 30));
-
-function qS(list) {
-    if (list.length <= 1) return list;
-    const piv = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < piv) {
-            left.push(list[i]);
+function sort(left, right) {
+    let li = 0;
+    let ri = 0;
+    const res = [];
+    while (li < left.length && ri < right.length) {
+        if (left[li] < right[ri]) {
+            res.push(left[li]);
+            li++;
         } else {
-            right.push(list[i]);
+            res.push(right[ri]);
+            ri++;
         }
     }
-    return [...qS(left), piv, ...qS(right)];
+    return res.concat(left.slice(li), right.slice(ri));
 }
 
-// console.log(qS(ar2));
-
-const selSort = (list, res=[]) => {
-    if (list.length === 0) return res;
-    const min = Math.min(...list);
-    const minIndex = list.indexOf(min);
-    res.push(min);
-    list.splice(minIndex, 1);
-    return selSort(list, res);
-}
-
-console.log(selSort(ar2));
+console.log(merge(ar2));
