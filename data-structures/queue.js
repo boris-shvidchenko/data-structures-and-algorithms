@@ -27,19 +27,16 @@
 // queue.remove()
 // queue.print()
 
-// fib tab
 // sel sort
 // graph all
 
-const fib = (val) => {
-    if (val <= 2) return 1;
-    const tab = new Array(val + 1).fill(0);
-    tab[1] = 1;
-    for (let i = 0; i < val; i++) {
-        tab[i+1] += tab[i];
-        tab[i+2] += tab[i];
-    }
-    return tab[val];
+const a = [1,40,-4,3.8,3.9,-0.5,3,3];
+
+function selSort(list, res=[]) {
+    if (list.length === 0) return res;
+    const min = Math.min(...list);
+    const minIndex = list.indexOf(min);
+    return selSort(list.splice(minIndex, 1), res.push(min));
 }
-console.log(fib(20))
-console.log(fib(202))
+
+console.log(selSort(a));
