@@ -96,7 +96,6 @@
 // console.log('Top 5 items: ', a);
 // console.log(heap.data.join(' > '));
 
-// fib memo
 // q sort
 // btree
 
@@ -111,3 +110,21 @@ const fib = (v, memo={}) => {
 
 // console.log(fib(10))
 // console.log(fib(109))
+
+
+function qs(list) {
+    if (list.length <= 1) return list;
+    const piv = list[0];
+    const left = [];
+    const right = [];
+    for (let i = 1; i < list.length; i++) {
+        if (list[i] < piv) {
+            left.push(list[i]);
+        } else {
+            right.push(list[i]);
+        }
+    }
+    return [...qs(left), piv, ...qs(right)];
+}
+
+console.log(qs(ar));
