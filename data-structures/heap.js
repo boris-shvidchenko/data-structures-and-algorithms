@@ -96,35 +96,48 @@
 // console.log('Top 5 items: ', a);
 // console.log(heap.data.join(' > '));
 
-// q sort
-// btree
-
-const ar = [2,6,-0.4,-40,32];
-
-const fib = (v, memo={}) => {
-    if (v <= 2) return 1;
-    if (v in memo) return memo[v];
-    memo[v] = fib(v-1, memo) + fib(v-2, memo);
-    return memo[v];
-}
-
-// console.log(fib(10))
-// console.log(fib(109))
-
-
-function qs(list) {
-    if (list.length <= 1) return list;
-    const piv = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < piv) {
-            left.push(list[i]);
-        } else {
-            right.push(list[i]);
-        }
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
     }
-    return [...qs(left), piv, ...qs(right)];
 }
 
-console.log(qs(ar));
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+function dft(root, t) {
+    if (root === null) return false;
+    if (root.val === t) return true;
+    return dft(root.left, t) || dft(root.right, t);
+}
+
+// console.log(dft(a));
+// console.log(dft(a, 'd'));
+// console.log(dft(a, 'z'));
+
+function bft(root, t) {
+    if (root === null) return false;   
+    const q = [root];
+    while (q.length > 0) {
+        const cur = q.shift();
+        if (cur.val === t) return true;
+        if (cur.left !== null) q.push(cur.left);
+        if (cur.right !== null) q.push(cur.right);
+    }
+    return false;
+}
+
+// console.log(bft(a));
+console.log(bft(a, 'd'));
+console.log(bft(a, 'z'));
