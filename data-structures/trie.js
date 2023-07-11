@@ -63,50 +63,115 @@
 // trie.insert('Goodbye');
 // trie.print();
 
-// btree
-// graph
 
 
 class Node {
+
     constructor(val) {
         this.val = val;
-        this.left = null;
-        this.right = null;
+        this.edges = [];
+    }
+
+    connect(node) {
+       this.edges.push(node);
+       node.edges.push(this); 
     }
 }
 
-const a = new Node('a');
-const b = new Node('b');
-const c = new Node('c');
-const d = new Node('d');
-const e = new Node('e');
-const f = new Node('f');
-a.left = b;
-a.right = c;
-b.left = d;
-b.right = e;
-c.right = f;
+class Graph {
 
-// function dft(root, t) {
-//     if (root === null) return false;
-//     if (root.val === t) return true;
-//     return dft(root.left, t) || dft(root.right, t);
-// }
-
-// console.log(dft(a, 'b'));
-// console.log(dft(a, 's'));
-
-function bft(root, t) {
-    if (root === null) return false;
-    const q = [root];
-    while (q.length > 0) {
-        const cur = q.shift();
-        if (cur.val === t) return true;
-        if (cur.left !== null) q.push(cur.left)
-        if (cur.right !== null) q.push(cur.right)
+    constructor(nodes) {
+        this.nodes = [...nodes]
     }
-    return false;
+
+    dft(start, end, visited=new Set()) {
+        if (start === end) {
+            console.log('Found node');
+        }
+        visited.add(start);
+        console.log('Visiting node: ', start.val);
+        for (let a of start.edges) {
+            if (!visited.has(a)) {
+                visited.add(a);
+                this.dft(a, end, visited);
+            }
+        }
+    }
+
+    bft(start, end) {
+        const v = new Set();
+        const q = [start];
+        while (q.length > 0) {
+            const cur = q.shift();
+            v.add(cur);
+            if (cur === end) {
+                console.log('Found node');
+            }
+            for (let a of cur.edges) {
+                if (!v.has(a)) {
+                    v.add(a);
+                    q.push(a);
+                }
+            }
+            console.log(cur.val);            
+        }
+    }
+
+    sp(start, end) {
+        const v = {};
+        const q = [start];
+        v[start.val] = null;
+        while (q.length > 0) {
+            const cur = q.shift();
+            if (cur === end) return this.rp(v, end);
+            for (let a of cur.edges) {
+                if (!v.hasOwnProperty(a.val)) {
+                    v[a.val] = cur;
+                    q.push(a);
+                }
+            }
+        }
+    }
+
+    rp(v, end) {
+        const path = [];
+        let cur = end;
+        while (cur !== null) {
+            path.push(cur.val);
+            cur = v[cur.val];
+        }
+        console.log(path.reverse());
+    }
+
 }
 
-console.log(bft(a, 'c'));
-console.log(bft(a, 'y'));
+const DFW = new Node('DFW');
+const JFK = new Node('JFK');
+const LAX = new Node('LAX');
+const HNL = new Node('HNL');
+const SAN = new Node('SAN');
+const EWR = new Node('EWR');
+const BOS = new Node('BOS');
+const MIA = new Node('MIA');
+const MCO = new Node('MCO');
+const PBI = new Node('PBI');
+const HKG = new Node('HKG');
+
+const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
+
+DFW.connect(JFK);
+DFW.connect(LAX);
+JFK.connect(BOS);
+JFK.connect(MIA);
+LAX.connect(HNL);
+LAX.connect(EWR);
+LAX.connect(SAN);
+SAN.connect(HKG);
+MIA.connect(MCO);
+MIA.connect(PBI);
+MCO.connect(PBI);
+
+// graph.bft(DFW, PBI);
+// graph.dft(DFW, HKG);
+console.log(graph.sp(DFW, PBI));
+
