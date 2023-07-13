@@ -15,84 +15,39 @@
 // for (let char of nums) console.log(char); 
 
 
-// bt
 
 class Node {
     constructor(val) {
         this.val = val;
-        this.next = null
+        this.left = null;
+        this.right = null;
     }
 }
 
-class LinkedList {
-    constructor() {
-        this.head = null;
-        this.length = 0;
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+function bft(root, t) {
+    if (root === null) return false;
+    const q = [root];
+    while (q.length > 0) {
+        let cur = q.shift();
+        if (cur.val === t) return true;
+        if (cur.left !== null) q.push(cur.left);
+        if (cur.right !== null) q.push(cur.right);
     }
-    append(node) {
-        const newNode = new Node(node);
-        let cur = this.head;
-        if (this.head === null) {
-            this.head = newNode;
-        } else {
-            while (cur.next !== null) {
-                cur = cur.next;
-            }
-            cur.next = newNode;
-        }
-        this.length++;
-    }
-    appendAt(node, index) {
-        const newNode = new Node(node);
-        let cur = this.head;
-        let curIndex = 0;
-        let prev;
-        if (index === 0) {
-            this.head = newNode;
-            newNode.next = cur;
-        } else {
-            while (curIndex < index) {
-                prev = cur;
-                cur = cur.next;
-                curIndex++;
-            }
-            prev.next = newNode;
-            newNode.next = cur;
-        }
-        this.length++;
-    }
-    remove(node) {
-        let cur = this.head;
-        let prev;
-        if (this.head.val === node) {
-            this.head = cur.next;
-        } else {
-            while (cur.val !== node) {
-                prev = cur;
-                cur = cur.next;
-            }
-            prev.next = cur.next;
-        }
-        this.length--;
-    }
-    print() {
-        let str = '';
-        let cur = this.head;
-        while (cur !== null) {
-            str += cur.val + '>';
-            cur = cur.next;
-        }
-        console.log(str);
-    }
+    return false;
 }
 
-
-// Test
-const list = new LinkedList();
-list.append('a');
-list.append('b');
-list.append('c');
-list.print();
-list.remove('b'); // a -> c -> etc.
-list.appendAt('z', 1);
-list.print();
+// console.log(bft(a));
+console.log(bft(a, 'c'));
+console.log(bft(a, 'w'));
