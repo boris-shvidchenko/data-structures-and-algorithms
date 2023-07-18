@@ -137,12 +137,3 @@ class HashTable {
         this.table.forEach(i => console.log(i));
     }
 }
-
-const table = new HashTable(50);
-table.set('name', 'Ryan');
-table.set('age', 25);
-table.set('color', 'red');
-table.display();
-table.remove('color');
-table.set('mane', 'Clark');
-table.display();
