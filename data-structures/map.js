@@ -9,40 +9,69 @@
 // // Iteration splits each pair into sub-array
 // for (let country of countries) console.log(country[0] + ' > ' + country[1]);
 
-const a = [1,2,3,4,5,6];
-const b = [1,-90,3.4,3.5,3,3,403,-93];
 
-function bs(l, t) {
-    if (l.length === 1) {
-        if (l[0] === t) return true;
-        return false;
-    } else {
-        const mid = Math.floor(l.length/2);
-        if (t === l[mid]) return true;
-        if (t < l[mid]) return bs(l.slice(0, mid), t);
-        return bs(l.slice(mid), t)
-    }
-}
 
-// console.log(bs(a, 3));
-// console.log(bs(a, 5));
-// console.log(bs(a, 50));
+
+const a = [1,-90,3.4,3.5,3,3,403,-93];
+
 
 // merge sort
 
-// q sort
-
-// sel sort
-
-const ss = (list, res=[]) => {
-    if (list.length === 0) return res;
-    const min = list.reduce((a, b) => a < b ? b : a);
-    const minIndex = list.indexOf(min);
-    res.push(min);
-    list.splice(minIndex, 1);
-    return ss(list, res); 
+function merge(list) {
+    if (list.length <= 1) return list;
+    const mid = Math.floor(list.length/2);
+    const left = list.slice(0, mid);
+    const right = list.slice(mid);
+    return sort(merge(left), merge(right));
 }
 
-console.log(ss(b));
+function sort(left, right) {
+    const res = [];
+    let leftIndex = 0;
+    let rightIndex = 0;
+    while (leftIndex < left.length && rightIndex < right.length) {
+        if (left[leftIndex] < right[rightIndex]) {
+            res.push(left[leftIndex]);
+            leftIndex++;
+        } else {
+            res.push(right[rightIndex]);
+            rightIndex++;
+        }
+    }
+    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
+}
+
+// console.log(merge(a));
+
+// q sort
+
+function qs(list) {
+    if (list.length <= 1) return list;
+    const piv = list[0];
+    const left = [];
+    const right = [];
+    for (let i = 1; i < list.length; i++) {
+        if (list[i] <= piv) left.push(list[i]);
+        if (list[i] > piv) right.push(list[i]);
+    }
+    return [...qs(left), piv, ...qs(right)];
+}
+
+// console.log(qs(a));
+
 
 // fib
+
+const fib = (v) => {
+    if (v <= 2) return 1;
+    const table = new Array(v+1).fill(0);
+    table[1] = 1;
+    for (let i = 0; i < v; i++) {
+        table[i+1] += table[i];
+        table[i+2] += table[i];
+    }
+    return table[v];
+}
+
+console.log(fib(22))
+console.log(fib(120))
