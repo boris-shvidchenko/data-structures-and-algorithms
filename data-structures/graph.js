@@ -257,41 +257,47 @@
 // // console.log(graph.shortestPath(DFW, PBI));
 
 
-// m sort
-// s sort
-// q sort
-
 
 // const l1 = [1,2,3,4,5];
 const l2 = [1,40,-90,3.4,3.56,74.-0.7];
 
-// function bs(list, t) {
-//     if (list.length === 1) {
-//         if (list[0] === t) return true;
-//         return false;
-//     } else {
-//         const mid = Math.floor(list.length/2);
-//         if (list[mid] === t) return true;
-//         if (t < list[mid]) {
-//             const left = list.slice(0, mid);
-//             return bs(left, t);
-//         } else {
-//             const right = list.slice(mid);
-//             return bs(right, t);
-//         }
-//     }
-// }
-
-// console.log(bs(l1, 3));
-// console.log(bs(l1, 30));
-
-function ss(list, res=[]) {
-    if (list.length === 0) return res;
-    const min = Math.min(...list);
-    const minIndex = list.indexOf(min);
-    res.push(min);
-    list.splice(minIndex, 1);
-    return ss(list, res);
+function qs(list) {
+    if (list.length <= 1) return list;
+    const piv = list[0];
+    const left = [];
+    const right = [];
+    for (let i = 1; i < list.length; i++) {
+        if (list[i] < piv) left.push(list[i]);
+        else right.push(list[i]);
+    }
+    return [...qs(left), piv, ...qs(right)];
 }
 
-console.log(ss(l2));
+// console.log(qs(l2));
+
+
+function mergeSort(list) {
+    if (list.length <= 1) return list;
+    const mid = Math.floor(list.length/2);
+    const left = list.slice(0, mid);
+    const right = list.slice(mid);
+    return sort(mergeSort(left), mergeSort(right));
+}
+
+function sort(left, right) {
+    const res = [];
+    let leftIndex = 0;
+    let rightIndex = 0;
+    while (leftIndex < left.length && rightIndex < right.length) {
+        if (left[leftIndex] < right[rightIndex]) {
+            res.push(left[leftIndex])
+            leftIndex++;
+        } else {
+            res.push(right[rightIndex]);
+            rightIndex++
+        }
+    }
+    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
+}
+
+console.log(mergeSort(l2));
