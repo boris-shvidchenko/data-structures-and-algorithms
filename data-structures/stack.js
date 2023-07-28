@@ -30,39 +30,61 @@
 // stack.peek(); // Expects 4
 
 // hash
-// quick sort
 
-const l = [1,2,3,4,5,6];
-const l2 = [1,-90,2,3.09,-43.9,4434];
 
-const bs = (list, t) => {
-    if (list.length === 1) {
-        if (list[0] === t) return true;
-        return false;
-    } else {
-        const mid = Math.floor(list.length/2);
-        if (list[mid] === t) return true;
-        if (t < list[mid]) return bs(list.slice(0, mid), t);
-        return bs(list.slice(mid), t);
+class HashTable {
+    constructor(size) {
+        this.size = size;
+        this.table = new Array(size);
     }
-}
-
-// console.log(bs(l, 3));
-// console.log(bs(l, 39));
-
-function qs(list) {
-    if (list.length <= 1) return list;
-    const piv = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < piv) {
-            left.push(list[i]);
+    hash(k){
+        let t = 0;
+        for (let i=0; i<k.length; i++) {
+            t += k.charCodeAt(i);
+        }
+        return t % this.size;
+    }
+    set(k,v) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[k,v]];
         } else {
-            right.push(list[i]);
+            const sameKey = bucket.find(i => i[0] === k);
+            if (sameKey) {
+                sameKey[1] = v;
+            } else {
+                bucket.push([k,v])
+            }
         }
     }
-    return [...qs(left), piv, ...qs(right)];
+    remove(k) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        const sameKey = bucket.find(i => i[0] === k);
+        bucket.splice(bucket.indexOf(sameKey), 1);
+    }
+    display() {
+        this.table.forEach(i => console.log(i));
+    }
+    get(k) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        const sameKey = bucket.find(i => i[0] === k);
+        if (sameKey) return sameKey[1];
+        return undefined;
+    }
 }
 
-console.log(qs(l2));
+const table = new HashTable(50);
+table.set('name', 'Ryan');
+table.set('age', 25);
+table.set('color', 'red');
+table.display();
+console.log(table.get('name'));
+table.remove('color');
+table.set('mane', 'Clark');
+table.display();
+
+
+// [ [ [k,v], [k,v] ],              [], [], ..... ]
