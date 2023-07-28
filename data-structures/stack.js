@@ -29,8 +29,6 @@
 // stack.print();
 // stack.peek(); // Expects 4
 
-
-// bs
 // hash
 // quick sort
 
@@ -49,5 +47,22 @@ const bs = (list, t) => {
     }
 }
 
-console.log(bs(l, 3));
-console.log(bs(l, 39));
+// console.log(bs(l, 3));
+// console.log(bs(l, 39));
+
+function qs(list) {
+    if (list.length <= 1) return list;
+    const piv = list[0];
+    const left = [];
+    const right = [];
+    for (let i = 1; i < list.length; i++) {
+        if (list[i] < piv) {
+            left.push(list[i]);
+        } else {
+            right.push(list[i]);
+        }
+    }
+    return [...qs(left), piv, ...qs(right)];
+}
+
+console.log(qs(l2));
