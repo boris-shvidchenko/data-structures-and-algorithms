@@ -63,34 +63,35 @@
 // trie.insert('Goodbye');
 // trie.print();
 
-// merge sort
-// sel sort
 // bt bft 2
 
-let a = [0.3, 32, -50, 42, 4, 4 ,10.443, -904];
-
-function mergeSort(list) {
-    if (list.length <= 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(mergeSort(left), mergeSort(right));
-}
-
-function sort(left, right) {
-    let res = [];
-    let leftIndex = 0;
-    let rightIndex = 0;
-    while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            res.push(left[leftIndex]);
-            leftIndex++;
-        } else {
-            res.push(right[rightIndex]);
-            rightIndex++;
-        }
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
     }
-    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
 }
 
-console.log(mergeSort(a));
+// const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+
+function fib(v, memo={}) {
+    if (v <= 2) return 1;
+    if (v in memo) return memo[v];
+    memo[v] = fib(v-1, memo) + fib(v-2, memo);
+    return memo[v];
+}
+
+// console.log(fib(10))
+// console.log(fib(108))
+
+function print(...items) {
+    items.forEach(i => console.log(i));
+}
+
+const a = [1,2,3,4,5,6];
+
+print(a, [1,2,3], [4,5,6]);
