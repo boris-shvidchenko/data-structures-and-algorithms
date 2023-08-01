@@ -9,40 +9,19 @@
 // // Iteration splits each pair into sub-array
 // for (let country of countries) console.log(country[0] + ' > ' + country[1]);
 
-// qs
-// ss
+
 // ms
 
-// const a = [1,2,3,4,5,6];
-const a = [1,70,-4.5,33.2,32];
+const a = [11,701,-41.5,331.2,312];
 
-function bs(l, t) {
-    if (l.length === 1) {
-        if (l[0] === t) return true;
-        return false;
-    } 
-    const mid = Math.floor(l.length/2);
-    if (l[mid] === t) return true;
-    if (t < l[mid]) return bs(l.slice(0, mid), 1);
-    return bs(l.slice(mid), 1);
+
+const ss = (list, res=[]) => {
+    if (list.length === 0) return res;
+    const min = Math.min(...list);
+    const minIndex = list.indexOf(min);
+    res.push(min);
+    list.splice(minIndex, 1);
+    return ss(list, res);
 }
 
-// console.log(bs(a, 3))
-// console.log(bs(a, 32))
-
-function qs(list) {
-    if (list.length <= 1) return list;
-    const piv = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i<list.length; i++) {
-        if (list[i] < piv) {
-            left.push(list[i]);
-        } else {
-            right.push(list[i]);
-        }
-    }
-    return [...qs(left), piv, ...qs(right)];
-}
-
-// console.log(qs(a));
+// console.log(ss(a));
