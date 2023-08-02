@@ -30,51 +30,48 @@
 // stack.peek(); // Expects 4
 
 
-// hash
-// btree 
-
-class HashTable {
-    constructor(size) {
-        this.size = size;
-        this.table = [];
-    }
-    hash(k) {
-        let t = 0;
-        for (let i=0; i<k.length; i++) {
-            t += k.charCodeAt(i);
-        }
-        return t % this.size;
-    }
-    display() {
-        this.table.forEach(i => console.log(i));
-    }
-    set(k, v) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        if (!bucket) {
-            this.table[index] = [[k,v]];
-        } else {
-            const sameKey = bucket.find(i => i[0] === k);
-            if (sameKey) {
-                sameKey[1] = v;
-            } else {
-                bucket.push([k,v]);
-            }
-        }
-    }
-    remove(k) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        const sameKey = bucket.find(i => i[0] === k);
-        bucket.splice(bucket.indexOf(sameKey), 1);
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
     }
 }
 
-const table = new HashTable(50);
-table.set('name', 'Ryan');
-table.set('age', 25);
-table.set('color', 'red');
-table.display();
-table.remove('color');
-table.set('mane', 'Clark');
-table.display();
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+function dft(root, t) {
+    if (root === null) return false;
+    if (root.val === t) return true;
+    return dft(root.left, t) || dft(root.right, t);
+}
+
+// console.log(dft(a))
+// console.log(dft(a, 'b'))
+// console.log(dft(a, 'z'))
+
+function bft(root, t) {
+    if (root === null) return false;
+    const q = [root];
+    while (q.length > 0) {
+        const cur = q.shift();
+        if (cur.val === t) return true;
+        if (cur.left !== null) q.push(cur.left);
+        if (cur.right !== null) q.push(cur.right);
+    }
+    return false;
+}
+
+// console.log(bft(a))
+console.log(bft(a, 'b'))
+console.log(bft(a, 'z'))
