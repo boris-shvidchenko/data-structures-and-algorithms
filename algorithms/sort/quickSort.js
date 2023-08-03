@@ -23,6 +23,7 @@
 // console.log(quickSort(testArray));
 
 const testArray = [5, 40, 6, 10, 2, 30, 10, 9, 7, 8];
+const l = [1,2,3,4,5,6];
 
 // qsort
 // selsort
@@ -54,4 +55,25 @@ function qs(list) {
     return [...qs(left), piv, ...qs(right)];
 }
 
-console.log(qs(testArray));
+// console.log(qs(testArray));
+
+function bsearch(l, t) {
+    if (l.length === 1) {
+        if (l[0] === t) return true;
+        return false;
+    } else {
+        const mid = Math.floor(l.length/2);
+        if (l[mid] === t) return true;
+        if (t < l[mid]) {
+            const left = l.slice(0, mid);
+            return bsearch(left, t);
+        } else {
+            const right = l.slice(mid);
+            return bsearch(right, t);
+        }
+    }
+}
+
+console.log(bsearch(l, 2))
+console.log(bsearch(l, 6))
+console.log(bsearch(l, 63))
