@@ -98,40 +98,98 @@
 
 
 
-let l = [1,-90,3,3,5.6,-0.9];
+let l = [10000,-90,3,3,5.6,-0.9];
 
-// quick
-// sel
 // linked list
 // graph
 
-// const fib = (v) => {
-//     if (v <= 2) return 1;
-//     const table = new Array(v+1).fill(0);
-//     table[1] = 1;
-//     for (let i = 0; i < v; i++) {
-//         table[i+1] += table[i];
-//         table[i+2] += table[i];
-//     }
-//     return table[v];
-// }
-
-// console.log(fib(20))
-// console.log(fib(200))
-
-function quickSort(list) {
-    if (list.length <= 1) return list;
-    const piv = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < piv) {
-            left.push(list[i]);
-        } else {
-            right.push(list[i]);
-        }
-    }
-    return [...quickSort(left), piv, ...quickSort(right)];
+function selSort(list, res=[]) {
+    if (list.length === 0) return res;
+    const min = Math.min(...list);
+    const minIndex = list.indexOf(min);
+    res.push(min);
+    list.splice(minIndex, 1);
+    return selSort(list, res);
 }
 
-console.log(quickSort(l));
+// console.log(selSort(l));
+
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.next = null;
+    }
+}
+
+class LinkedList {
+    constructor() {
+        this.length = 0;
+        this.head = null;
+    }
+    append(node) {
+        const newNode = new Node(node);
+        let cur = this.head;
+        if (this.head === null) {
+            this.head = newNode;
+        } else {
+            while (cur.next !== null) {
+                cur = cur.next;
+            }
+            cur.next = newNode;
+        }
+        this.length++;
+    }
+    appendAt(node, index) {
+        const newNode = new Node(node);
+        let cur = this.head;
+        let prev;
+        let curIndex = 0;
+        if (index === 0) {
+            this.head = newNode;
+            newNode.next = cur;
+        } else {
+            while (curIndex < index) {
+                prev = cur;
+                cur = cur.next;
+                curIndex++;
+            }
+            prev.next = newNode;
+            newNode.next = cur;
+        }
+        this.length++;
+    }
+    remove(node) {
+        let cur = this.head;
+        let prev;
+        if (this.head.val === node) {
+            this.head = cur.next;
+        } else {
+            while (cur.val !== node) {
+                prev = cur;
+                cur = cur.next;
+            }
+            prev.next = cur.next;
+        }
+        this.length--;
+    }
+    print() {
+        let str = '';
+        let cur = this.head;
+        while (cur !== null) {
+            str += cur.val + '>';
+            cur = cur.next;
+        }
+        console.log(str);
+    }
+}
+
+// Test
+const list = new LinkedList();
+list.append('a');
+list.append('b');
+list.append('c');
+list.print();
+list.remove('b'); // a -> c -> etc.
+list.appendAt('z', 1);
+list.print();
+
