@@ -14,86 +14,106 @@
 // // Iteration works just like with an array
 // for (let char of nums) console.log(char); 
 
-
-//  linked list
-//  graph
-
 class Node {
     constructor(val) {
         this.val = val;
-        this.next = null;
+        this.edges = [];
+    }
+    connect(node) {
+        this.edges.push(node);
+        node.edges.push(this);
     }
 }
 
-class LinkedList {
-    constructor() {
-        this.head = null;
-        this.length = 0;
+class Graph {
+    constructor(nodes) {
+        this.nodes = [...nodes];
     }
-    append(node) {
-        const newNode = new Node(node);
-        let cur = this.head;
-        if (this.head === null) {
-            this.head = newNode;
-        } else {
-            while (cur.next !== null) {
-                cur = cur.next;
-            }
-            cur.next = newNode;
+    dft(start, end, visited=new Set()) {
+        if (start === end) {
+            console.log('Found node');
         }
-        this.length++;
-    }
-    appendAt(node, index) {
-        const newNode = new Node(node);
-        let cur = this.head;
-        let curIndex = 0;
-        let prev;
-        if (index === 0) {
-            this.head = newNode;
-            newNode.next = cur;
-        } else {
-            while (curIndex < index) {
-                prev = cur;
-                cur = cur.next;
-                curIndex++;
+        visited.add(start);
+        console.log(start.val);
+        for (let a of start.edges) {
+            if (!visited.has(a)) {
+                visited.add(a);
+                this.dft(a, end, visited);
             }
-            prev.next = newNode;
-            newNode.next = cur;
         }
-        this.length++;
     }
-    remove(node) {
-        let cur = this.head;
-        let prev;
-        if (this.head.val === node) {
-            this.head = cur.next;
-        } else {
-            while (cur.val !== node) {
-                prev = cur;
-                cur = cur.next;
+    bft(start, end) {
+        const visited = new Set();
+        const q = [start];
+        while (q.length > 0) {
+            let cur = q.shift();
+            if (cur === end) {
+                console.log('Found node');
             }
-            prev.next = cur.next;
+            visited.add(cur);
+            console.log(cur.val);
+            for (let a of cur.edges) {
+                if (!visited.has(a)) {
+                    visited.add(a);
+                    q.push(a);
+                }
+            }
         }
-        this.length--;
     }
-    print() {
-        let str = '';
-        let cur = this.head;
+    sp(start, end) {
+        const visited = {};
+        const q = [start];
+        visited[start.val] = null;
+        while (q.length > 0) {
+            let cur = q.shift();
+            if (cur === end) {
+                return this.rp(visited, end);
+            }
+            for (let a of cur.edges) {
+                if (!visited.hasOwnProperty(a.val)) {
+                    visited[a.val] = cur;
+                    q.push(a);
+                }
+            }
+        }
+    }
+    rp(visited, end) {
+        const res = [];
+        let cur = end;
         while (cur !== null) {
-            str += cur.val + '>';
-            cur = cur.next;
+            res.push(cur.val);
+            cur = visited[cur.val];
         }
-        console.log(str);
+        return res.reverse();
     }
 }
 
-// Test
-const list = new LinkedList();
-list.append('a');
-list.append('b');
-list.append('c');
-list.print();
-list.remove('b'); // a -> c -> etc.
-list.appendAt('z', 1);
-list.print();
+const DFW = new Node('DFW');
+const JFK = new Node('JFK');
+const LAX = new Node('LAX');
+const HNL = new Node('HNL');
+const SAN = new Node('SAN');
+const EWR = new Node('EWR');
+const BOS = new Node('BOS');
+const MIA = new Node('MIA');
+const MCO = new Node('MCO');
+const PBI = new Node('PBI');
+const HKG = new Node('HKG');
 
+const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
+
+DFW.connect(JFK);
+DFW.connect(LAX);
+JFK.connect(BOS);
+JFK.connect(MIA);
+LAX.connect(HNL);
+LAX.connect(EWR);
+LAX.connect(SAN);
+SAN.connect(HKG);
+MIA.connect(MCO);
+MIA.connect(PBI);
+MCO.connect(PBI);
+
+graph.bft(DFW, PBI);
+// graph.dft(DFW, HKG);
+// console.log(graph.sp(DFW, PBI));
