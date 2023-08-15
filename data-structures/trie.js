@@ -64,14 +64,12 @@
 // trie.print();
 
 
-// m sort
-// fib memo/tab
 // hash
 // graph
 // b tree
 // l list
 
-const l = [12,-920,4.25,-3092.5,1.2,22,22,-9,4333];
+const l = [124,-920,4.25,-30942.5,14.2,242,22,-9,444333];
 
 function ss(list, res=[]) {
     if (list.length === 0) return res;
@@ -98,3 +96,29 @@ const fib = (v) => {
 // console.log(fib(20));
 // console.log(fib(200));
 
+
+function mergeSort(list) {
+    if (list.length <= 1) return list;
+    const mid = Math.floor(list.length/2);
+    const left = list.slice(0, mid);
+    const right = list.slice(mid);
+    return sort(mergeSort(left), mergeSort(right));
+}
+
+function sort(left, right) {
+    const res = [];
+    let leftIndex = 0;
+    let rightIndex = 0;
+    while (leftIndex < left.length && rightIndex < right.length) {
+        if (left[leftIndex] < right[rightIndex]) {
+            res.push(left[leftIndex]);
+            leftIndex++;
+        } else {
+            res.push(right[rightIndex]);
+            rightIndex++;
+        }
+    }
+    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
+}
+
+console.log(mergeSort(l));
