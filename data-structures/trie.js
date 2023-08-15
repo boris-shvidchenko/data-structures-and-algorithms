@@ -69,56 +69,48 @@
 // b tree
 // l list
 
-const l = [124,-920,4.25,-30942.5,14.2,242,22,-9,444333];
-
-function ss(list, res=[]) {
-    if (list.length === 0) return res;
-    const min = Math.min(...list);
-    const minIndex = list.indexOf(min);
-    res.push(min);
-    list.splice(minIndex, 1);
-    return ss(list, res);
-}
-
-// console.log(ss(l));
-
-const fib = (v) => {
-    if (v <= 2) return 1;
-    const tab = new Array(v+1).fill(0);
-    tab[1] = 1;
-    for (let i = 0; i < v; i++) {
-        tab[i+1] += tab[i];
-        tab[i+2] += tab[i];
+class HashMap {
+    constructor(size) {
+        this.size = size;
+        this.table = new Array(size);
     }
-    return tab[v];
-}
-
-// console.log(fib(20));
-// console.log(fib(200));
-
-
-function mergeSort(list) {
-    if (list.length <= 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(mergeSort(left), mergeSort(right));
-}
-
-function sort(left, right) {
-    const res = [];
-    let leftIndex = 0;
-    let rightIndex = 0;
-    while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            res.push(left[leftIndex]);
-            leftIndex++;
+    hash(k) {
+        let t = 0;
+        for (let i = 0; i < k.length; i++) {
+            t += k.charCodeAt(i);
+        }
+        return t % this.size;
+    }
+    set(k,v) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[k,v]];
         } else {
-            res.push(right[rightIndex]);
-            rightIndex++;
+            const sameKey = bucket.find(i => i[0] === k);
+            if (sameKey) {
+                sameKey[1] = v;
+            } else {
+                bucket.push([k,v]);
+            }
         }
     }
-    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
+    remove(k) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        const sameKey = bucket.find(i => i[0] === k);
+        bucket.splice(bucket.indexOf(sameKey), 1);
+    }
+    display() {
+        this.table.forEach(i => console.log(i))
+    }
 }
 
-console.log(mergeSort(l));
+const table = new HashMap(50);
+table.set('name', 'Ryan');
+table.set('age', 25);
+table.set('color', 'red');
+table.display();
+table.remove('color');
+table.set('mane', 'Clark');
+table.display();
