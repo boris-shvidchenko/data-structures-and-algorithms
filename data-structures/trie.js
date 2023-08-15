@@ -64,9 +64,6 @@
 // trie.print();
 
 
-
-// q sort
-// s sort
 // m sort
 // fib memo/tab
 // hash
@@ -74,42 +71,30 @@
 // b tree
 // l list
 
+const l = [12,-920,4.25,-3092.5,1.2,22,22,-9,4333];
 
-const l = [1,-90,4.5,-309.5,1.2,22,22,-9,4333];
-
-function bs(list, t) {
-    if (list.length === 1) {
-        if (list[0] === t) return true;
-        return false;
-    } else {
-        const mid = Math.floor(list.length/2);
-        if (t < list[mid]) {
-            const left = list.slice(0, mid);
-            return bs(left, t);
-        } else {
-            const right = list.slice(mid);
-            return bs(right, t);
-        }
-    }
+function ss(list, res=[]) {
+    if (list.length === 0) return res;
+    const min = Math.min(...list);
+    const minIndex = list.indexOf(min);
+    res.push(min);
+    list.splice(minIndex, 1);
+    return ss(list, res);
 }
 
-// console.log(bs(bl, 3))
-// console.log(bs(bl, 5))
-// console.log(bs(bl, 59))
+// console.log(ss(l));
 
-const qs = (list) => {
-    if (list.length <= 1) return list;
-    const piv = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < piv) {
-            left.push(list[i]);
-        } else {
-            right.push(list[i]);
-        }
+const fib = (v) => {
+    if (v <= 2) return 1;
+    const tab = new Array(v+1).fill(0);
+    tab[1] = 1;
+    for (let i = 0; i < v; i++) {
+        tab[i+1] += tab[i];
+        tab[i+2] += tab[i];
     }
-    return [...qs(left), piv, ...qs(right)];
+    return tab[v];
 }
 
-console.log(qs(l));
+// console.log(fib(20));
+// console.log(fib(200));
+
