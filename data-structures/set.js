@@ -15,26 +15,35 @@
 // for (let char of nums) console.log(char); 
 
 
-// qsort
+
 // msort
 // hash
 // btree
 
 const l = [10,-40,3.4,3.5,6,6,0.34,-74,2323];
 
-const qs = (list) => {
+function mergeSort(list) {
     if (list.length <= 1) return list;
-    const piv = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < piv) {
-            left.push(list[i]);
-        } else {
-            right.push(list[i]);
-        }
-    }
-    return [...qs(left), piv, ...qs(right)];
+    const mid = Math.floor(list.length/2);
+    const left = list.slice(0, mid);
+    const right = list.slice(mid);
+    return sort(mergeSort(left), mergeSort(right));
 }
 
-console.log(qs(l));
+function sort(left, right) {
+    let leftIndex = 0;
+    let rightIndex = 0;
+    const res = [];
+    while (leftIndex < left.length && rightIndex < right.lenght) {
+        if (left[leftIndex] < right[rightIndex]) {
+            res.push(left[leftIndex]);
+            leftIndex++;
+        } else {
+            res.push(right[rightIndex]);
+            rightIndex++;
+        }
+    }
+    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
+}
+
+console.log(mergeSort(l));
