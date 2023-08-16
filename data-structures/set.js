@@ -16,34 +16,52 @@
 
 
 
-// msort
+
 // hash
 // btree
 
-const l = [10,-40,3.4,3.5,6,6,0.34,-74,2323];
-
-function mergeSort(list) {
-    if (list.length <= 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(mergeSort(left), mergeSort(right));
-}
-
-function sort(left, right) {
-    let leftIndex = 0;
-    let rightIndex = 0;
-    const res = [];
-    while (leftIndex < left.length && rightIndex < right.lenght) {
-        if (left[leftIndex] < right[rightIndex]) {
-            res.push(left[leftIndex]);
-            leftIndex++;
-        } else {
-            res.push(right[rightIndex]);
-            rightIndex++;
+class HashMap {
+    constructor(size) {
+        this.size = size;
+        this.table = new Array(size);
+    }
+    hash(k) {
+        let t = 0;
+        for (let i = 0; i < k.length; i++) {
+            t += k.charCodeAt(i)
+        }
+        return t % this.size;
+    }
+    set(k,v) {  
+        const index = this.hash(k);
+        const bucket = this.table[index]
+        if (!bucket) {
+            this.table[index] = [[k,v]];
+        } else {    
+            const sameKey = bucket.find(i => i[0] === k)
+            if (sameKey) {
+                sameKey[1] = v;
+            } else {
+                bucket.push([k,v])
+            }
         }
     }
-    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
+    remove(k) { 
+        const index = this.hash(k);
+        const bucket = this.table[index]
+        const sameKey = bucket.find(i => i[0] === k)
+        bucket.splice(bucket.indexOf(sameKey), 1);
+    }
+    display() {
+        this.table.forEach(i => console.log(i));
+    }
 }
 
-console.log(mergeSort(l));
+const table = new HashMap(50);
+table.set('name', 'Ryan');
+table.set('age', 25);
+table.set('color', 'red');
+table.display();
+table.remove('color');
+table.set('mane', 'Clark');
+table.display();
