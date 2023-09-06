@@ -104,7 +104,7 @@ function bft(root, t) {
     while (q.length > 0) {
         const cur = q.shift();
         if (cur.val === t) return true;
-        if (cur.left !== null) q.push(cur.left);
+        if (cur.left !== null) q.push(cur.left); 
         if (cur.right !== null) q.push(cur.right);
     }
     return false;
