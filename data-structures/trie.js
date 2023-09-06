@@ -63,8 +63,7 @@
 // trie.insert('Goodbye');
 // trie.print();
 
-// qsort
-// sel sort
+
 // m sort
 // hash
 // linked list
@@ -73,7 +72,7 @@
 // fib 
 
 // const l = [1,2,3,4,5,6];
-const l = [1,-90,3.4,3.6,23,0,799];
+const l = [122,-9202,32.24,322.6,23,22220,7299];
 
 function bs(list, t) {
     if (list.length <= 1) {
@@ -110,4 +109,41 @@ const qs = (list) => {
     return [...qs(left), piv, ...qs(right)];
 }
 
-console.log(qs(l));
+// console.log(qs(l));
+
+function selSort(list, res=[]) {
+    if (list.length === 0) return res;
+    const min = Math.min(...list);
+    const minIndex = list.indexOf(min);
+    res.push(min);
+    list.splice(minIndex, 1);
+    return selSort(list, res);
+}
+
+// console.log(selSort(l));
+
+function mergeSort(list) {
+    if (list.length <= 1) return list;
+    const mid = Math.floor(list.length/2);
+    const left = list.slice(0, mid);
+    const right = list.slice(mid);
+    return sort(mergeSort(left), mergeSort(right));
+}
+
+function sort(left, right) {
+    let leftIndex = 0;
+    let rightIndex = 0;
+    const res = [];
+    while (leftIndex < left.length && rightIndex < right.length) {
+        if (left[leftIndex] < right[rightIndex]) {
+            res.push(left[leftIndex]);
+            leftIndex++;
+        } else {
+            res.push(right[rightIndex]);
+            rightIndex++;
+        }
+    }
+    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
+}
+
+console.log(mergeSort(l));
