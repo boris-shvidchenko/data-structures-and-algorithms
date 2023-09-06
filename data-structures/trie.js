@@ -64,86 +64,23 @@
 // trie.print();
 
 
-// m sort
+
 // hash
 // linked list
 // graph
 // b tree
 // fib 
 
-// const l = [1,2,3,4,5,6];
-const l = [122,-9202,32.24,322.6,23,22220,7299];
-
-function bs(list, t) {
-    if (list.length <= 1) {
-        if (list[0] === t) return true;
-        return false;
-    } else {
-        const mid = Math.floor(list.length/2);
-        if (list[mid] === t) return true;
-        if (t < list[mid]) {
-            const left = list.slice(0, mid);
-            return bs(left, t);
-        } else {
-            const right = list.slice(mid);
-            return bs(right, t);
-        }
+const fib = (val) => {
+    if (val <= 2) return 1;
+    const table = new Array(val+1).fill(0);
+    table[1] = 1;
+    for (let i = 0; i < val; i++) {
+        table[i+1] += table[i];
+        table[i+2] += table[i];
     }
+    return table[val];
 }
 
-// console.log(bs(l, 2));
-// console.log(bs(l, 7));
-
-const qs = (list) => {
-    if (list.length <= 1) return list;
-    const piv = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < piv) {
-            left.push(list[i]);
-        } else {
-            right.push(list[i]);
-        } 
-    }
-    return [...qs(left), piv, ...qs(right)];
-}
-
-// console.log(qs(l));
-
-function selSort(list, res=[]) {
-    if (list.length === 0) return res;
-    const min = Math.min(...list);
-    const minIndex = list.indexOf(min);
-    res.push(min);
-    list.splice(minIndex, 1);
-    return selSort(list, res);
-}
-
-// console.log(selSort(l));
-
-function mergeSort(list) {
-    if (list.length <= 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(mergeSort(left), mergeSort(right));
-}
-
-function sort(left, right) {
-    let leftIndex = 0;
-    let rightIndex = 0;
-    const res = [];
-    while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            res.push(left[leftIndex]);
-            leftIndex++;
-        } else {
-            res.push(right[rightIndex]);
-            rightIndex++;
-        }
-    }
-    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
-}
-
-console.log(mergeSort(l));
+console.log(fib(20));
+console.log(fib(200));
