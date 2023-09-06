@@ -69,18 +69,49 @@
 // linked list
 // graph
 // b tree
-// fib 
 
-const fib = (val) => {
-    if (val <= 2) return 1;
-    const table = new Array(val+1).fill(0);
-    table[1] = 1;
-    for (let i = 0; i < val; i++) {
-        table[i+1] += table[i];
-        table[i+2] += table[i];
+class HashMap {
+    constructor(size) {
+        this.size = size;
+        this.table = new Array(size);
     }
-    return table[val];
+    hash(k) {
+        let t = 0;
+        for (let i = 0; i < k.length; i++) {
+            t += k.charCodeAt(i);
+        }
+        return t % this.size;
+    }
+    set(k,v) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[k,v]];
+        } else {
+            const sameKey = bucket.find(i => i[0] === k);
+            if (sameKey) {
+                sameKey[1] = v;
+            } else {
+                bucket.push([k,v]);
+            }
+        }
+    }
+    remove(k) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        const sameKey = bucket.find(i => i[0] === k);
+        bucket.splice(bucket.indexOf(sameKey), 1);
+    }
+    display() {
+        this.table.forEach(i => console.log(i));
+    }
 }
 
-console.log(fib(20));
-console.log(fib(200));
+const table = new HashMap(50);
+table.set('name', 'Ryan');
+table.set('age', 25);
+table.set('color', 'red');
+table.display();
+table.remove('color');
+table.set('mane', 'Clark');
+table.display();
