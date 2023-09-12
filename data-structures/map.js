@@ -137,26 +137,11 @@ b.right = e;
 c.right = f;
 
 function dft(root, t) {
-    if (root === null) return [];
-    const left = dft(root.left, t);
-    const right = dft(root.right, t);
-    return [...left, root.v, ...right]
-}
-console.log(dft(a))
-// console.log(dft(a, 'd'))
-// console.log(dft(a, 'z'))
-
-function bft(root, t) {
     if (root === null) return false;
-    const q = [root];
-    while (q.length > 0) {
-        const cur = q.shift();
-        if (cur.v === t) return true;
-        if (cur.left !== null) q.push(cur.left);
-        if (cur.right !== null) q.push(cur.right);
-    }
-    return false;
+    if (root.v === t) return true;
+    return dft(root.left, t) || dft(root.right, t);
 }
-// console.log(bft(a))
-console.log(bft(a, 'd'))
-console.log(bft(a, 'z'))
+// console.log(dft(a))
+console.log(dft(a, 'd'))
+console.log(dft(a, 'z'))
+
