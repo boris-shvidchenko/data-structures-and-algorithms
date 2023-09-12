@@ -11,137 +11,151 @@
 
 
 // ms
-// qs
-// ss
-// hash
 // bt
 // graph
 
-const l = [1,2,3,4,5,6];
-// const l = [1,-90,3,4.5,333,0.9,-900];
+const l = [12,-902,3,42.52,3323,20.9,-9200];
+
+function qs(list) {
+    if (list.length <= 1) return list;
+    const piv = list[0];
+    let left = [];
+    let right = [];
+    for (let i = 1; i<list.length; i++) {
+        if (list[i] < piv) {
+            left.push(list[i]);
+        } else {
+            right.push(list[i]);
+        }
+    }
+    return [...qs(left), piv, ...qs(right)];
+}
+
+
+function mergeSort(list) {
+    if (list.length <= 1) return list;
+    const mid = Math.floor(list.length/2);
+    const left = list.slice(0, mid);
+    const right = list.slice(mid);
+    return sort(mergeSort(left), mergeSort(right));
+}
+
+function sort(left, right) {
+    let leftIndex = 0;
+    let rightIndex = 0;
+    let res = [];
+    while (leftIndex < left.length && rightIndex < right.length) {
+        if (left[leftIndex] < right[rightIndex]) {
+            res.push(left[leftIndex]);
+            leftIndex++;
+        } else {
+            res.push(right[rightIndex]);
+            rightIndex++;
+        }
+    }
+    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
+}
+
+console.log(mergeSort(l));
 
 class Node {
     constructor(v) {
         this.v = v;
-        this.next = null;
+        this.edges = [];
+    }
+    connect(node) {
+        this.edges.push(node);
+        node.edges.push(this);
     }
 }
 
-class LinkedList {
-    constructor() {
-        this.head = null;
-        this.length = 0;
+class Graph {
+    constructor(nodes) {
+        this.nodes = [...nodes];
     }
-    append(node) {
-        const newNode = new Node(node);
-        let cur = this.head;
-        if (this.head === null) {
-            this.head = newNode;
-        } else {
-            while (cur.next !== null) {
-                cur = cur.next;
-            }
-            cur.next = newNode;
+    dft(start, end, visited = new Set()) {
+        if (start === end) {
+            console.log('found node');
         }
-        this.length++;
-    }
-    appendAt(index, node) {
-        const newNode = new Node(node);
-        let cur = this.head;
-        let curIndex = 0;
-        let prev;
-        if (index === 0) {
-            this.head = newNode;
-            newNode.next = cur;
-        } else {
-            while (curIndex < index) {
-                prev = cur;
-                cur = cur.next;
-                curIndex++;
+        console.log('node: ', start.v);
+        visited.add(start);
+        for (let a of start.edges) {
+            if (!visited.has(a)) {
+                visited.add(a);
+                this.dft(a, end, visited);
             }
-            prev.next = newNode;
-            newNode.next = cur;
         }
-        this.length++;
     }
-    remove(node) {
-        let cur = this.head;
-        let prev;
-        if (this.head.v === node) {
-            this.head = cur.next;
-        } else {
-            while (cur.v !== node) {
-                prev = cur;
-                cur = cur.next;
+    bft(start, end) {
+        const q = [start];
+        const visited = new Set();
+        while (q.length > 0) {
+            const cur = q.shift();
+            visited.add(cur);
+            if (cur === end) {
+                console.log('Found node');
+            } 
+            for (let a of cur.edges) {
+                if (!visited.has(a)) {
+                    visited.add(a);
+                    q.push(a);
+                }
             }
-            prev.next = cur.next;
+            console.log('visintg node: ', cur.v);
         }
-        this.length--;
     }
-    print() {
-        let cur = this.head;
-        let str = '';
+    sp(start, end) {
+        const visited = {};
+        const q = [start];
+        visited[start.v] = null;
+        while (q.length > 0) {
+            const cur = q.shift();
+            if (cur === start) {
+                return this.rp(visited, end);
+            }
+            for (let a of cur.edges) {
+                if (!visited.hasOwnProperty(a.val)) {
+                    visited[a.val] = cur;
+                    q.push(a);
+                }
+            }
+        }
+    }
+    rp(visited, end) {
+        let path = [];
+        let cur = end;
         while (cur !== null) {
-            str += cur.v + '>';
-            cur = cur.next;
+            path.push(cur);
+            cur = visited[cur.v];
         }
-        console.log(str);
+        return path.reverse();
     }
 }
 
-// Test
-// const list = new LinkedList();
-// list.append('a');
-// list.append('b');
-// list.append('c');
-// list.print();
-// list.remove('b'); // a -> c -> etc.
-// list.appendAt(1,'z');
-// list.print();
+const DFW = new Node('DFW');
+const JFK = new Node('JFK');
+const LAX = new Node('LAX');
+const HNL = new Node('HNL');
+const SAN = new Node('SAN');
+const EWR = new Node('EWR');
+const BOS = new Node('BOS');
+const MIA = new Node('MIA');
+const MCO = new Node('MCO');
+const PBI = new Node('PBI');
+const HKG = new Node('HKG');
 
+const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
 
-class HashTable {
-    constructor(size) {
-        this.size = size;
-        this.table = new Array(size);
-    }
-    hash(k) {
-        let t = 0;
-        for (let i=0; i<k.length; i++) {
-            t += k.charCodeAt(i);
-        }
-        return t % this.size;
-    }
-    set(k,v) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        if (!bucket) {
-            this.table[index] = [[k,v]];
-        } else {
-            const sameKey = bucket.find(i => i[0] === k);
-            if (sameKey) {
-                sameKey[1] = v;
-            } else {
-                bucket.push([k,v]);
-            }
-        }
-    }
-    remove(k) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        const sameKey = bucket.find(i => i[0] === k);
-        bucket.splice(bucket.indexOf(sameKey), 1);
-    }
-    display() {
-        this.table.forEach(i => console.log(i));
-    }
-}
+DFW.connect(JFK);
+DFW.connect(LAX);
+JFK.connect(BOS);
+JFK.connect(MIA);
+LAX.connect(HNL);
+LAX.connect(EWR);
+LAX.connect(SAN);
+SAN.connect(HKG);
+MIA.connect(MCO);
+MIA.connect(PBI);
+MCO.connect(PBI);
 
-const table = new HashTable(50);
-table.set('name', 'Ryan');
-table.set('age', 25);
-table.set('color', 'red');
-table.display();
-table.remove('color');
-table.set('mane', 'Clark');
-table.display();
+// console.log(graph.sp(DFW, PBI));
