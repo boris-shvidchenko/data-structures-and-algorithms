@@ -63,62 +63,107 @@
 // trie.insert('Goodbye');
 // trie.print();
 
-const l = [1,-990,3.5,23,-987,1.2,0.078];
-const l2 = [0.5,-23,222,5,4.65,0.43];
-const l3 = [222,43234,-6723,3.4,3434,7,-34];
 
-// merge
-// sel
-// quick
-// graph
 
-function selSort(list, res=[]) {
-    if (list.length === 0) return res;
-    const min = Math.min(...list);
-    const minIndex = list.indexOf(min);
-    res.push(min);
-    list.splice(minIndex, 1);
-    return selSort(list, res);
-}
-
-console.log('Sel Sort: ', selSort(l));
-
-function quickSort(list) {
-    if (list.length <= 1) return list;
-    const piv = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] <= piv) left.push(list[i]);
-        if (list[i] > piv) right.push(list[i]);
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.edges = [];
     }
-    return [...quickSort(left), piv, ...quickSort(right)];
+    connect(node) {
+        this.edges.push(node);
+        node.edges.push(this);
+    }
 }
 
-console.log('Sel Sort: ', quickSort(l2));
-
-function mergeSort(list) {
-    if (list.length <= 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(mergeSort(left), mergeSort(right));
-}
-
-function sort(left, right) {
-    let leftIndex = 0;
-    let rightIndex = 0;
-    const res = [];
-    while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            res.push(left[leftIndex]);
-            rightIndex++;
-        } else {
-            res.push(right[rightIndex]);
-            rightIndex++;
+class Graph {
+    constructor(nodes) {
+        this.nodes = [...nodes];
+    }
+    dft(start, end, visited=new Set()) {
+        if (start === end) {
+            console.log('Found node');
+        }
+        visited.add(start);
+        console.log('Node: ', start.val);
+        for (let a of start.edges) {
+            if (!visited.has(a)) {
+                visited.add(a);
+                this.dft(a, end, visited);
+            }
         }
     }
-    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
+    bft(start, end) {
+        const visited = new Set();
+        const q = [start];
+        while (q.length > 0) {
+            const cur = q.shift();
+            if (cur === end) {
+                console.log('Found node');
+            }
+            console.log('Node: ', cur.val);
+            for (let a of cur.edges) {
+                if (!visited.has(a)) {
+                    visited.add(a);
+                    q.push(a);
+                }
+            }
+        }
+    }
+    sp(start, end) {
+        const visited = {};
+        const q = [start];
+        visited[start.val] = null;
+        while (q.length > 0) {
+            const cur = q.shift();
+            if (cur === end) {
+                return this.rp(visited, end);
+            }
+            for (let a of cur.edges) {
+                if (!visited.hasOwnProperty(a.val)) {
+                    visited[a.val] = cur;
+                    q.push(a);
+                }
+            }
+        }
+    }
+    rp(visited, end) {
+        let cur = end;
+        let path = [];
+        while (cur !== null) {
+            path.push(cur.val);
+            cur = visited[cur.val];
+        }
+        return path.reverse();
+    }
 }
 
-console.log('Merge Sort: ', mergeSort(l3));
+const DFW = new Node('DFW');
+const JFK = new Node('JFK');
+const LAX = new Node('LAX');
+const HNL = new Node('HNL');
+const SAN = new Node('SAN');
+const EWR = new Node('EWR');
+const BOS = new Node('BOS');
+const MIA = new Node('MIA');
+const MCO = new Node('MCO');
+const PBI = new Node('PBI');
+const HKG = new Node('HKG');
+
+const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
+
+DFW.connect(JFK);
+DFW.connect(LAX);
+JFK.connect(BOS);
+JFK.connect(MIA);
+LAX.connect(HNL);
+LAX.connect(EWR);
+LAX.connect(SAN);
+SAN.connect(HKG);
+MIA.connect(MCO);
+MIA.connect(PBI);
+MCO.connect(PBI);
+
+// graph.bft(DFW, PBI);
+// graph.dft(DFW, HKG);
+console.log(graph.sp(DFW, PBI));
