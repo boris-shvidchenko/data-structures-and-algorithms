@@ -29,79 +29,17 @@
 // stack.print();
 // stack.peek(); // Expects 4
 
+
+
 const a1 = [1,2,3,4,5,6,7,8];
 const a2 = [1,4,-94,5.6,324,-999843,34];
 
-// bsearch
-// fib memo tab
-// ssort
 // qsort
 // msort
 // hash
 // llist
 // graph
 // btree
-
-const bSearch = (list, t) => {
-    if (list.length === 1) {
-        if (list[0] === t) return true;
-        return false;
-    } else {
-        const mid = Math.floor(list.length/2);
-        if (t === list[mid]) return true;
-        if (t < list[mid]) {
-            const left = list.slice(0, mid);
-            return bSearch(left, t);
-        } else {
-            const right = list.slice(mid);
-            return bSearch(right, t);
-        }
-    }
-}
-
-console.log('Binary Search:')
-console.log(bSearch(a1, 3));
-console.log(bSearch(a1, 30));
-
-function fib(v, memo={}) {
-    if (v <= 2) return 1;
-    if (v in memo) return memo[v];
-    memo[v] = fib(v-1, memo) + fib(v-2, memo);
-    return memo[v];
-}
-
-console.log('Fib Memo:')
-console.log(fib(10));
-console.log(fib(100));
-
-function fib2(v) {
-    if (v <= 2) return 1;
-    const table = new Array(v+1).fill(0);
-    table[1] = 1;
-    for (let i = 0; i < v; i++) {
-        table[i+1] += table[i];
-        table[i+2] += table[i];
-    }
-    return table[v];
-}
-
-console.log('Fib Tab:')
-console.log(fib(20));
-console.log(fib(200));
-
-
-
-const selSort = (list, res=[]) => {
-    if (list.length === 0) return res;
-    const min = Math.min(...list);
-    const minIndex = list.indexOf(min);
-    res.push(min);
-    list.splice(minIndex, 1);
-    return selSort(list, res);
-}
-
-console.log('Selection Sort:');
-console.log(selSort(a2));
 
 const qSort = (list) => {
     if (list.length <= 1) return list;
@@ -115,8 +53,8 @@ const qSort = (list) => {
     return [...qSort(left), piv, ...qSort(right)];
 }
 
-console.log('Quick sort:')
-console.log(qSort(a2));
+// console.log('Quick sort:')
+// console.log(qSort(a2));
 
 
 function mergeSort(list) {
@@ -143,5 +81,49 @@ function sort(left, right) {
     return res.concat(left.slice(leftIndex), right.slice(rightIndex));
 }
 
-console.log('merge sort:');
-console.log(mergeSort(a2));
+// console.log('merge sort:');
+// console.log(mergeSort(a2));
+
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+function dft(root, t) {
+    if (root === null) return false;
+    if (root.val === t) return true;
+    return dft(root.left, t) || dft(root.right, t);
+}
+// console.log(dft(a));
+console.log(dft(a, 'd'));
+console.log(dft(a, 'z'));
+
+function bft(root, t) {
+    if (root === null) return false;
+    const q = [root];
+    while (q.length > 0) {
+        const cur = q.shift();
+        if (cur.val === t) return true;
+        if (cur.left !== null) q.push(cur.left);
+        if (cur.right !== null) q.push(cur.right);
+    }
+    return false;
+}
+// console.log(bft(a));
+console.log(bft(a, 'd'));
+console.log(bft(a, 'z'));
