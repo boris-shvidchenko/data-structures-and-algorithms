@@ -31,99 +31,113 @@
 
 
 
-const a1 = [1,2,3,4,5,6,7,8];
-const a2 = [1,4,-94,5.6,324,-999843,34];
 
-// qsort
-// msort
+
 // hash
 // llist
 // graph
-// btree
 
-const qSort = (list) => {
-    if (list.length <= 1) return list;
-    const piv = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < piv) left.push(list[i]);
-        if (list[i] >= piv) right.push(list[i]);
-    }
-    return [...qSort(left), piv, ...qSort(right)];
-}
-
-// console.log('Quick sort:')
-// console.log(qSort(a2));
-
-
-function mergeSort(list) {
-    if (list.length <= 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(mergeSort(left), mergeSort(right));
-}
-
-function sort(left, right) {
-    let leftIndex = 0;
-    let rightIndex = 0;
-    const res = [];
-    while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            res.push(left[leftIndex]);
-            leftIndex++;
-        } else {
-            res.push(right[rightIndex]);
-            rightIndex++;
-        }
-    }
-    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
-}
-
-// console.log('merge sort:');
-// console.log(mergeSort(a2));
 
 class Node {
     constructor(val) {
         this.val = val;
-        this.left = null;
-        this.right = null;
+        this.edges = [];
+    }
+    connect(node) {
+        this.edges.push(node);
+        node.edges.push(this);
     }
 }
 
-const a = new Node('a');
-const b = new Node('b');
-const c = new Node('c');
-const d = new Node('d');
-const e = new Node('e');
-const f = new Node('f');
-a.left = b;
-a.right = c;
-b.left = d;
-b.right = e;
-c.right = f;
-
-function dft(root, t) {
-    if (root === null) return false;
-    if (root.val === t) return true;
-    return dft(root.left, t) || dft(root.right, t);
-}
-// console.log(dft(a));
-console.log(dft(a, 'd'));
-console.log(dft(a, 'z'));
-
-function bft(root, t) {
-    if (root === null) return false;
-    const q = [root];
-    while (q.length > 0) {
-        const cur = q.shift();
-        if (cur.val === t) return true;
-        if (cur.left !== null) q.push(cur.left);
-        if (cur.right !== null) q.push(cur.right);
+class Graph {
+    constructor(nodes) {
+        this.nodes = [...nodes];
     }
-    return false;
+    dft(start, end, visited=new Set()) {
+        if (start === end) {
+            console.log('Found node');
+        }
+        console.log('Node: ', start.val);
+        visited.add(start);
+        for (let a of start.edges) {
+            if (!visited.has(a)) {
+                visited.add(a);
+                this.dft(a, end, visited);
+            }
+        }
+    }
+    bft(start, end) {
+        const visited = new Set();
+        const q = [start];
+        while (q.length > 0) {
+            const cur = q.shift();
+            if (cur === end) {
+                console.log('Found node');
+            }
+            for (let a of cur.edges) {
+                if (!visited.has(a)) {
+                    visited.add(a);
+                    q.push(a);
+                }
+            }
+            console.log('node: ', cur.val);
+        }
+    }
+    sp(start, end) {
+        const visited = {};
+        const q = [start];
+        visited[start.val] = null;
+        while (q.length > 0) {
+            const cur = q.shift();
+            if (cur === end) {
+                return this.rp(visited, end);
+            }
+            for (let a of cur.edges) {
+                if (!visited.hasOwnProperty(a.val)) {
+                    visited[a.val] = cur;
+                    q.push(a);
+                }
+            }
+        }
+    }
+    rp(visited, end) {
+        const path = [];
+        let cur = end;
+        while (cur !== null) {
+            path.push(cur.val);
+            cur = visited[cur.val];
+        }
+        return path.reverse();
+    }
 }
-// console.log(bft(a));
-console.log(bft(a, 'd'));
-console.log(bft(a, 'z'));
+
+const DFW = new Node('DFW');
+const JFK = new Node('JFK');
+const LAX = new Node('LAX');
+const HNL = new Node('HNL');
+const SAN = new Node('SAN');
+const EWR = new Node('EWR');
+const BOS = new Node('BOS');
+const MIA = new Node('MIA');
+const MCO = new Node('MCO');
+const PBI = new Node('PBI');
+const HKG = new Node('HKG');
+
+const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
+
+DFW.connect(JFK);
+DFW.connect(LAX);
+JFK.connect(BOS);
+JFK.connect(MIA);
+LAX.connect(HNL);
+LAX.connect(EWR);
+LAX.connect(SAN);
+SAN.connect(HKG);
+MIA.connect(MCO);
+MIA.connect(PBI);
+MCO.connect(PBI);
+
+// graph.bft(DFW, PBI);
+// console.log('==============')
+// graph.dft(DFW, HKG);
+console.log(graph.sp(DFW, PBI));
