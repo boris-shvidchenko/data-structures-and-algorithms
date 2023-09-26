@@ -35,146 +35,101 @@
 
 
 const a1 = [1,2,3,4,5,6];
-// const a1 = [1,0.5,-93,232,6];
+const a2 = [1,0.5,-93,232,6];
 
-function mergeSort(list) {}
-function sort(left, right) {}
-
-function bsearch(list, t) {}
-
-function qsort(list) {}
-
-function selSort(list, res=[]) {}
-
-function fib(v, memo={}) {}
-
-function fib(v) {}
-
-// Hash
-class HashTable {
-    constructor(size) {
-        this.size = size;
-        this.table = new Array(size);
-    }
-    hash(k) {
-        let t = 0;
-        for (let i = 0; i < k.length; i++) {
-            t += k.charCodeAt(i);
-        }
-        return t % this.size;
-    }
-    set(k,v) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        if (!bucket) {
-            this.table[index] = [[k,v]];
+function mergeSort(list) {
+    if (list.length <= 1) return list;
+    const mid = Math.floor(list.length/2);
+    const left = list.slice(0, mid);
+    const right = list.slice(mid);
+    return sort(mergeSort(left), mergeSort(right));
+}
+function sort(left, right) {
+    const res = [];
+    let leftIndex = 0;
+    let rightIndex = 0;
+    while (leftIndex < left.length && rightIndex < right.length) {
+        if (left[leftIndex] < right[rightIndex]) {
+            res.push(left[leftIndex]);
+            leftIndex++;
         } else {
-            const sameKey = bucket.find(i => i[0] === k);
-            if (sameKey) {
-                sameKey[1] = v;
-            } else {
-                bucket.push([k,v]);
-            }
+            res.push(right[rightIndex]);
+            rightIndex++;
         }
     }
-    remove(k) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        const sameKey = bucket.find(i => i[0] === k);
-        bucket.splice(bucket.indexOf(sameKey), 1);
-    }
-    display() {
-        this.table.forEach(i => console.log(i));
+    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
+}
+
+// console.log(mergeSort(a2));
+
+function bsearch(list, t) {
+    if (list.length === 1) {
+        if (list[0] === t) return true;
+        return false;
+    } else {
+        const mid = Math.floor(list.length/2);
+        if (list[mid] === t) return true;
+        if (t < list[mid]) {
+            const left = list.slice(0, mid);
+            return bsearch(left, t);
+        } else {
+            const right = list.slice(mid);
+            return bsearch(right, t);
+        }
     }
 }
 
-// const table = new HashTable(50);
-// table.set('name', 'Ryan');
-// table.set('age', 25);
-// table.set('color', 'red');
-// table.display();
-// table.remove('color');
-// table.set('mane', 'Clark');
-// table.display();
+// console.log(bsearch(a1, 2));
+// console.log(bsearch(a1, 29));
 
-// Linked List
-class Node {
-    constructor(val) {
-        this.val = val;
-        this.next = null;
+function qsort(list) {
+    if (list.length <= 1) return list;
+    const piv = list[0];
+    const left = [];
+    const right = [];
+    for (let i = 1; i < list.length; i++) {
+        if (list[i] < piv) left.push(list[i]);
+        if (list[i] >= piv) right.push(list[i]);
     }
+    return [...qsort(left), piv, ...qsort(right)];
 }
 
-class LinkedList {
-    constructor() {
-        this.head = null;
-        this.length = 0;
-    }
-    append(node) {
-        const newNode = new Node(node);
-        let cur = this.head;
-        if (this.head === null) {
-            this.head = newNode;
-        } else {
-            while (cur.next !== null) {
-                cur = cur.next;
-            }
-            cur.next = newNode;
-        }
-        this.length++;
-    }
-    appendAt(index, node) {
-        const newNode = new Node(node);
-        let cur = this.head;
-        let curIndex = 0;
-        let prev;
-        if (index === 0) {
-            this.head = newNode;
-            newNode.next = cur;
-        } else {
-            while (curIndex < index) {
-                prev = cur;
-                cur = cur.next;
-                curIndex++;
-            }
-            prev.next = newNode;
-            newNode.next = cur;
-        }
-        this.length++;
-    }
-    remove(node) {
-        let cur = this.head;
-        let prev;
-        if (this.head.val === node) {
-            this.head = cur.next;
-        } else {
-            while (cur.val !== node) {
-                prev = cur;
-                cur = cur.next;
-            }
-            prev.next = cur.next;
-        }
-        this.length--;
-    }
-    print() {
-        let str = '';
-        let cur = this.head;
-        while (cur !== null) {
-            str += cur.val + '>';
-            cur = cur.next;
-        }
-        console.log(str);
-    }
+// console.log(qsort(a2));
+
+function selSort(list, res=[]) {
+    if (list.length === 0) return res;
+    const min = Math.min(...list);
+    const minIndex = list.indexOf(min);
+    list.splice(minIndex, 1);
+    res.push(min);
+    return selSort(list, res); 
 }
 
-const list = new LinkedList();
-list.append('a');
-list.append('b');
-list.append('c');
-list.print();
-list.remove('b'); // a -> c -> etc.
-list.appendAt(1,'z');
-list.print();
+function fib(v, memo={}) {
+    if (v <= 2) return 1;
+    if (v in memo) return memo[v];
+    memo[v] = fib(v-1, memo) + fib(v-2, memo);
+    return memo[v];
+}
+
+// console.log(fib(14));
+// console.log(fib(189));
+
+function fib2(v) {
+    if (v <= 2) return 1;
+    const table = new Array(v+1).fill(0);
+    table[1] = 1;
+    for (let i = 0; i < v; i++) {
+        table[i+1] += table[i];
+        table[i+2] += table[i];
+    }
+    return table[v];
+}
+
+console.log(fib2(20));
+console.log(fib2(200));
+
+    
 
 // B Tree
 // class Node {
