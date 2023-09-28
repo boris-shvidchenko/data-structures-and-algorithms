@@ -98,19 +98,51 @@
 
 
 // hash
-// fib
 // graph
 
-const fib = (v) => {
-    if (v <= 2) return 1;
-    const tab = new Array(v+1).fill(0);
-    tab[1] = 1;
-    for (let i = 0; i < v; i++) {
-        tab[i+1] += tab[i];
-        tab[i+2] += tab[i];
+class HashTable {
+    constructor(size) {
+        this.size = size;
+        this.table = new Array(size);
     }
-    return tab[v];
+    hash(k) {
+        let t = 0;
+        for (let i = 0; i < k.length; i++) {
+            t += k.charCodeAt(i);
+        }
+        return t % this.size;
+    }
+    set(k,v) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[k,v]];
+        } else {
+            const sameKey = bucket.find(i => i[0] === k);
+            if (sameKey) {
+                sameKey[1] = v;
+            } else {
+                bucket.push([k,v]);
+            }
+        }
+    }
+    remove(k) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        const sameKey = bucket.find(i => i[0] === k);
+        bucket.splice(bucket.indexOf(sameKey), 1);
+    }
+    display() {
+        this.table.forEach(i => console.log(i));
+    }
 }
 
-console.log(fib(20))
-console.log(fib(200))
+
+const table = new HashTable(50);
+table.set('name', 'Ryan');
+table.set('age', 25);
+table.set('color', 'red');
+table.display();
+table.remove('color');
+table.set('mane', 'Clark');
+table.display();
