@@ -14,59 +14,95 @@
 // // Iteration works just like with an array
 // for (let char of nums) console.log(char); 
 
-// fib
-// bs
-// ms
-// qs
-// ss
-// hash
 
 
-const l = [1,2,3,4,5];
-// const a = [1,0.5,23,-89,23,23,5.87,-900];
-
-class HashTable {
-    constructor(size) {
-        this.size = size;
-        this.table = new Array(size);
+function fib(v) {
+    if (v <= 2) return 1;
+    const tab = new Array(v+1).fill(0);
+    tab[1] = 1;
+    for (let i = 0; i < v; i++) {
+        tab[i+1] += tab[i];
+        tab[i+2] += tab[i];
     }
-    hash(k) {
-        let t = 0;
-        for (let i = 0; i < k.length; i++) {
-            t += k.charCodeAt(i);
-        }
-        return t % this.size;
-    }
-    set(k,v) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        if (!bucket) {
-            this.table[index] = [[k,v]];
+    return tab[v];
+}
+
+console.log(fib(20))
+console.log(fib(200))
+
+// const l = [1,2,3,4,5];
+const l = [1111,0.5,23,-819,2311,123,5.87,-900];
+
+function bs(list, t) {
+    if (list.length === 1) {
+        if (list[0] === t) return true;
+        return false;
+    } else {
+        const mid = Math.floor(list.length/2);
+        if (t === list[mid]) return true;
+        if (t < list[mid]) {
+            const left = list.slice(0, mid);
+            return bs(left, t);
         } else {
-            const sameKey = bucket.find(i => i[0] === k);
-            if (sameKey) {
-                sameKey[1] = v;
-            } else {
-                bucket.push([k,v]);
-            }
+            const right = list.slice(mid);
+            return bs(right, t);
         }
-    }
-    remove(k) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        const sameKey = bucket.find(i => i[0] === k);
-        bucket.splice(bucket.indexOf(sameKey), 1);
-    }
-    display() {
-        this.table.forEach(i => console.log(i));
     }
 }
 
-const table = new HashTable(50);
-table.set('name', 'Ryan');
-table.set('age', 25);
-table.set('color', 'red');
-table.display();
-table.remove('color');
-table.set('mane', 'Clark');
-table.display();
+// console.log(bs(l, 2))
+// console.log(bs(l, 9))
+
+function merge(list) {
+    if (list.length <= 1) return list;
+    const mid = Math.floor(list.length/2);
+    const left = list.slice(0, mid);
+    const right = list.slice(mid);
+    return sort(merge(left), merge(right));
+}
+
+function sort(left, right) {
+    let leftIndex = 0;
+    let rightIndex = 0;
+    const res = [];
+    while (leftIndex < left.length && rightIndex < right.length) {
+        if (left[leftIndex] < right[rightIndex]) {
+            res.push(left[leftIndex]);
+            leftIndex++;
+        } else {
+            res.push(right[rightIndex]);
+            rightIndex++;
+        }
+    }
+    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
+}
+
+// console.log(merge(l));
+
+function selSort(list, res=[]) {
+    if (list.length === 0) return res;
+    const min = Math.min(...list);
+    const minIndex = list.indexOf(min);
+    res.push(min);
+    list.splice(minIndex, 1);
+    return selSort(list, res);
+}
+
+// console.log(selSort(l));
+
+function selSort(list) {
+    if (list.length <= 1) return list;
+    const piv = list[0];
+    const left = [];
+    const right = [];
+    for (let i = 1; i < list.length; i++) {
+        if (list[i] < piv) {
+            left.push(list[i]);
+        } else {
+            right.push(list[i]);
+        }
+    }
+    return [...selSort(left), piv, ...selSort(right)];
+}
+
+// console.log(selSort(l));
