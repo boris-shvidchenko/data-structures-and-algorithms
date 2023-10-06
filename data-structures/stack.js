@@ -30,60 +30,47 @@
 // stack.peek(); // Expects 4
 
 
-
-// btree
-
-
-function fib(v) {
-    if (v <= 2) return 1;
-    const tab = new Array(v+1).fill(0);
-    tab[1] = 1;
-    for (let i = 0; i < v; i++) {
-        tab[i+1] += tab[i];
-        tab[i+2] += tab[i];
-    }
-    return tab[v];
-}
-
-console.log(fib(100))
-console.log(fib(1000))
-
-// const a = [1,2,3,4,5];
-const a = [1,4,-90,3.5,0,32];
-
-function bs(list, t) {
-    if (list.length === 1) {
-        if (list[0] === t) return true;
-        return false;
-    } else {
-        const mid = Math.floor(list.length/2);
-        if (t === list[mid]) return true;
-        if (t < list[mid]) {
-            const left = list.slice(0, mid);
-            return bs(left, t);
-        } else {
-            const right = list.slice(mid);
-            return bs(right, t);
-        }
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
     }
 }
 
-// console.log(bs(a, 1));
-// console.log(bs(a, 10));
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
 
-const qs = (list) => {
-    if (list.length <= 1) return list;
-    const piv = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < piv) {
-            left.push(list[i]);
-        } else {
-            right.push(list[i]);
-        }
+function dft(root, t) {
+    if (root === null) return false;
+    if (root.val === t) return true;
+    return dft(root.left, t) || dft(root.right, t);
+}
+// console.log(dft(a));
+// console.log(dft(a, 'z'));
+// console.log(dft(a, 'd'));
+
+function bft(root, t) {
+    if (root === null) return false;
+    const q = [root];
+    while (q.length > 0) {
+        const cur = q.shift();
+        if (cur.val === t) return true;
+        if (cur.left !== null) q.push(cur.left);
+        if (cur.right !== null) q.push(cur.right);
     }
-    return [...qs(left), piv, ...qs(right)];
+    return false;
 }
 
-// console.log(qs(a));
+// console.log(bft(a));
+console.log(bft(a, 'z'));
+console.log(bft(a, 'd'));
