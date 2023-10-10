@@ -14,13 +14,12 @@
 // // Iteration works just like with an array
 // for (let char of nums) console.log(char); 
 
-const a = [1,2,3,4,5];
-// const a = [1,0,4,5,-90,3.4];
+
+const a = [1,0,4,5,-90,3.4];
 
 // merge s
 // sel sort
 // q sort
-// link list
 // hash
 // btree
 // graph
@@ -28,112 +27,70 @@ const a = [1,2,3,4,5];
 class Node {
     constructor(v) {
         this.v = v;
-        this.next = null;
+        this.edges = [];
+    }
+    connect(node) {
+        this.edges.push(node);
+        node.edges.push(this);
     }
 }
 
-class LinkedList {
-    constructor() {
-        this.head = null;
-        this.length = 0;
+class Graph {
+    constructor(nodes) {
+        this.nodes = [...nodes];
     }
-    append(node) {
-        const newNode = new Node(node);
-        let cur = this.head;
-        if (this.head === null) {
-            this.head = newNode;
-        } else {
-            while (cur.next !== null) {
-                cur = cur.next;
+    sp(start, end) {
+        const vis = {};
+        vis[start.v] = null;
+        const q = [start];
+        while (q.length > 0) {
+            let cur = q.shift();
+            if (cur === end) return this.rp(vis, end);
+            for (let a of cur.edges) {
+                if (!vis.hasOwnProperty(a.v)) {
+                    vis[a.v] = cur;
+                    q.push(a);
+                }
             }
-            cur.next = newNode;
         }
-        this.length++;
     }
-    appendAt(index, node) {
-        const newNode = new Node(node);
-        let cur = this.head;
-        let curIndex = 0;
-        let prev;
-        if (index === 0) {
-            this.head = newNode;
-            newNode.next = cur;
-        } else {
-            while (curIndex < index) {
-                prev = cur;
-                cur = cur.next;
-                curIndex++;
-            }
-            prev.next = newNode;
-            newNode.next = cur;
+    rp(vis, end) {
+        const path = [];
+        let cur = end;
+        while (cur !== null) {
+            path.push(cur.v);
+            cur = vis[cur.v]
         }
-        this.length++;
-    }
-    remove(node) {
-        let cur = this.head;
-        let prev;
-        if (this.head.v === node) {
-            this.head = cur.next;
-        } else {
-            while (cur.v !== node) {
-                prev = cur;
-                cur = cur.next;
-            }
-            prev.next = cur.next;
-        }
-        this.length--;
-    }
-    print() {
-        let str = '';
-        let cur = this.head;
-        while(cur !== null) {
-            str += cur.v + '>';
-            cur = cur.next;
-        }
-        console.log(str);
+        return path.reverse();
     }
 }
 
-// Test
-const list = new LinkedList();
-list.append('a');
-list.append('b');
-list.append('c');
-list.print();
-list.remove('b'); // a -> c -> etc.
-list.appendAt(1,'z');
-list.print();
+const DFW = new Node('DFW');
+const JFK = new Node('JFK');
+const LAX = new Node('LAX');
+const HNL = new Node('HNL');
+const SAN = new Node('SAN');
+const EWR = new Node('EWR');
+const BOS = new Node('BOS');
+const MIA = new Node('MIA');
+const MCO = new Node('MCO');
+const PBI = new Node('PBI');
+const HKG = new Node('HKG');
 
-function fib(val) {
-    if (val <= 2) return 1;
-    const tab = new Array(val+1).fill(0);
-    tab[1] = 1;
-    for (let i = 0; i < val; i++) {
-        tab[i+1] += tab[i];
-        tab[i+2] += tab[i];
-    }
-    return tab[val];
-}
+const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
 
-// console.log(fib(120))
-// console.log(fib(1200))
+DFW.connect(JFK);
+DFW.connect(LAX);
+JFK.connect(BOS);
+JFK.connect(MIA);
+LAX.connect(HNL);
+LAX.connect(EWR);
+LAX.connect(SAN);
+SAN.connect(HKG);
+MIA.connect(MCO);
+MIA.connect(PBI);
+MCO.connect(PBI);
 
-const bs = (list, t) => {
-    if (list.length === 1) {
-        if (list[0] === t) return true;
-        return false;
-    } else {
-        let half;
-        const mid = Math.floor(list.length/2);
-        if (t === list[mid]) return true;
-        if (t < list[mid]) {
-            half = list.slice(0, mid);
-        } else {
-            half = list.slice(mid);
-        }
-        return bs(half, t);
-    }
-}
-
-// console.log(bs(a, 2));
-// console.log(bs(a, 24));
+// graph.bft(DFW, PBI);
+// graph.dft(DFW, HKG);
+console.log(graph.sp(DFW, PBI));
