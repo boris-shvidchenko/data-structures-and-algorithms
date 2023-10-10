@@ -15,82 +15,56 @@
 // for (let char of nums) console.log(char); 
 
 
-const a = [1,0,4,5,-90,3.4];
+const a = [11,10,41,51,-901,3.4];
 
-// merge s
-// sel sort
 // q sort
-// hash
 // btree
-// graph
 
-class Node {
-    constructor(v) {
-        this.v = v;
-        this.edges = [];
+class HashTable {
+    constructor(size) {
+        this.size = size;
+        this.table = new Array(size);
     }
-    connect(node) {
-        this.edges.push(node);
-        node.edges.push(this);
+    hash(k) {
+        let t = 0;
+        for (let i = 0; i<k.length; i++) {
+            t += k.charCodeAt(i);
+        }
+        return t % this.size;
     }
-}
-
-class Graph {
-    constructor(nodes) {
-        this.nodes = [...nodes];
-    }
-    sp(start, end) {
-        const vis = {};
-        vis[start.v] = null;
-        const q = [start];
-        while (q.length > 0) {
-            let cur = q.shift();
-            if (cur === end) return this.rp(vis, end);
-            for (let a of cur.edges) {
-                if (!vis.hasOwnProperty(a.v)) {
-                    vis[a.v] = cur;
-                    q.push(a);
-                }
+    set(k,v) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[k,v]];
+        } else {
+            const sameKey = bucket.find(i => i[0] === k);            
+            if (sameKey) {
+                sameKey[1] = v;
+            } else {
+                bucket.push([k,v]);
             }
         }
     }
-    rp(vis, end) {
-        const path = [];
-        let cur = end;
-        while (cur !== null) {
-            path.push(cur.v);
-            cur = vis[cur.v]
+    remove(k) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (bucket) {
+            const sameKey = bucket.find(i => i[0] === k);
+            bucket.splice(bucket.indexOf(sameKey), 1)
         }
-        return path.reverse();
+    }
+    display() {
+        this.table.forEach(i => console.log(i));
     }
 }
 
-const DFW = new Node('DFW');
-const JFK = new Node('JFK');
-const LAX = new Node('LAX');
-const HNL = new Node('HNL');
-const SAN = new Node('SAN');
-const EWR = new Node('EWR');
-const BOS = new Node('BOS');
-const MIA = new Node('MIA');
-const MCO = new Node('MCO');
-const PBI = new Node('PBI');
-const HKG = new Node('HKG');
+const table = new HashTable(50);
+table.set('name', 'Ryan');
+table.set('age', 25);
+table.set('color', 'red');
+table.display();
+table.remove('color');
+table.set('mane', 'Clark');
+table.display();
 
-const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
-
-DFW.connect(JFK);
-DFW.connect(LAX);
-JFK.connect(BOS);
-JFK.connect(MIA);
-LAX.connect(HNL);
-LAX.connect(EWR);
-LAX.connect(SAN);
-SAN.connect(HKG);
-MIA.connect(MCO);
-MIA.connect(PBI);
-MCO.connect(PBI);
-
-// graph.bft(DFW, PBI);
-// graph.dft(DFW, HKG);
-console.log(graph.sp(DFW, PBI));
