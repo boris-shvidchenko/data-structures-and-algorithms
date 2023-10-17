@@ -97,81 +97,103 @@
 // console.log(heap.data.join(' > '));
 
 
-const l = [11320,1234,-1235,213.4,232233];
-
-// qsort
-// graph
-
-function qs(list) {
-    if (list.length <= 1) return list;
-    const piv = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < piv) {
-            left.push(list[i]);
-        } else {
-            right.push(list[i]);
-        }
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.edges = [];
     }
-    return [...qs(left), piv, ...qs(right)];
-}
-
-console.log(qs(l));
-
-const selSort = (list, res=[]) => {
-    if (list.length === 0) return res;
-    const min = Math.min(...list);
-    const minIndex = list.indexOf(min);
-    res.push(min);
-    list.splice(minIndex, 1);
-    return selSort(list, res);
-}
-
-// console.log(selSort(l));
-
-function mergeSort(list) {
-    if (list.length <= 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(mergeSort(left), mergeSort(right)); 
-}
-
-function sort(left, right) {
-    let leftIndex = 0;
-    let rightIndex = 0;
-    let res = [];
-    while (leftIndex , left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            res.push(left[leftIndex]);
-            leftIndex++;
-        } else {
-            res.push(right[rightIndex]);
-            rightIndex++;
-        }
-    }
-    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
-}
-
-// console.log(mergeSort(l));
-
-function bs(list, t) {
-    if (list.length === 1) {
-        if (list[0] === t) return true;
-        return false;
-    } else {
-        const mid = Math.floor(list.length/2);
-        if (t === list[mid]) return true;
-        if (t < list[mid]) {
-            const left = list.slice(0, mid);
-            return bs(left, t);
-        } else {
-            const right = list.slice(mid);
-            return bs(right, t);
-        }
+    connect(node) {
+        this.edges.push(node);
+        node.edges.push(this);
     }
 }
 
-// console.log(bs(l, 2))
-// console.log(bs(l, 29))
+class Graph {
+    constructor(nodes) {
+        this.nodes = [...nodes];
+    }
+    dft(start, end, visited = new Set()) {
+        if (start === end) {
+            console.log('Found');
+        }
+        visited.add(start);
+        console.log('node: ', start.val);
+        for (let a of start.edges) {
+            if (!visited.has(a)) {
+                visited.add(a);
+                this.dft(a, end, visited);
+            }
+        }
+    }
+    bft(start, end) {
+        const visited = new Set();
+        const q = [start];
+        while(q.length > 0) {
+            const cur = q.shift();
+            if (cur === end) {
+                console.log('Fouind');
+            }
+            console.log('Node:', cur.val);
+            for (let a of cur.edges) {
+                if (!visited.has(a)) {
+                    visited.add(a);
+                    q.push(a);
+                }
+            }
+        }
+    }
+    sp(start, end) {
+        const visited = {};
+        const q = [start];
+        visited[start.val] = null;
+        while(q.length > 0) {
+            const cur = q.shift();
+            if (cur === end) return this.rp(visited, end);
+            for (let a of cur.edges) {
+                if (!visited.hasOwnProperty(a.val)) {
+                    visited[a.val] = cur;
+                    q.push(a);
+                }
+            }
+        }
+    }
+    rp(visited, end) {
+        const path = [];
+        let cur = end;
+        while (cur !== null) {
+            path.push(cur.val);
+            cur = visited[cur.val];
+        }
+        return path.reverse();
+    }
+}
+
+const DFW = new Node('DFW');
+const JFK = new Node('JFK');
+const LAX = new Node('LAX');
+const HNL = new Node('HNL');
+const SAN = new Node('SAN');
+const EWR = new Node('EWR');
+const BOS = new Node('BOS');
+const MIA = new Node('MIA');
+const MCO = new Node('MCO');
+const PBI = new Node('PBI');
+const HKG = new Node('HKG');
+
+const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
+
+DFW.connect(JFK);
+DFW.connect(LAX);
+JFK.connect(BOS);
+JFK.connect(MIA);
+LAX.connect(HNL);
+LAX.connect(EWR);
+LAX.connect(SAN);
+SAN.connect(HKG);
+MIA.connect(MCO);
+MIA.connect(PBI);
+MCO.connect(PBI);
+
+// graph.bft(DFW, PBI);
+// graph.dft(DFW, HKG);
+console.log(graph.sp(DFW, PBI));
