@@ -16,65 +16,116 @@
 
 
 // linked list
-// sel s
-// q sort
-// hash
 
-class HashTable {
-    constructor(size) {
-        this.size = size;
-        this.table = new Array(size);
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.next = null;
     }
-    hash(k) {
-        let t = 0;
-        for (let i = 0; i < k.length; i++) {
-            t += k.charCodeAt(i);
-        }
-        return t % this.size;
+}
+
+class LinkedList {
+    constructor() {
+        this.length = 0;
+        this.head = null;
     }
-    set(k,v) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        if (!bucket) {
-            this.table[index] = [[k,v]];
+    append(node) {
+        const newNode = new Node(node);
+        let cur = this.head;
+        if (this.head === null) {
+            this.head = newNode;
         } else {
-            const sameKey = bucket.find(i => i[0] === k);
-            if (sameKey) {
-                sameKey[1] = v;
-            } else {
-                bucket.push([k,v]);
+            while (cur.next !== null) {
+                cur = cur.next;
             }
+            cur.next = newNode;
+        }
+        this.length++;
+    }
+    appendAt(index, node) {
+        const newNode = new Node(node);
+        let cur = this.head;
+        let curIndex = 0;
+        let prev;
+        if (index === 0) {
+            this.head = newNode;
+            newNode.next = cur;
+        } else {
+            while (curIndex < index) {
+                prev = cur;
+                cur = cur.next;
+                curIndex++;
+            }
+            prev.next = newNode;
+            newNode.next = cur;
+        }
+        this.length++;
+    }
+    remove(node) {
+        let cur = this.head;
+        let prev;
+        if (this.head.val === node) {
+            this.head = cur.next;
+        } else {
+            while (cur.val !== node) {
+                prev = cur;
+                cur = cur.next;
+            }
+            prev.next = cur.next;
+        } 
+        this.length--;
+    }
+    contains(node) {
+        let cur = this.head;
+        while (cur !== null) {
+            if (cur.val === node) {
+                console.log('True');
+                return;
+            }
+            cur = cur.next;
+        }
+        console.log('False');
+    }
+    print() {
+        let a = '';
+        let cur = this.head;
+        while (cur !== null) {
+            a += cur.val + '>';
+            cur = cur.next;
+        }
+        console.log(a);
+    }
+}
+
+// Test
+const list = new LinkedList();
+list.append('a');
+list.append('b');
+list.append('c');
+list.contains('a'); // true
+list.contains('z'); // false
+list.print();
+list.remove('b'); // a -> c -> etc.
+list.appendAt(1,'z');
+list.print();
+list.contains('z'); // true
+
+const l = [11,16,-190,3.15,231114];
+
+function qs(list) {
+    if (list.length <= 1) return list;
+    const piv = list[0];
+    const left = [];
+    const right = [];
+    for (let i = 1; i < list.length; i++) {
+        if (list[i] < piv) {
+            left.push(list[i]);
+        } else {
+            right.push(list[i]);
         }
     }
-    remove(k) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        const sameKey = bucket.find(i => i[0] === k);
-        bucket.splice(bucket.indexOf(sameKey), 1);
-    }
-    display() {
-        this.table.forEach(i => console.log(i));
-    }
+    return [...qs(left), piv, ...qs(right)];
 }
 
-// const table = new HashTable(50);
-// table.set('name', 'Ryan');
-// table.set('age', 25);
-// table.set('color', 'red');
-// table.display();
-// table.remove('color');
-// table.set('mane', 'Clark');
-// table.display();
+// console.log(qs(l));
 
-const l = [1,6,-90,3.5,234];
-
-const selSort = (list, res=[]) => {
-    if (list.length === 0) return res;
-    const min = Math.min(...list);
-    const minIndex = list.indexOf(min);
-    res.push(min);
-    list.splice(minIndex, 1);
-    return selSort(list, res);
-}
-
-// console.log(selSort(l));
