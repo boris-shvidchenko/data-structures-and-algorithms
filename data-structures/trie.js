@@ -64,37 +64,109 @@
 // trie.print();
 
 // merge sort
-// sel sort
-// quick sort
 // linked list
 // graph
 
 const a = [1,-90,3.5,66,3,-27];
 
-// function selSort(list, res=[]) {
-//     if (list.length === 0) return res;
-//     const min = Math.min(...list);
-//     const minIndex = list.indexOf(min);
-//     list.splice(minIndex, 1);
-//     res.push(min);
-//     return selSort(list, res);
-// }
-
-// console.log('SS', selSort(a));
-
-function quickSort(list) {
-    if (list.length <= 1) return list;
-    const piv = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < piv) {
-            left.push(list[i]);
-        } else {
-            right.push(list[i]);
-        }
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.edges = [];
     }
-    return [...quickSort(left), piv, ...quickSort(right)];
+    connect(node) {
+        this.edges.push(node);
+        node.edges.push(this);
+    }
 }
 
-console.log('QS', quickSort(a));
+class Graph {
+    constructor(nodes) {
+        this.nodes = [...nodes];
+    }
+    dft(start, end, visited=new Set()) {
+        if (start === end) {
+            console.log('Found node!');
+        }
+        visited.add(start);
+        console.log(start.val);
+        for (let a of start.edges) {
+            if (!visited.has(a)) {
+                visited.add(a);
+                this.dft(a, end, visited);
+            }
+        }
+    }
+    bft(start, end) {
+        const visited = new Set();
+        const q = [start];
+        while (q.length > 0) {
+            const cur = q.shift();
+            if (cur === end) {
+                console.log('Found node');
+            }
+            console.log(cur.val);
+            for (let a of cur.edges) {
+                if (!visited.has(a)) {
+                    visited.add(a);
+                    q.push(a);
+                }
+            }
+        }
+    }
+    sp(start, end) {
+        const visited = {};
+        const q = [start];
+        visited[start.val] = null;
+        while (q.length > 0) {
+            const cur = q.shift();
+            if (cur === end) return this.rp(visited, end);
+            for (let a of cur.edges) {
+                if (!visited.hasOwnProperty(a.val)) {
+                    visited[a.val] = cur;
+                    q.push(a);
+                }
+            }
+        }
+    }
+    rp(visited, end) {
+        let cur = end;
+        const path = [];
+        while (cur !== null) {
+            path.push(cur.val);
+            cur = visited[cur.val];
+        }
+        return path.reverse();
+    }
+}
+
+
+const DFW = new Node('DFW');
+const JFK = new Node('JFK');
+const LAX = new Node('LAX');
+const HNL = new Node('HNL');
+const SAN = new Node('SAN');
+const EWR = new Node('EWR');
+const BOS = new Node('BOS');
+const MIA = new Node('MIA');
+const MCO = new Node('MCO');
+const PBI = new Node('PBI');
+const HKG = new Node('HKG');
+
+const graph = new Graph([DFW, JFK, LAX, HNL, SAN, EWR, BOS, MIA, MCO, PBI, HKG]);
+
+DFW.connect(JFK);
+DFW.connect(LAX);
+JFK.connect(BOS);
+JFK.connect(MIA);
+LAX.connect(HNL);
+LAX.connect(EWR);
+LAX.connect(SAN);
+SAN.connect(HKG);
+MIA.connect(MCO);
+MIA.connect(PBI);
+MCO.connect(PBI);
+
+// graph.bft(DFW, PBI);
+// graph.dft(DFW, HKG);
+console.log(graph.sp(DFW, PBI));
