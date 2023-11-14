@@ -68,10 +68,29 @@
 // quick sort
 // sel sort
 // b search
-// fib 2x
 
 const l = [1,2,3,4,5];
 // const l = [30,-7,4.5,1,1,34,-0.8];
+
+function bSearch(list, t) {
+    if (list.length === 1) {
+        if (list[0] === t) return true;
+        return false;
+    } else {
+        const mid = Math.floor(list.length/2);
+        if (t === list[mid]) return true;
+        if (t < list[mid]) {
+            const left = list.slice(0, mid);
+            return bSearch(left, t);
+        } else {
+            const right = list.slice(mid);
+            return bSearch(right, t);            
+        }
+    }
+}
+
+console.log(bSearch(l, 2))
+console.log(bSearch(l, 29))
 
 // const fib = (val, memo={}) => {
 //     if (val <= 2) return 1;
@@ -83,19 +102,19 @@ const l = [1,2,3,4,5];
 // console.log(fib(10))
 // console.log(fib(100))
 
-const fib2 = (val) => {
-    if (val <= 2) return 1;
-    const table = new Array(val+1).fill(0);
-    table[1] = 1;
-    for (let i = 0; i < val; i++) {
-        table[i+1] += table[i];
-        table[i+2] += table[i];
-    }
-    return table[val];
-}
+// const fib2 = (val) => {
+//     if (val <= 2) return 1;
+//     const table = new Array(val+1).fill(0);
+//     table[1] = 1;
+//     for (let i = 0; i < val; i++) {
+//         table[i+1] += table[i];
+//         table[i+2] += table[i];
+//     }
+//     return table[val];
+// }
 
-console.log(fib2(20))
-console.log(fib2(200))
+// console.log(fib2(20))
+// console.log(fib2(200))
 
 class HashTable {
     constructor(size) {
