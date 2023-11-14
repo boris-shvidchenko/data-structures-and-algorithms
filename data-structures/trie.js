@@ -64,10 +64,71 @@
 // trie.print();
 
 // btree
-// quick sort
-// sel sort
 
-const l = [3220,-7,4.5,1,1,34,-0.8];
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+function dft(root, t) {
+    if (root === null) return false;
+    if (root.val === t) return true;
+    return dft(root.left, t) || dft(root.right, t);
+}
+// console.log(dft(a))
+console.log(dft(a, 'd'))
+console.log(dft(a, 'z'))
+
+function bft(root, t) {
+    if (root === null) return false;  
+    const q = [root];
+    while (q.length > 0) {
+        const cur = q.shift();
+        if (cur.val === t) return true;
+        if (cur.left !== null) q.push(cur.left);
+        if (cur.right !== null) q.push(cur.right);
+    }
+    return false;
+}
+// console.log(bft(a))
+console.log(bft(a, 'd'))
+console.log(bft(a, 'z'))
+
+
+
+const l = [3220,-7,4.5,1,1,3222,-0.8];
+
+function qSort(list) {
+    if (list.length <= 1) return list;
+    const left = [];
+    const right = [];
+    const piv = list[0];
+    for (let i = 1; i < list.length; i++) {
+        if (list[i] < piv) {
+            left.push(list[i]);
+        } else {
+            right.push(list[i]);
+        }
+    }
+    return [...qSort(left), piv, ...qSort(right)];
+}
+
+// console.log(qSort(l));
 
 function selSort(list, res=[]) {
     if (list.length === 0) return res;
@@ -78,7 +139,7 @@ function selSort(list, res=[]) {
     return selSort(list, res);
 }
 
-console.log(selSort(l));
+// console.log(selSort(l));
 
 function merge(list) {
     if (list.length <= 1) return list;
