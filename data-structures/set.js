@@ -14,63 +14,48 @@
 // // Iteration works just like with an array
 // for (let char of nums) console.log(char); 
 
-// const a = [1,2,3,4,5];
-const a = [-92201,3221.4,14,0,150229,-6.4];
+const a = [1,2,3,4,5];
 
-// b search
-// q sort
-// fib 2
-
-function qs(list) {
-    if (list.length <= 1) return list;
-    const piv = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < piv) {
-            left.push(list[i]);
+function bs(list, t) {
+    if (list.length === 1) {
+        if (list[0] === t) return true;
+        return false;
+    } else {
+        const mid = Math.floor(list.length/2);
+        if (t === list[mid]) return true;
+        if (t < list[mid]) {
+            const left = list.slice(0, mid);
+            return bs(left, t);
         } else {
-            right.push(list[i]);
+            const right = list.slice(mid);
+            return bs(right, t);
         }
     }
-    return [...qs(left), piv, ...qs(right)];
 }
 
-console.log(qs(a));
+console.log(bs(a, 2));
+console.log(bs(a, 33));
 
-function selSort(list, res=[]) {
-    if (list.length === 0) return res;
-    const min = Math.min(...list);
-    const minIndex = list.indexOf(min);
-    res.push(min);
-    list.splice(minIndex, 1);
-    return selSort(list, res);
+function fib(val, memo={}) {
+    if (val <= 2) return 1;
+    if (val in memo) return memo[val];
+    memo[val] = fib(val-1, memo) + fib(val-2, memo);
+    return memo[val];
 }
 
-// console.log(selSort(a));
+// console.log(fib(10));
+// console.log(fib(100));
 
-function merge(list) {
-    if (list.length <= 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(merge(left), merge(right));
-}
-
-function sort(left, right) {
-    let leftIndex = 0;
-    let rightIndex = 0;
-    let res = [];
-    while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            res.push(left[leftIndex]);
-            leftIndex++;
-        } else {
-            res.push(right[rightIndex]);
-            rightIndex++;
-        }
+function fib2(val) {
+    if (val <= 2) return 1;
+    const tab = new Array(val+1).fill(0);
+    tab[1] = 1;
+    for (let i = 0; i < val; i++) {
+        tab[i+1] += tab[i];
+        tab[i+2] += tab[i];
     }
-    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
+    return tab[val];
 }
 
-// console.log(merge(a));
+// console.log(fib2(20));
+// console.log(fib2(200));
