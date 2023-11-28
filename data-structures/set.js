@@ -17,95 +17,128 @@
 // hash
 // graph
 // btree
-// linked list
 
-const l = [1222,-9202,3,402,9.4,-39];
-
-function merge(list) {
-    if (list.length <= 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return mergeSort(merge(left), merge(right));
-}
-
-function mergeSort(left, right) {
-    let leftIndex = 0;
-    let rightIndex = 0;
-    const res = [];
-    while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            res.push(left[leftIndex]);
-            leftIndex++;
+class HashTable {
+    constructor(size) {
+        this.size = size;
+        this.table = new Array(size);
+    }
+    hash(k) {
+        let t = 0;
+        for (let i = 0; i < k.length; i++) {
+            t += k.charCodeAt(i);
+        }
+        return t % this.size;
+    }
+    set(k,v) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[k,v]];
         } else {
-            res.push(right[rightIndex]);
-            rightIndex++;
+            const sameKey = bucket.find(i => i[0] === k);
+            if (sameKey) {
+                sameKey[1] = v;
+            } else {
+                bucket.push([k,v]);
+            }
         }
     }
-    // return res;
-    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
+    remove(k) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        const sameKey = bucket.find(i => i[0] === k);
+        bucket.splice(bucket.indexOf(sameKey), 1);
+    }
+    display() {
+        this.table.forEach(i => console.log(i));
+    }
 }
 
-console.log(merge(l));
+const table = new HashTable(50);
+table.set('name', 'Ryan');
+table.set('age', 25);
+table.set('color', 'red');
+table.display();
+table.remove('color');
+table.set('mane', 'Clark');
+table.display();
 
-// function ss(list, res=[]) {
-//     if (list.length === 0) return res;
-//     const min = Math.min(...list);
-//     const minIndex = list.indexOf(min);
-//     list.splice(minIndex, 1);
-//     res.push(min);
-//     return ss(list, res);
-// }
-
-// // console.log(ss(l));
-
-// function qs(list) {
-//     if (list.length <= 2) return list;
-//     const piv = list[0];
-//     const left = [];
-//     const right = [];
-//     for (let i = 1; i < list.length; i++) {
-//         if (list[i] < piv) {
-//             left.push(list[i]);
-//         } else {
-//             right.push(list[i]);
-//         }
-//     }
-//     return [...qs(left), piv, ...qs(right)];
-// }
-
-// // console.log(qs(l));
-
-// function fib(val) {
-//     if (val <= 2) return 1;
-//     const tab = new Array(val+1).fill(0);
-//     tab[1] = 1;
-//     for (let i = 0; i < val; i++) {
-//         tab[i+1] += tab[i];
-//         tab[i+2] += tab[i];
-//     }
-//     return tab[val];
-// }
-
-// // console.log(fib(20));
-// // console.log(fib(200));
-
-// const bs = (list, t) => {
-//     if (list.length === 1) {
-//         if (list[0] === t) return true;
-//         return false;
-//     } else {
-//         const mid = Math.floor(list.length/2);
-//         if (t === list[mid]) return true;
-//         if (t < list[mid]) {
-//             const left = list.slice(0, mid);
-//             return bs(left, t);
-//         } else {
-//             const right = list.slice(mid);
-//             return bs(right, t);
-//         }
+// class Node {
+//     constructor(val) {
+//         this.val = val;
+//         this.next = null;
 //     }
 // }
 
-// // console.log(bs(l, 2));
-// // console.log(bs(l, 29));
+class LinkedList {
+    constructor() {
+        this.length = 0 ;
+        this.head = null;
+    }   
+    append(node) {
+        const newNode = new Node(node);
+        let cur = this.head;
+        if (this.head === null) {
+            this.head = newNode;
+        } else {
+            while (cur.next !== null) {
+                cur = cur.next;
+            }
+            cur.next = newNode;
+        }
+        this.length++;
+    }
+    appendAt(index, node) {
+        const newNode = new Node(node);
+        let cur = this.head;
+        let curIndex = 0;
+        let prev;
+        if (index === 0) {
+            this.head = newNode;
+            newNode.next = cur;
+        } else {
+            while (curIndex < index) {
+                prev = cur;
+                cur = cur.next;
+                curIndex++;
+            }
+            prev.next = newNode;
+            newNode.next = cur;
+        }
+        this.length++;
+    }
+    remove(node) {
+        let cur = this.head;
+        let prev;
+        if (this.head.val === node) {
+            this.head = cur.next;
+        } else {
+            while (cur.val !== node) {
+                prev = cur;
+                cur = cur.next;
+            }
+            prev.next = cur.next;
+        }
+        this.length--;
+    }
+    display() {
+        let cur = this.head;
+        let str = '';
+        while (cur !== null) {
+            str += cur.val + '>';
+            cur = cur.next;
+        }
+        console.log(str);
+    }
+}
+
+// Test
+// const list = new LinkedList();
+// list.append('a');
+// list.append('b');
+// list.append('c');
+// list.display();
+// list.remove('b'); // a -> c -> etc.
+// list.appendAt(1,'z');
+// list.display();
