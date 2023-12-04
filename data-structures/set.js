@@ -15,83 +15,164 @@
 // for (let char of nums) console.log(char); 
 
 
-// b search
-// fib memo
-// fib tab
+
+
 // q sort
-// merge sort
 // sel sort
 // b tree
 // hash
 // graph
 // linked list
 
-const l = [1,2,3,4,5];
-const l2 = [1,-90,4.53,2423,-934];
+const l = [1,-90,4.53,2423,-934];
 
-function fib(val, memo={}) {
-    if (val <= 2) return 1;
-    if (val in memo) return memo[val];
-    memo[val] = fib(val-1, memo) + fib(val-2, memo);
-    return memo[val];
+function selSort(list, res=[]) {
+    if (list.length === 0) return res;
+    const min = Math.min(...list);
+    const minIndex = list.indexOf(min);
+    res.push(min);
+    list.splice(minIndex, 1);
+    return selSort(list, res);
 }
-console.log(fib(10));
-console.log(fib(100));
+console.log(selSort(l));
 
-function fib2(val) {
-    if (val <= 2) return 1;
-    const tab = new Array(val+1).fill(0);
-    tab[1] = 1;
-    for (let i = 0; i < val; i++) {
-        tab[i+1] += tab[i];
-        tab[i+2] += tab[i];
-    }
-    return tab[val];
-}
-console.log(fib2(20));
-console.log(fib2(200));
-
-function binarySort(list, target) {
-    if (list.length === 1) {
-        if(list[0] === target) return true;
-        return false;
-    } else {
-        const mid = Math.floor(list.length/2);
-        if (target === list[mid]) return true;
-        if (target < list[mid]) {
-            const left = list.slice(0, mid);
-            return binarySort(left, target);
-        } else {
-            const right = list.slice(mid);
-            return binarySort(right, target);
-        }
-    }
-}
-console.log(binarySort(l, 2));
-console.log(binarySort(l, 29));
-
-
-function mergeSort(list) {
+const qSort = (list) => {
     if (list.length <= 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(mergeSort(left), mergeSort(right));
-}
-
-function sort(left, right) {
-    let leftIndex = 0;
-    let rightIndex = 0;
-    const res = [];
-    while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            res.push(left[leftIndex]);
-            leftIndex++;
+    const piv = list[0];
+    const left = [];
+    const right = [];
+    for (let i = 1; i < list.length; i++) {
+        if (list[i] < piv) {
+            left.push(list[i]);
         } else {
-            res.push(right[rightIndex]);
-            rightIndex++;
+            right.push(list[i]);
         }
     }
-    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
+    return [...qSort(left), piv, ...qSort(right)];
 }
-console.log(mergeSort(l2));
+// console.log(qSort(l));
+
+class HashTable {
+    constructor(size) {
+        this.size = size;
+        this.table = new Array(size);
+    }
+    hash(k) {
+        let t = 0;
+        for (let i = 0; i < k.length; i++) {
+            t += k.charCodeAt(i);
+        }
+        return t % this.size;
+    }
+    set(k,v) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        if (!bucket) {
+            this.table[index] = [[k,v]];
+        } else {
+            const sameKey = bucket[i => i[0] === k];
+            if (sameKey) {
+                sameKey[1] = v;
+            } else {
+                bucket.push([k,v]);
+            }
+        }
+    }
+    remove(k) {
+        const index = this.hash(k);
+        const bucket = this.table[index];
+        const sameKey = bucket[i => i[0] === k];
+        bucket.splice(bucket.indexOf(sameKey, 1));
+    }
+    display() {
+        this.table.forEach(i => console.log(i));
+    }
+}
+
+// const table = new HashTable(50);
+// table.set('name', 'Ryan');
+// table.set('age', 25);
+// table.set('color', 'red');
+// table.display();
+// table.remove('color');
+// table.set('mane', 'Clark');
+// table.display();
+
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.next = null;
+    }
+}
+
+class LinkedList {
+    constructor() {
+        this.length = 0;
+        this.head = null;
+    }
+    append(node) {
+        const newNode = new Node(node);
+        let cur = this.head;
+        if (this.head === null) {
+            this.head = newNode;
+        } else {
+            while (cur.next !== null) {
+                cur = cur.next;
+            }
+            cur.next = newNode;
+        }
+        this.length++;
+    }
+    appendAt(index, node) {
+        const newNode = new Node(node);
+        let cur = this.head;
+        let curIndex = 0;
+        let prev;
+        if (index === 0) {
+            this.head = newNode;
+            newNode.next = cur;
+        } else {
+            while (curIndex < index) {
+                prev = cur;
+                cur = cur.next;
+                curIndex++;
+            }
+            prev.next = newNode;
+            newNode.next = cur;
+        }
+        this.length++;
+    }
+    remove(node) {
+        let cur = this.head;
+        let prev;
+        if (this.head.val === node) {
+            this.head = cur.next;
+        } else {
+            while (cur.val !== node) {
+                prev = cur;
+                cur = cur.next;
+            }
+            prev.next = cur.next;
+        }
+        this.length--;
+    }
+    print() {
+        let cur = this.head;
+        let str = '';
+        while (cur !== null) {
+            str += cur.val + '>';
+            cur = cur.next;
+        }
+        console.log(str);
+    }
+}
+
+// // Test
+// const list = new LinkedList();
+// list.append('a');
+// list.append('b');
+// list.append('c');
+// list.print();
+// list.remove('b'); // a -> c -> etc.
+// list.appendAt(1,'z');
+// list.print();
