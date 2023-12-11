@@ -18,93 +18,57 @@
 const l = [2,0.4,-43,23423,23,-77];
 
 // b tree
-// hash
 // l list
 // graph
 // fib memo
 // fib tab
-// m sort
 // s sort
 
-class HashTable {
-    constructor(size) {
-        this.size = size;
-        this.table = new Array(size);
+const fib = (v, memo={}) => {
+    if (v <= 2) return 1;
+    if (v in memo) return memo[v];
+    memo[v] = fib(v-1, memo) + fib(v-2, memo);
+    return memo[v];
+}
+console.log(fib(10));
+console.log(fib(100));
+
+console.log('Fib 2 => ', fib2(20));;
+console.log('Fib 2 => ', fib2(200));;
+function fib2(val) {
+    if (val <= 2) return 1;
+    const table = new Array(val+1).fill(0);
+    table[1] = 1;
+    for (let i = 0; i < val; i++) {
+        table[i+1] += table[i];
+        table[i+2] += table[i];
     }
-    hash(k) {
-        let t = 0;
-        for (let i = 0; i < k.length; i++) {
-            t += k.charCodeAt(i);
-        }
-        return t % this.size;
-    }
-    set(k,v) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        if (!bucket) {
-            this.table[index] = [[k,v]];
-        } else {
-            const sameKey = bucket.find(i => i[0] === k);
-            if (sameKey) {
-                sameKey[1] = v;
-            } else {
-                bucket.push([k,v]);
-            }
-        }
-    }
-    remove(k) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        const sameKey = bucket.find(i => i[0] === k);
-        bucket.splice(bucket.indexOf(sameKey), 1);
-    }
-    display() {
-        this.table.forEach(i => console.log(i));
-    }
+    return table[val];
 }
 
-const table = new HashTable(50);
-table.set('name', 'Ryan');
-table.set('age', 25);
-table.set('color', 'red');
-table.display();
-table.remove('color');
-table.set('mane', 'Clark');
-table.display();
-
-// console.log(qSort(l));
-
-function qSort(list) {
+function mergeSort(list) {
     if (list.length <= 1) return list;
-    const piv = list[0];
-    const left = [];
-    const right = [];
-    for (let i = 1; i < list.length; i++) {
-        if (list[i] < piv) {
-            left.push(list[i]);
-        } else {
-            right.push(list[i]);
-        }
-    }
-    return [...qSort(right), piv, ...qSort(left)];
+    const mid = Math.floor(list.length/2);
+    const left = list.slice(0, mid);
+    const right = list.slice(mid);
+    return sort(mergeSort(left), mergeSort(right));
 }
 
-const bSearch = (list, target) => {
-    if (list.length === 1) {
-        if (list[0] === target) return true;
-        return false;
-    } else {
-        const mid = Math.floor(list.length/2);
-        if (target === list[mid]) return true;
-        if (target < list[mid]) {
-            const left = list.slice(0, mid);
-            return bSearch(left, target);
+function sort(left, right) {
+    let leftIndex = 0;
+    let rightIndex = 0;
+    const res = [];
+    while (leftIndex < left.length && rightIndex < right.length) {
+        if (left[leftIndex] < right[rightIndex]) {
+            res.push(left[leftIndex]);
+            leftIndex++;
         } else {
-            const right = list.slice(mid);
-            return bSearch(right, target);
+            res.push(right[rightIndex]);
+            rightIndex++;
         }
     }
-};
+    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
+}
 
-// console.log(bSearch(l, 3));
-// console.log(bSearch(l, 90));
+// console.log(mergeSort(l));
+
