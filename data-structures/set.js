@@ -14,91 +14,67 @@
 // // Iteration works just like with an array
 // for (let char of nums) console.log(char); 
 
-// q sort
-// b tree
-// hash
 
-const l = [1111,4,-845,3.6,234,4.05,-909];
 
-class HashTable {
-    constructor(size) {
-        this.size = size;
-        this.table = new Array(size);
-    }
-    hash(k) {
-        let t = 0;
-        for (let i = 0; i < k.length; i++) {
-            t += k.charCodeAt(i);
-        }
-        return t % this.size;
-    }
-    set(k,v) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        if (!bucket) {
-            this.table[index] = [[k,v]];
-        } else {
-            const sameKey = bucket.find(i => i[0] === k);
-            if (sameKey) {
-                sameKey[1] = v;
-            } else {
-                bucket.push([k,v]);
-            }
-        }
-    }
-    remove(k) {
-        const index = this.hash(k);
-        const bucket = this.table[index];
-        const sameKey = bucket.find(i => i[0] === k);
-    }
-    display() {
-        this.table.forEach(i => console.log(i));
-    }
-}
+const l = [1111,224,-845,3.6,234,4.05,-909];
 
-const table = new HashTable(50);
-table.set('name', 'Ryan');
-table.set('age', 25);
-table.set('color', 'red');
-table.display();
-table.remove('color');
-table.set('mane', 'Clark');
-table.display();
-
-const selSort = (list, res=[]) => {
-    if (list.length === 0) return res;
-    const min = Math.min(...list);
-    const minIndex = list.indexOf(min);
-    list.splice(minIndex, 1);
-    res.push(min);
-    return selSort(list, res);
-}
-
-// console.log(selSort(l));
-
-function merge(list) {
+function qs(list) {
     if (list.length <= 1) return list;
-    const mid = Math.floor(list.length/2);
-    const left = list.slice(0, mid);
-    const right = list.slice(mid);
-    return sort(merge(left), merge(right));
-}
-
-function sort(left, right) {
-    let leftIndex = 0;
-    let rightIndex = 0;
-    let res = [];
-    while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-            res.push(left[leftIndex]);
-            leftIndex++;
+    const piv = list[0];
+    let left = [];
+    let right = [];
+    for (let i = 1; i < list.length; i++) {
+        if (list[i] < piv) {
+            left.push(list[i]);
         } else {
-            res.push(right[rightIndex]);
-            rightIndex++;
+            right.push(list[i]);
         }
     }
-    return res.concat(left.slice(leftIndex), right.slice(rightIndex));
+    return [...qs(left), piv, ...qs(right)];
 }
 
-// console.log(merge(l));
+// console.log(qs(l));
 
+class Node {
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+function dft(root, target) {
+    if (root === null) return false;
+    if (root.val === target) return true;
+    return dft(root.left, target) || dft(root.right, target);
+}
+// console.log(dft(a));
+// console.log(dft(a, 'b'));
+// console.log(dft(a, 'z'));
+
+function bft(root, target) {
+    if (root === null) return false;
+    const q = [root];
+    while (q.length > 0) {
+        const cur = q.shift();
+        if (cur.val === target) return true;
+        if (cur.left !== null) q.push(cur.left);
+        if (cur.right !== null) q.push(cur.right);
+    }
+    return false;
+}
+// console.log(bft(a));
+console.log(bft(a, 'b'));
+console.log(bft(a, 'z'));
